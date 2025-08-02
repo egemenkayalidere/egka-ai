@@ -1,0 +1,161 @@
+{
+  "name": "Workflow Orchestrator",
+  "version": "1.0.0",
+  "description": "Coordinates multi-agent workflow and manages task lifecycle",
+  "type": "orchestrator",
+  "workflow_states": {
+    "initiated": {
+      "description": "User input received, workflow initiated",
+      "next_states": ["analyzing"],
+      "agent": "manager_agent"
+    },
+    "analyzing": {
+      "description": "Task analysis and creation phase",
+      "next_states": ["pending", "failed"],
+      "agent": "analyst_agent"
+    },
+    "pending": {
+      "description": "Task created and waiting for execution",
+      "next_states": ["executing", "cancelled"],
+      "agent": "developer_agent"
+    },
+    "executing": {
+      "description": "Task execution in progress",
+      "next_states": ["completed", "failed", "paused"],
+      "agent": "developer_agent"
+    },
+    "completed": {
+      "description": "Task successfully completed",
+      "next_states": [],
+      "agent": "developer_agent"
+    },
+    "failed": {
+      "description": "Task execution failed",
+      "next_states": ["retrying", "cancelled"],
+      "agent": "developer_agent"
+    },
+    "cancelled": {
+      "description": "Task cancelled by user or system",
+      "next_states": [],
+      "agent": "manager_agent"
+    },
+    "paused": {
+      "description": "Task execution paused",
+      "next_states": ["executing", "cancelled"],
+      "agent": "developer_agent"
+    },
+    "retrying": {
+      "description": "Task retry attempt",
+      "next_states": ["executing", "failed"],
+      "agent": "developer_agent"
+    }
+  },
+  "agent_coordination": {
+    "manager_to_analyst": {
+      "trigger": "user_input",
+      "action": "delegate_task",
+      "data_transfer": ["user_request", "context"],
+      "file_operations": {
+        "read": ["shared/logs/manager-agent.log"],
+        "write": ["shared/logs/system.log"]
+      }
+    },
+    "analyst_to_developer": {
+      "trigger": "task_created",
+      "action": "create_task_context",
+      "data_transfer": ["task_id", "requirements", "context_file"],
+      "file_operations": {
+        "read": ["shared/tasks/*.context7.json", "main.context7.json"],
+        "write": [
+          "shared/tasks/TASK-XXXX-XXXX.context7.json",
+          "shared/logs/analyst-agent.log"
+        ]
+      }
+    },
+    "developer_to_system": {
+      "trigger": "task_completed",
+      "action": "update_status_and_log",
+      "data_transfer": ["task_result", "execution_log", "status"],
+      "file_operations": {
+        "read": ["shared/tasks/*.context7.json", "main.context7.json"],
+        "write": [
+          "shared/logs/developer-agent.log",
+          "shared/logs/task-reports.md",
+          "shared/logs/system.log"
+        ]
+      }
+    }
+  },
+  "file_monitoring": {
+    "task_directory": {
+      "path": "shared/tasks/",
+      "pattern": "*.context7.json",
+      "monitoring": {
+        "new_files": "trigger_developer_agent",
+        "modified_files": "update_workflow_status",
+        "deleted_files": "cleanup_workflow"
+      }
+    },
+    "log_directory": {
+      "path": "shared/logs/",
+      "pattern": "*.log",
+      "monitoring": {
+        "new_entries": "update_system_status",
+        "error_entries": "trigger_alert",
+        "size_limit": "rotate_logs"
+      }
+    }
+  },
+  "error_handling": {
+    "agent_failure": {
+      "retry_attempts": 3,
+      "retry_delay": 5000,
+      "fallback_agent": "manager_agent",
+      "notification": "system_log"
+    },
+    "file_access_error": {
+      "retry_attempts": 2,
+      "retry_delay": 1000,
+      "fallback": "create_backup",
+      "notification": "agent_log"
+    },
+    "workflow_timeout": {
+      "timeout_duration": 300000,
+      "action": "cancel_task",
+      "notification": "system_log"
+    }
+  },
+  "performance_metrics": {
+    "workflow_duration": {
+      "measurement": "end_time - start_time",
+      "target": "< 300000ms",
+      "alert_threshold": "> 600000ms"
+    },
+    "agent_response_time": {
+      "measurement": "agent_activation_time",
+      "target": "< 5000ms",
+      "alert_threshold": "> 10000ms"
+    },
+    "task_success_rate": {
+      "measurement": "completed_tasks / total_tasks",
+      "target": "> 95%",
+      "alert_threshold": "< 90%"
+    }
+  },
+  "maintenance": {
+    "log_rotation": {
+      "frequency": "daily",
+      "max_size": "10MB",
+      "retention": "30_days"
+    },
+    "task_cleanup": {
+      "frequency": "weekly",
+      "completed_tasks_retention": "90_days",
+      "failed_tasks_retention": "30_days"
+    },
+    "system_health_check": {
+      "frequency": "hourly",
+      "checks": ["agent_availability", "file_permissions", "disk_space"]
+    }
+  }
+}

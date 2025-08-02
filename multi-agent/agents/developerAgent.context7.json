@@ -1,0 +1,160 @@
+{
+  "name": "Developer Agent",
+  "version": "1.0.0",
+  "description": "Multi-Agent System Developer Agent - Executes development tasks and implements solutions",
+  "type": "agent",
+  "capabilities": [
+    "code_generation",
+    "file_creation",
+    "code_analysis",
+    "bug_fixing",
+    "feature_implementation",
+    "testing",
+    "documentation",
+    "shared_logging",
+    "task_logging",
+    "file_reading",
+    "context_analysis",
+    "log_analysis"
+  ],
+  "configuration": {
+    "supported_languages": [
+      "typescript",
+      "javascript",
+      "python",
+      "json",
+      "markdown"
+    ],
+    "max_file_size": 1000000,
+    "timeout": 60000,
+    "log_level": "info"
+  },
+  "dependencies": ["analyst_agent"],
+  "api_endpoints": {
+    "execute_task": "/tasks/execute",
+    "get_task_status": "/tasks/:id/status",
+    "get_task_result": "/tasks/:id/result",
+    "list_completed_tasks": "/tasks/completed",
+    "read_task_context": "/shared-tasks/:id",
+    "read_all_tasks": "/shared-tasks/*.context7.json",
+    "read_main_context": "/main.context7.json",
+    "list_pending_tasks": "/shared-tasks/pending",
+    "update_task_status": "/shared-tasks/:id/status",
+    "read_agent_log": "/shared-logs/developer-agent.log",
+    "read_system_log": "/shared-logs/system.log",
+    "read_task_reports": "/shared-logs/task-reports.md",
+    "write_log": "/shared-log/write",
+    "read_logs": "/shared-log/read",
+    "get_task_logs": "/shared-log/task/:id"
+  },
+  "workflow": {
+    "task_execution": {
+      "task_discovery": {
+        "scan_shared_tasks": true,
+        "read_task_context": true,
+        "read_main_context": true,
+        "priority_sorting": true
+      },
+      "task_analysis": {
+        "requirement_understanding": true,
+        "complexity_assessment": true,
+        "resource_planning": true,
+        "context_awareness": true
+      },
+      "implementation": {
+        "code_generation": true,
+        "file_creation": true,
+        "code_review": true
+      },
+      "testing": {
+        "unit_testing": true,
+        "integration_testing": true,
+        "validation": true
+      },
+      "documentation": {
+        "code_comments": true,
+        "readme_generation": true,
+        "api_documentation": true
+      },
+      "task_completion": {
+        "status_update": true,
+        "result_logging": true,
+        "context_cleanup": true
+      }
+    },
+    "shared_logging": {
+      "task_execution_log": {
+        "start_time": true,
+        "end_time": true,
+        "duration": true,
+        "status": true,
+        "details": true
+      },
+      "work_log": {
+        "actions_performed": true,
+        "files_created": true,
+        "files_modified": true,
+        "code_changes": true,
+        "errors_encountered": true
+      },
+      "performance_log": {
+        "execution_time": true,
+        "memory_usage": true,
+        "cpu_usage": true
+      }
+    },
+    "quality_assurance": {
+      "code_quality_check": true,
+      "performance_optimization": true,
+      "security_audit": true
+    }
+  },
+  "development_tools": {
+    "file_operations": {
+      "create_file": true,
+      "edit_file": true,
+      "delete_file": true,
+      "search_files": true
+    },
+    "code_analysis": {
+      "syntax_check": true,
+      "linting": true,
+      "type_checking": true
+    },
+    "testing_framework": {
+      "unit_tests": true,
+      "integration_tests": true,
+      "e2e_tests": true
+    },
+    "logging_system": {
+      "agent_log_file": "/shared-logs/developer-agent.log",
+      "system_log_file": "/shared-logs/system.log",
+      "task_log_file": "/shared-logs/task-reports.md",
+      "log_rotation": true,
+      "log_compression": true
+    }
+  },
+  "monitoring": {
+    "metrics": [
+      "tasks_completed",
+      "average_execution_time",
+      "code_quality_score",
+      "bug_rate",
+      "log_entries_written",
+      "log_file_size"
+    ],
+    "alerts": [
+      "execution_timeout",
+      "high_bug_rate",
+      "code_quality_degradation",
+      "log_file_full",
+      "logging_failure"
+    ]
+  },
+  "security": {
+    "authentication": "jwt",
+    "authorization": "role_based",
+    "code_signing": true,
+    "audit_logging": true
+  }
+}

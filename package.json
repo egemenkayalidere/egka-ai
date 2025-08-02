@@ -1,0 +1,47 @@
+{
+  "name": "@egkasoft/egka-ai-agents",
+  "version": "1.0.0",
+  "description": "Multi-Agent System for automated task management and development",
+  "main": "index.js",
+  "bin": {
+    "egka-ai": "./bin/egka-ai.js"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "setup": "node scripts/setup.js",
+    "init": "node scripts/init.js",
+    "prepublishOnly": "npm run test",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "multi-agent",
+    "automation",
+    "development",
+    "task-management",
+    "ai-agents",
+    "egkasoft"
+  ],
+  "author": "EgKaSoft",
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "inquirer": "^8.2.4",
+    "fs-extra": "^11.1.1",
+    "commander": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egkasoft/egka-ai-agents.git"
+  },
+  "bugs": {
+    "url": "https://github.com/egkasoft/egka-ai-agents/issues"
+  },
+  "homepage": "https://github.com/egkasoft/egka-ai-agents#readme"
+}
