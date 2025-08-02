@@ -1,5 +1,5 @@
 {
-  "name": "@egkasoft/egka-ai-agents",
+  "name": "@egemenkayalidere/egka-ai-agents",
   "version": "1.0.0",
   "description": "Multi-Agent System for automated task management and development",
   "main": "index.js",
@@ -23,9 +23,9 @@
   ],
   "author": "EgKaSoft",
   "license": "MIT",
-  "private": true,
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -38,10 +38,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/egkasoft/egka-ai-agents.git"
+    "url": "git+https://github.com/egemenkayalidere/egka-ai-agents.git"
   },
   "bugs": {
-    "url": "https://github.com/egkasoft/egka-ai-agents/issues"
+    "url": "https://github.com/egemenkayalidere/egka-ai-agents/issues"
   },
-  "homepage": "https://github.com/egkasoft/egka-ai-agents#readme"
+  "homepage": "https://github.com/egemenkayalidere/egka-ai-agents#readme"
 }
