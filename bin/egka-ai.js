@@ -400,7 +400,13 @@ program
     try {
       // Mevcut proje için cursor rules oluştur
       const currentProjectConfig = {
-        projectName: path.basename(process.cwd()),
+        projectName: path.basename(() => {
+        try {
+          return process.cwd();
+        } catch (error) {
+          return path.dirname(__dirname);
+        }
+      }()),
         framework: "unknown",
         language: "javascript",
         cssFramework: "css",
@@ -408,7 +414,13 @@ program
         packageManager: "npm",
       };
 
-      await createCursorRules(process.cwd(), currentProjectConfig);
+      await createCursorRules(() => {
+      try {
+        return process.cwd();
+      } catch (error) {
+        return path.dirname(__dirname);
+      }
+    }(), currentProjectConfig);
 
       const initScript = path.join(__dirname, "..", "scripts", "init.js");
       if (await fs.pathExists(initScript)) {
@@ -1307,7 +1319,16 @@ async function createProjectWizard(options) {
 }
 
 async function generateProject(config) {
-  const projectPath = path.join(process.cwd(), config.projectName);
+  // Güvenli current working directory alma
+  let currentCwd;
+  try {
+    currentCwd = process.cwd();
+  } catch (error) {
+    // Eğer process.cwd() başarısız olursa, __dirname kullan
+    currentCwd = path.dirname(__dirname);
+  }
+  
+  const projectPath = path.join(currentCwd, config.projectName);
 
   console.log(
     chalk.blue(`\n🚀 ${config.projectName} projesi oluşturuluyor...`)
@@ -1318,8 +1339,13 @@ async function generateProject(config) {
     await createProjectWithFrameworkCLI(config);
 
     // Proje klasörüne geç
-    const originalCwd = process.cwd();
-    process.chdir(projectPath);
+    const originalCwd = currentCwd;
+    try {
+      process.chdir(projectPath);
+    } catch (error) {
+      console.error(chalk.red("Proje klasörüne geçiş hatası:"), error.message);
+      return;
+    }
 
     // Konfigürasyon dosyaları oluştur
     await createConfigFiles(projectPath, config);
@@ -1347,7 +1373,11 @@ async function generateProject(config) {
     }
 
     // Orijinal dizine geri dön
-    process.chdir(originalCwd);
+    try {
+      process.chdir(originalCwd);
+    } catch (error) {
+      console.error(chalk.red("Orijinal dizine dönüş hatası:"), error.message);
+    }
 
     console.log(chalk.green("\n✅ Proje başarıyla oluşturuldu!"));
     console.log(chalk.cyan(`\n📂 Proje klasörü: ${projectPath}`));
@@ -1355,8 +1385,13 @@ async function generateProject(config) {
     // Otomatik paket yükleme
     console.log(chalk.yellow("\n📦 Bağımlılıklar yükleniyor..."));
     try {
-      const originalCwd = process.cwd();
-      process.chdir(projectPath);
+      const originalCwd = currentCwd;
+      try {
+        process.chdir(projectPath);
+      } catch (error) {
+        console.error(chalk.red("Proje klasörüne geçiş hatası:"), error.message);
+        return;
+      }
 
       const installCommand =
         config.packageManager === "yarn"
@@ -1368,7 +1403,11 @@ async function generateProject(config) {
       console.log(chalk.gray(`   ${installCommand} çalıştırılıyor...`));
       execSync(installCommand, { stdio: "inherit" });
 
-      process.chdir(originalCwd);
+      try {
+        process.chdir(originalCwd);
+      } catch (error) {
+        console.error(chalk.red("Orijinal dizine dönüş hatası:"), error.message);
+      }
       console.log(chalk.green("✅ Bağımlılıklar başarıyla yüklendi!"));
 
       console.log(chalk.cyan("\n🚀 Proje hazır! Hemen başlayabilirsiniz:"));
@@ -4029,7 +4068,15 @@ ${
 }
 
 async function createProjectWithFrameworkCLI(config) {
-  const projectPath = path.join(process.cwd(), config.projectName);
+  // Güvenli current working directory alma
+  let currentCwd;
+  try {
+    currentCwd = process.cwd();
+  } catch (error) {
+    currentCwd = path.dirname(__dirname);
+  }
+  
+  const projectPath = path.join(currentCwd, config.projectName);
 
   console.log(
     chalk.yellow("📦 Framework CLI aracı ile proje oluşturuluyor...")
@@ -4117,7 +4164,15 @@ async function createSvelteProject(config) {
 }
 
 async function createVanillaProject(config) {
-  const projectPath = path.join(process.cwd(), config.projectName);
+  // Güvenli current working directory alma
+  let currentCwd;
+  try {
+    currentCwd = process.cwd();
+  } catch (error) {
+    currentCwd = path.dirname(__dirname);
+  }
+  
+  const projectPath = path.join(currentCwd, config.projectName);
 
   // Vanilla projesi oluştur
   await fs.ensureDir(projectPath);
@@ -4174,7 +4229,15 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 async function createProjectManually(config) {
-  const projectPath = path.join(process.cwd(), config.projectName);
+  // Güvenli current working directory alma
+  let currentCwd;
+  try {
+    currentCwd = process.cwd();
+  } catch (error) {
+    currentCwd = path.dirname(__dirname);
+  }
+  
+  const projectPath = path.join(currentCwd, config.projectName);
 
   console.log(chalk.yellow("📝 Manuel proje oluşturuluyor..."));
 
