@@ -400,13 +400,13 @@ program
     try {
       // Mevcut proje için cursor rules oluştur
       const currentProjectConfig = {
-        projectName: path.basename(() => {
+        projectName: path.basename((() => {
         try {
           return process.cwd();
         } catch (error) {
           return path.dirname(__dirname);
         }
-      }()),
+      })()),
         framework: "unknown",
         language: "javascript",
         cssFramework: "css",
@@ -414,13 +414,13 @@ program
         packageManager: "npm",
       };
 
-      await createCursorRules(() => {
-      try {
-        return process.cwd();
-      } catch (error) {
-        return path.dirname(__dirname);
-      }
-    }(), currentProjectConfig);
+      await createCursorRules((() => {
+        try {
+          return process.cwd();
+        } catch (error) {
+          return path.dirname(__dirname);
+        }
+      })(), currentProjectConfig);
 
       const initScript = path.join(__dirname, "..", "scripts", "init.js");
       if (await fs.pathExists(initScript)) {
