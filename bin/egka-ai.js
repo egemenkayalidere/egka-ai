@@ -3708,7 +3708,7 @@ async function createCursorRules(projectPath, config) {
   const cursorRulesPath = path.join(projectPath, ".cursor", "rules");
   await fs.ensureDir(cursorRulesPath);
 
-  const newChatRulesContent = `# EGKA AI AGENTS - New Chat Rules
+  const multiAgentRulesContent = `# Multi-Agent System Rules
 
 ## Multi-Agent System Rules
 
@@ -4022,8 +4022,8 @@ ${
 `;
 
   await fs.writeFile(
-    path.join(cursorRulesPath, "new-chat-rules.mdc"),
-    newChatRulesContent
+    path.join(cursorRulesPath, "multi-agent-rules.mdc"),
+    multiAgentRulesContent
   );
   console.log(chalk.green("✅ Cursor rules oluşturuldu"));
 }

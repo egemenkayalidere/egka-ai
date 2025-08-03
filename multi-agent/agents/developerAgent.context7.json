@@ -45,9 +45,27 @@
     "read_task_reports": "/shared-logs/task-reports.md",
     "write_log": "/shared-log/write",
     "read_logs": "/shared-log/read",
-    "get_task_logs": "/shared-log/task/:id"
+    "get_task_logs": "/shared-log/task/:id",
+    "load_context_injection": "/shared-context-injection/developer-injection.context7.json",
+    "read_injection_config": "/shared-context-injection/*.context7.json",
+    "validate_injection_data": "/shared-context-injection/validate",
+    "merge_context_data": "/shared-context-injection/merge"
   },
   "workflow": {
+    "context_injection": {
+      "startup_sequence": {
+        "load_context_injection": true,
+        "validate_injection_data": true,
+        "merge_with_existing_context": true,
+        "apply_global_settings": true
+      },
+      "injection_management": {
+        "auto_refresh": false,
+        "persistent_storage": true,
+        "conflict_resolution": "injection_priority",
+        "rollback_capability": true
+      }
+    },
     "task_execution": {
       "task_discovery": {
         "scan_shared_tasks": true,

@@ -163,4 +163,7 @@ out/
 
 # Multi-Agent System specific
 multi-agent/shared/logs/*.log
-multi-agent/shared/tasks/*.context7.json 
+multi-agent/shared/tasks/*.context7.json
+
+# Documentation files
+CONTEXT7_AGENT_SYSTEM_GUIDE.txt 

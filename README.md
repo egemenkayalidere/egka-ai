@@ -1,6 +1,14 @@
 # EGKA AI AGENTS
 
-Multi-Agent System for automated task management and development.
+Multi-Agent System with Context Injection, UI Architecture Rules, and Atomic Design for automated task management and development.
+
+## ✨ New Features in v1.1.0
+
+- **Context Injection Mechanism**: Developer agent automatically loads UI architecture rules
+- **Atomic Design System**: Hierarchical component structure (Atoms, Molecules, Organisms, Templates)
+- **Module System**: Domain-based business logic with Zustand stores
+- **Material UI Integration**: Universal UI rules for all projects
+- **Multi-Project Support**: React, React Native, Next.js with consistent architecture
 
 ## 🚀 Installation
 
@@ -64,8 +72,27 @@ This project uses a Multi-Agent System with the following agents:
 
 - **Manager Agent**: User greeting and task delegation
 - **Analyst Agent**: Task analysis and requirements gathering
-- **Developer Agent**: Code development and implementation
+- **Developer Agent**: Code development with Context Injection and UI Architecture rules
 - **Backend Agent**: API and database operations
+
+### Context Injection Mechanism
+
+Developer agent automatically loads UI architecture rules from `multi-agent/shared/context-injection/developer-injection.context7.json`:
+
+```bash
+# Developer agent startup with context injection
+node multi-agent/scripts/developer-agent-startup.js
+
+# Test context injection mechanism
+node multi-agent/scripts/test-context-injection.js
+```
+
+### UI Architecture Rules
+
+- **Atomic Design**: Atoms → Molecules → Organisms → Templates
+- **Module System**: Domain-based business logic with Zustand stores
+- **Material UI**: Universal UI library integration
+- **State Management**: Zustand with domain-based stores
 
 ## 📁 Project Structure
 
@@ -74,7 +101,11 @@ project/
 ├── multi-agent/                    # Multi-agent system
 │   ├── agents/                     # Agent configurations
 │   ├── shared/                     # Tasks and logs
-│   └── orchestrator/               # Workflow management
+│   │   ├── context-injection/      # Context injection files
+│   │   ├── tasks/                  # Task context files
+│   │   └── logs/                   # System logs
+│   ├── orchestrator/               # Workflow management
+│   └── scripts/                    # Agent scripts
 └── .cursor/rules/
     └── multi-agent-rules.mdc       # Cursor rules
 ```

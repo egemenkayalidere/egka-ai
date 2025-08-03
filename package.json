@@ -1,7 +1,7 @@
 {
-  "name": "@egemenkayalidere/egka-ai-agents",
-  "version": "1.0.0",
-  "description": "Multi-Agent System for automated task management and development",
+  "name": "@egka/egka-ai-agents",
+  "version": "1.1.0",
+  "description": "Multi-Agent System with Context Injection, UI Architecture Rules, and Atomic Design for automated task management and development",
   "main": "index.js",
   "bin": {
     "egka-ai": "./bin/egka-ai.js"
@@ -19,13 +19,19 @@
     "development",
     "task-management",
     "ai-agents",
-    "egkasoft"
+    "egkasoft",
+    "context-injection",
+    "ui-architecture",
+    "atomic-design",
+    "material-ui",
+    "zustand",
+    "react",
+    "nextjs"
   ],
   "author": "EgKaSoft",
   "license": "MIT",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
+    "access": "restricted"
   },
   "dependencies": {
     "chalk": "^4.1.2",
