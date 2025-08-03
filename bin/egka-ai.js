@@ -4944,6 +4944,22 @@ Log'lar \`shared/logs/\` klasöründe tutulur.
     console.log(chalk.green("✅ Scripts dosyaları kopyalandı"));
   }
 
+  // Orchestrator dosyalarını kopyala (workflow.context7.json hariç)
+  const sourceOrchestratorPath = path.join(__dirname, "..", "multi-agent", "orchestrator");
+  const targetOrchestratorPath = path.join(multiAgentPath, "orchestrator");
+  
+  if (await fs.pathExists(sourceOrchestratorPath)) {
+    const orchestratorFiles = await fs.readdir(sourceOrchestratorPath);
+    for (const file of orchestratorFiles) {
+      if (file !== "workflow.context7.json") { // workflow dosyasını atla, zaten oluşturuldu
+        const sourceFile = path.join(sourceOrchestratorPath, file);
+        const targetFile = path.join(targetOrchestratorPath, file);
+        await fs.copy(sourceFile, targetFile);
+      }
+    }
+    console.log(chalk.green("✅ Orchestrator dosyaları kopyalandı"));
+  }
+
   console.log(chalk.green("✅ Multi-agent sistemi oluşturuldu"));
 }
 
