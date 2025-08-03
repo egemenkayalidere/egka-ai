@@ -4114,6 +4114,15 @@ async function createProjectWithFrameworkCLI(config) {
 
 async function createNextJSProject(config) {
   // Next.js projesi oluştur
+  
+  // Güvenli current working directory alma
+  let currentCwd;
+  try {
+    currentCwd = process.cwd();
+  } catch (error) {
+    currentCwd = path.dirname(__dirname);
+  }
+  
   const createCommand = `npx create-next-app@latest ${
     config.projectName
   } --typescript=${config.language === "typescript"} --tailwind=${
@@ -4121,24 +4130,85 @@ async function createNextJSProject(config) {
   } --eslint --app --src-dir --import-alias "@/*" --yes`;
 
   console.log(chalk.gray(`   ${createCommand}`));
-  execSync(createCommand, { stdio: "inherit" });
+  
+  try {
+    execSync(createCommand, { 
+      stdio: "inherit",
+      cwd: currentCwd,
+      env: { ...process.env, FORCE_COLOR: "1" }
+    });
+    
+    console.log(chalk.green("✅ Next.js projesi oluşturuldu"));
+  } catch (error) {
+    console.log(chalk.yellow("⚠️  Next.js CLI hatası, manuel oluşturma yapılıyor..."));
+    throw error; // Manuel oluşturmaya geç
+  }
 }
 
 async function createReactProject(config) {
   // Vite ile React projesi oluştur (Create React App deprecated)
   const template = config.language === "typescript" ? "react-ts" : "react";
+  
+  // Güvenli current working directory alma
+  let currentCwd;
+  try {
+    currentCwd = process.cwd();
+  } catch (error) {
+    currentCwd = path.dirname(__dirname);
+  }
+  
   const createCommand = `npm create vite@latest ${config.projectName} -- --template ${template} --yes`;
 
   console.log(chalk.gray(`   ${createCommand}`));
-  execSync(createCommand, { stdio: "inherit" });
+  
+  try {
+    // Önce mevcut dizini kaydet
+    const originalCwd = currentCwd;
+    
+    // Proje dizinine geç
+    const projectPath = path.join(currentCwd, config.projectName);
+    
+    // Vite ile proje oluştur
+    execSync(createCommand, { 
+      stdio: "inherit",
+      cwd: currentCwd,
+      env: { ...process.env, FORCE_COLOR: "1" }
+    });
+    
+    console.log(chalk.green("✅ Vite projesi oluşturuldu"));
+  } catch (error) {
+    console.log(chalk.yellow("⚠️  Vite CLI hatası, manuel oluşturma yapılıyor..."));
+    throw error; // Manuel oluşturmaya geç
+  }
 }
 
 async function createLovableProject(config) {
   // Lovable projesi oluştur (varsayılan olarak Vite kullan)
+  
+  // Güvenli current working directory alma
+  let currentCwd;
+  try {
+    currentCwd = process.cwd();
+  } catch (error) {
+    currentCwd = path.dirname(__dirname);
+  }
+  
   const createCommand = `npm create vite@latest ${config.projectName} -- --template react-ts --yes`;
 
   console.log(chalk.gray(`   ${createCommand}`));
-  execSync(createCommand, { stdio: "inherit" });
+  
+  try {
+    execSync(createCommand, { 
+      stdio: "inherit",
+      cwd: currentCwd,
+      env: { ...process.env, FORCE_COLOR: "1" }
+    });
+    
+    console.log(chalk.green("✅ Lovable projesi oluşturuldu"));
+  } catch (error) {
+    console.log(chalk.yellow("⚠️  Lovable CLI hatası, manuel oluşturma yapılıyor..."));
+    throw error; // Manuel oluşturmaya geç
+  }
 }
 
 async function createVueProject(config) {
