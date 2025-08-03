@@ -4763,6 +4763,7 @@ async function createMultiAgentSystem(projectPath, config) {
     shared: {
       tasks: {},
       logs: {},
+      "context-injection": {},
     },
     orchestrator: {},
   };
@@ -4922,6 +4923,25 @@ Log'lar \`shared/logs/\` klasöründe tutulur.
       path.join(multiAgentPath, "shared", "logs", logFile),
       `[${getReliableTimestamp()}] [INFO] Multi-agent system initialized\n`
     );
+  }
+
+  // Context injection dosyalarını kopyala
+  const sourceContextInjectionPath = path.join(__dirname, "..", "multi-agent", "shared", "context-injection");
+  const targetContextInjectionPath = path.join(multiAgentPath, "shared", "context-injection");
+  
+  if (await fs.pathExists(sourceContextInjectionPath)) {
+    await fs.copy(sourceContextInjectionPath, targetContextInjectionPath);
+    console.log(chalk.green("✅ Context injection dosyaları kopyalandı"));
+  }
+
+  // Scripts klasörünü oluştur ve dosyaları kopyala
+  const scriptsPath = path.join(multiAgentPath, "scripts");
+  await fs.ensureDir(scriptsPath);
+  
+  const sourceScriptsPath = path.join(__dirname, "..", "multi-agent", "scripts");
+  if (await fs.pathExists(sourceScriptsPath)) {
+    await fs.copy(sourceScriptsPath, scriptsPath);
+    console.log(chalk.green("✅ Scripts dosyaları kopyalandı"));
   }
 
   console.log(chalk.green("✅ Multi-agent sistemi oluşturuldu"));
