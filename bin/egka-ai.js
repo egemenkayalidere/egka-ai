@@ -4166,7 +4166,7 @@ async function createReactProject(config) {
     currentCwd = path.dirname(__dirname);
   }
 
-  const createCommand = `npm create vite@latest ${config.projectName} -- --template ${template} --yes`;
+  const createCommand = `npx create-vite@latest ${config.projectName} --template ${template} --yes`;
 
   console.log(chalk.gray(`   ${createCommand}`));
 
@@ -4204,7 +4204,7 @@ async function createLovableProject(config) {
     currentCwd = path.dirname(__dirname);
   }
 
-  const createCommand = `npm create vite@latest ${config.projectName} -- --template react-ts --yes`;
+  const createCommand = `npx create-vite@latest ${config.projectName} --template react-ts --yes`;
 
   console.log(chalk.gray(`   ${createCommand}`));
 
