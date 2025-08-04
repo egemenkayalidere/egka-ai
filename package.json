@@ -4,7 +4,7 @@
   "description": "Multi-Agent System with Context Injection, Atomic Design, and Storybook Integration for automated task management and development",
   "main": "index.js",
   "bin": {
-    "egka-ai": "./bin/egka-ai.js"
+    "egka-ai": "bin/egka-ai.js"
   },
   "scripts": {
     "install": "node scripts/install.js",
