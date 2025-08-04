@@ -1,139 +1,25 @@
 {
-  "project_name": "Multi-Agent System",
-  "version": "1.0.0",
-  "description": "Multi-Agent System for automated task management and development",
-  "created_at": "2025-01-27T10:00:00Z",
-  "last_updated": "2025-01-27T12:00:00Z",
-  "project_story": "Yeni proje için multi-agent sistemi kurulumu ve konfigürasyonu - web-app projesi eklendi",
-  "system_overview": {
-    "architecture": "Multi-Agent System with Manager, Analyst, and Developer Agents",
-    "workflow": "User Input → Manager → Analyst → Developer → Task Completion",
-    "communication": "Shared file-based communication through context7.json files",
-    "logging": "Centralized logging system with agent-specific and system-wide logs"
-  },
-  "agents": {
-    "manager_agent": {
-      "role": "User interface and task delegation",
-      "responsibilities": [
-        "User greeting",
-        "Task reception",
-        "Workflow initiation"
-      ],
-      "file_access": ["shared/logs/manager-agent.log", "shared/logs/system.log"]
-    },
-    "analyst_agent": {
-      "role": "Task analysis and creation",
-      "responsibilities": [
-        "Requirement analysis",
-        "Task ID generation",
-        "Context file creation"
-      ],
-      "file_access": [
-        "shared/tasks/*.context7.json",
-        "shared/logs/analyst-agent.log",
-        "shared/logs/system.log"
-      ]
-    },
-    "developer_agent": {
-      "role": "Task execution and implementation",
-      "responsibilities": [
-        "Code generation",
-        "File operations",
-        "Task completion"
-      ],
-      "file_access": [
-        "shared/tasks/*.context7.json",
-        "shared/logs/developer-agent.log",
-        "shared/logs/system.log",
-        "shared/logs/task-reports.md"
-      ]
-    }
-  },
+  "system_name": "Multi-Agent Development System",
+  "version": "2.0.0",
+  "description": "AI destekli geliştirme sistemi",
+  "created_at": "2025-08-04T19:43:40.332Z",
+  "active_agents": 3,
+  "agents": [
+    "managerAgent",
+    "analystAgent",
+    "developerAgent"
+  ],
   "file_structure": {
-    "multi-agent/": {
-      "agents/": "Agent configuration files",
-      "shared/": {
-        "tasks/": "Task context files (TASK-XXXX-XXXX.context7.json)",
-        "logs/": "Agent and system logs"
-      },
-      "orchestrator/": "Agent coordination and workflow management",
-      "main.context7.json": "This file - Project overview and story"
-    }
+    "agents/": "Agent konfigürasyonları",
+    "shared/": "Paylaşılan dosyalar",
+    "shared/tasks/": "Task dosyaları",
+    "shared/logs/": "Log dosyaları",
+    "orchestrator/": "Agent koordinasyonu",
+    "scripts/": "Sistem scriptleri"
   },
-  "project_structure": {
-    "lovable+cursor/": {
-      "mobile-app/": "React Native/Expo mobile app",
-      "admin-panel/": "React/TypeScript admin dashboard",
-      "web-app/": "Next.js web application",
-      "backend-api/": "Node.js/Express API server",
-      "multi-agent/": "Multi-agent system"
-    }
-  },
-  "rules": {
-    "agent_file_access": {
-      "manager_agent": {
-        "can_read": ["shared/logs/manager-agent.log", "shared/logs/system.log"],
-        "can_write": ["shared/logs/manager-agent.log", "shared/logs/system.log"]
-      },
-      "analyst_agent": {
-        "can_read": [
-          "shared/tasks/*.context7.json",
-          "shared/logs/analyst-agent.log",
-          "shared/logs/system.log",
-          "main.context7.json"
-        ],
-        "can_write": [
-          "shared/tasks/*.context7.json",
-          "shared/logs/analyst-agent.log",
-          "shared/logs/system.log"
-        ]
-      },
-      "developer_agent": {
-        "can_read": [
-          "shared/tasks/*.context7.json",
-          "shared/logs/developer-agent.log",
-          "shared/logs/system.log",
-          "shared/logs/task-reports.md",
-          "main.context7.json"
-        ],
-        "can_write": [
-          "shared/logs/developer-agent.log",
-          "shared/logs/system.log",
-          "shared/logs/task-reports.md"
-        ]
-      }
-    },
-    "task_management": {
-      "id_format": "TASK-{YEAR}-{SEQUENTIAL}",
-      "auto_increment_start": 1000,
-      "context_file_format": "context7.json",
-      "required_fields": [
-        "task_id",
-        "title",
-        "description",
-        "priority",
-        "status",
-        "assigned_agent",
-        "created_at"
-      ]
-    },
-    "logging": {
-      "agent_logs": "Each agent writes to its own log file",
-      "system_log": "Shared system-wide log for important events",
-      "task_reports": "Detailed task execution reports",
-      "log_rotation": true,
-      "log_compression": true
-    }
-  },
-  "status": {
-    "active_agents": 3,
-    "total_tasks_created": 0,
-    "system_health": "ready",
-    "last_maintenance": "2025-01-27T12:00:00Z",
-    "enhancements": [
-      "Clean system initialization",
-      "Ready for new projects",
-      "Web-app project added"
-    ]
-  }
+  "enhancements": [
+    "Multi-project desteği",
+    "Atomic design support",
+    "AI-powered component editing"
+  ]
 }

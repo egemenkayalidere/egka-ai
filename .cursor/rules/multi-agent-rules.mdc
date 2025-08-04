@@ -1,21 +1,17 @@
----
-alwaysApply: true
----
-
 # Multi-Agent System Rules
 
-## Agent Activation Rules
+## Multi-Agent System Rules
+
+### Agent Activation Rules
 
 Her yeni chat başlangıcında aşağıdaki multi-agent sistemi otomatik olarak devreye girer:
 
-### 1. Manager Agent Activation
-
+#### 1. Manager Agent Activation
 - **Trigger:** Kullanıcı herhangi bir komut girdiğinde
 - **Action:** "Merhaba! Multi-Agent Sistemine hoş geldiniz. Görevinizi alıyorum ve analist ajanımıza aktarıyorum."
 - **Next Step:** Görevi analist agent'a aktarır ve proje kapsamını belirler
 
-### 2. Analyst Agent Activation
-
+#### 2. Analyst Agent Activation
 - **Trigger:** Manager'dan gelen görev
 - **Action:**
   - Auto increment ID ile task oluşturur (TASK-2025-1000 formatında)
@@ -23,20 +19,16 @@ Her yeni chat başlangıcında aşağıdaki multi-agent sistemi otomatik olarak 
   - Proje türüne göre uygun agent'a atar (developer/backend)
   - Multi-project desteği ile tüm projeleri analiz eder
 
-### 3. Developer Agent Activation (Frontend)
-
+#### 3. Developer Agent Activation (Frontend)
 - **Trigger:** Frontend/UI ile ilgili task'lar
 - **Action:**
-  - Context injection mekanizmasını yükler
-  - UI architecture kurallarını uygular
   - Task context dosyasını okur
   - React Native (mobile), React (admin panel) veya Next.js (web-app) geliştirme yapar
   - Backend gereksinimlerini backend agent'a devreder
   - Shared log'a yazar
   - Task durumunu günceller
 
-### 4. Backend Agent Activation
-
+#### 4. Backend Agent Activation
 - **Trigger:** Backend/API ile ilgili task'lar
 - **Action:**
   - Task context dosyasını okur
@@ -44,112 +36,6 @@ Her yeni chat başlangıcında aşağıdaki multi-agent sistemi otomatik olarak 
   - Firebase entegrasyonu ve authentication işlemleri
   - Shared log'a yazar
   - Task durumunu günceller
-
-## Context Injection Mechanism
-
-### Developer Agent Context Injection
-
-Developer agent her başlangıçta otomatik olarak context injection yükler:
-
-```bash
-# Developer agent'ı context injection ile başlat
-node multi-agent/scripts/developer-agent-startup.js
-
-# Injection mekanizmasını test et
-node multi-agent/scripts/test-context-injection.js
-```
-
-### Injection Dosyası
-
-- **Konum:** `multi-agent/shared/context-injection/developer-injection.context7.json`
-- **İçerik:** UI architecture kuralları, global settings, project configs
-- **Otomatik Yükleme:** Her developer agent başlangıcında
-
-## UI Architecture Rules
-
-### Atomic Design System
-
-#### 1. Atoms
-
-- **Açıklama:** Material UI veya HTML elementlerinden türetilen en küçük bileşenler
-- **Konum:** `components/atoms`
-- **Örnekler:** CustomButton, CustomTextField, CustomIcon
-- **Kurallar:**
-  - Material UI veya HTML elementlerinden türetilmeli
-  - Tek bir işlevi olmalı
-  - Yeniden kullanılabilir olmalı
-
-#### 2. Molecules
-
-- **Açıklama:** İki veya daha fazla atomun birleşimi
-- **Konum:** `components/molecules`
-- **Örnekler:** InputWithLabel, AvatarWithName, FormField
-- **Kurallar:**
-  - İki veya daha fazla atom içermeli
-  - Tek bir amaca hizmet etmeli
-  - Kendi state'i olmamalı
-
-#### 3. Organisms
-
-- **Açıklama:** Sayfa parçalarını temsil eden büyük bileşenler
-- **Konum:** `components/organisms`
-- **Örnekler:** Sidebar, Navbar, ProfileCard
-- **Kurallar:**
-  - Birden fazla molecule ve atom içermeli
-  - Sayfa parçasını temsil etmeli
-  - Store bağlantısı olabilir ancak kendi store'unu üretmemeli
-  - İş mantığı içermemeli
-
-#### 4. Templates
-
-- **Açıklama:** Layout ve şablonlar
-- **Konum:** `components/templates`
-- **Örnekler:** MasterPage, DashboardLayout
-- **Kurallar:**
-  - Layout ve şablonları ifade etmeli
-  - Organizmaları birleştirmeli
-  - Sayfa düzeyinde yapı oluşturmalı
-
-### Module System
-
-#### Modules
-
-- **Açıklama:** Domain'e özel iş mantığı, store ve API katmanları
-- **Konum:** `modules/*`
-- **Yapı:** `store.ts`, `services.ts`, `UI component(s)`
-- **Örnekler:** UserModule, AuthModule, NotificationModule
-- **Kurallar:**
-  - Kendi iş mantığını üretmeli
-  - Store ve API çağrılarını içermeli
-  - Domain'e özel olmalı
-  - Bağımsız çalışabilmeli
-
-### State Management
-
-#### Zustand Store Pattern
-
-- **Konum:** `modules/*/store.ts`
-- **Naming:** `use[ModuleName]Store`
-- **Yapı:**
-  - State: interface
-  - Actions: functions
-  - Selectors: computed values
-
-#### API Services
-
-- **Konum:** `modules/*/services.ts`
-- **Naming:** `[ModuleName]Service`
-- **Yapı:**
-  - API calls: async functions
-  - Error handling: try-catch blocks
-  - Type definitions: interfaces
-
-### Material UI Integration
-
-- **Theme Usage:** Required
-- **Component Wrapping:** Required
-- **Customization:** Theme-based
-- **Responsive Design:** Required
 
 ## File Structure
 
@@ -161,63 +47,42 @@ multi-agent/
 │   ├── developerAgent.context7.json
 │   └── backendAgent.context7.json
 ├── shared/
-│   ├── tasks/                    # Task context dosyaları
-│   ├── logs/                     # Shared log dosyaları
-│   └── context-injection/        # Context injection dosyaları
-├── orchestrator/                 # Agent koordinasyonu
-└── scripts/                      # Agent script'leri
+│   ├── tasks/          # Task context dosyaları
+│   └── logs/           # Shared log dosyaları
+└── orchestrator/       # Agent koordinasyonu
 ```
 
 ## Project Structure
 
 ```
 egka-ai/
-├── mobile-app/                   # React Native mobile app
-├── admin-panel/                  # React admin dashboard
-├── web-app/                      # Next.js web application
-├── backend-api/                  # Node.js Express API
-└── multi-agent/                  # Multi-agent sistemi
+├── mobile-app/         # React Native mobile app
+├── admin-panel/        # React admin dashboard
+├── web-app/           # Next.js web application
+└── backend-api/        # Node.js Express API
 ```
-
-## Universal UI Rules
-
-### Supported Frameworks
-
-- **React:** Material UI + Zustand + React Router
-- **React Native:** React Native Paper + Zustand + React Navigation
-- **Next.js:** Material UI + Zustand + Next Router
-
-### Architecture Principles
-
-- **Atomic Design:** Hierarchical component structure
-- **State Management:** Zustand (domain-based)
-- **UI Library:** Material UI
-- **Code Organization:** Modular
 
 ## Workflow
 
 1. User Input → Manager Agent (Greeting + Project Identification)
 2. Manager → Analyst Agent (Task Creation + Context File + Agent Assignment)
 3. Analyst → Shared Tasks (TASK-XXXX-XXXX.context7.json)
-4. Developer Agent → Context Injection Loading
-5. Agent Assignment:
+4. Agent Assignment:
    - Frontend Tasks → Developer Agent (React Native/React/Next.js)
    - Backend Tasks → Backend Agent (Node.js/Express)
    - Full-stack Tasks → Both Agents (Coordinated)
-6. Agent Execution → Reads Task → Executes → Logs → Updates Status
+5. Agent Execution → Reads Task → Executes → Logs → Updates Status
 
 ## Logging
 
 - Tüm aktiviteler `multi-agent/shared/logs/` klasöründe loglanır
 - Task durumları `multi-agent/shared/tasks/` klasöründe takip edilir
-- Context injection logları ayrı dosyalarda tutulur
 - Her agent'ın kendi log dosyası vardır:
   - `manager-agent.log`
   - `analyst-agent.log`
   - `developer-agent.log`
   - `backend-agent.log`
   - `system.log`
-  - `context-injection.log`
 
 ## Multi-Project Support
 
@@ -228,24 +93,70 @@ egka-ai/
 
 Her proje için uygun agent'lar otomatik olarak seçilir ve görevler dağıtılır.
 
-## Must Apply Rules
+## Framework Specific Rules
 
-1. **Context7 must be loaded before task execution**
-2. **All component structures must follow the atomic design layer**
-3. **Modules must define their own Zustand store and API layer**
-4. **Organisms must not contain business logic or create their own stores**
-5. **Agent must reject any task execution if context7 is not injected**
-6. **All components must be Material UI theme compatible**
-7. **All context and operation logs must be recorded**
+### Vanilla Projects
+
+
+- Use modern JavaScript/TypeScript
+- Follow vanilla JS best practices
+- Implement modular architecture
+
+
+### CSS Framework: css
+
+
+- Use css for styling
+- Follow css best practices
+- Implement responsive design
+
 
 ## Language Rules
 
-- **Ajanlar, her zaman Türkçe cevaplar vermeli**
-- **Tüm log dosyaları Türkçe olmalı**
-- **Hata mesajları Türkçe olmalı**
-- **Dokümantasyon Türkçe olmalı**
-  description:
-  globs:
-  alwaysApply: false
+### JavaScript
+
+
+- Use modern JavaScript (ES6+)
+- Use proper variable declarations (const/let)
+- Follow JavaScript best practices
+
+
+## Feature Rules
+
+
+
+## Communication Rules
+
+- Ajanlar, her zaman Türkçe cevaplar vermeli
+- Kod yorumları Türkçe olmalı
+- Değişken ve fonksiyon isimleri İngilizce olmalı
+- Dosya isimleri İngilizce olmalı
+
+## Code Quality Rules
+
+- ESLint kurallarına uyulmalı
+- Prettier ile kod formatlanmalı
+- TypeScript strict mode kullanılmalı
+- Modern JavaScript/TypeScript özellikleri kullanılmalı
+- Accessibility (a11y) standartlarına uyulmalı
+- Performance optimizasyonları yapılmalı
+
+## Security Rules
+
+- Environment variables kullanılmalı
+- API anahtarları güvenli şekilde saklanmalı
+- Input validation yapılmalı
+- XSS ve CSRF koruması sağlanmalı
+- HTTPS kullanılmalı
+
+## Performance Rules
+
+- Code splitting uygulanmalı
+- Lazy loading kullanılmalı
+- Image optimization yapılmalı
+- Bundle size optimize edilmeli
+- Caching stratejileri uygulanmalı
 
 ---
+
+**Bu dosya otomatik olarak oluşturulmuştur ve "always" seçili olmalıdır.**

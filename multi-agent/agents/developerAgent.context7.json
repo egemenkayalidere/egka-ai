@@ -1,7 +1,7 @@
 {
   "name": "Developer Agent",
-  "version": "1.0.0",
-  "description": "Multi-Agent System Developer Agent - Executes development tasks and implements solutions",
+  "version": "2.0.0",
+  "description": "Multi-Agent System Developer Agent - Atomic Design Expert with Automatic Story Generation",
   "type": "agent",
   "capabilities": [
     "code_generation",
@@ -15,7 +15,11 @@
     "task_logging",
     "file_reading",
     "context_analysis",
-    "log_analysis"
+    "log_analysis",
+    "atomic_design_implementation",
+    "story_generation",
+    "component_analysis",
+    "storybook_integration"
   ],
   "configuration": {
     "supported_languages": [
@@ -23,13 +27,117 @@
       "javascript",
       "python",
       "json",
-      "markdown"
+      "markdown",
+      "tsx",
+      "jsx"
     ],
     "max_file_size": 1000000,
     "timeout": 60000,
     "log_level": "info"
   },
   "dependencies": ["analyst_agent"],
+  "atomic_design_expertise": {
+    "levels": {
+      "atoms": {
+        "description": "Temel UI bileşenleri",
+        "examples": ["Button", "Input", "Icon", "Typography", "Avatar"],
+        "rules": [
+          "Tek bir işlevi olmalı",
+          "Yeniden kullanılabilir olmalı",
+          "Props ile özelleştirilebilir olmalı",
+          "Material UI veya HTML elementlerinden türetilmeli"
+        ]
+      },
+      "molecules": {
+        "description": "İki veya daha fazla atomun birleşimi",
+        "examples": [
+          "FormField",
+          "Card",
+          "SearchBar",
+          "Navigation",
+          "Breadcrumb"
+        ],
+        "rules": [
+          "İki veya daha fazla atom içermeli",
+          "Tek bir amaca hizmet etmeli",
+          "Kendi state'i olmamalı",
+          "Props ile kontrol edilebilir olmalı"
+        ]
+      },
+      "organisms": {
+        "description": "Sayfa parçalarını temsil eden büyük bileşenler",
+        "examples": [
+          "Header",
+          "Sidebar",
+          "Footer",
+          "ProductList",
+          "UserProfile"
+        ],
+        "rules": [
+          "Birden fazla molecule ve atom içermeli",
+          "Sayfa parçasını temsil etmeli",
+          "Store bağlantısı olabilir",
+          "İş mantığı içermemeli"
+        ]
+      },
+      "templates": {
+        "description": "Layout ve şablonlar",
+        "examples": [
+          "MasterPage",
+          "DashboardLayout",
+          "AuthLayout",
+          "AdminLayout"
+        ],
+        "rules": [
+          "Layout ve şablonları ifade etmeli",
+          "Organizmaları birleştirmeli",
+          "Sayfa düzeyinde yapı oluşturmalı"
+        ]
+      },
+      "pages": {
+        "description": "Tam sayfalar",
+        "examples": ["HomePage", "LoginPage", "DashboardPage", "ProfilePage"],
+        "rules": [
+          "Tam sayfa içeriğini temsil etmeli",
+          "Template ve organismleri kullanmalı",
+          "Route ile bağlantılı olmalı"
+        ]
+      }
+    },
+    "file_structure": {
+      "atoms": "src/components/atoms/",
+      "molecules": "src/components/molecules/",
+      "organisms": "src/components/organisms/",
+      "templates": "src/components/templates/",
+      "pages": "src/components/pages/"
+    },
+    "naming_conventions": {
+      "components": "PascalCase (MyButton, UserCard)",
+      "files": "PascalCase.tsx (MyButton.tsx, UserCard.tsx)",
+      "folders": "kebab-case (user-profile, product-list)"
+    }
+  },
+  "story_generation": {
+    "automatic": true,
+    "trigger": "component_created || component_updated",
+    "story_format": ".stories.tsx",
+    "required_variants": [
+      "Default",
+      "Primary",
+      "Secondary",
+      "Disabled",
+      "Small",
+      "Large",
+      "HTMLPreview"
+    ],
+    "story_content": {
+      "imports": "React ve component import",
+      "default_export": "Component metadata ve argTypes",
+      "variants": "Tüm varyantlar için story exports",
+      "html_preview": "HTML çıktısı için özel hikaye"
+    },
+    "script_path": "multi-agent/scripts/auto-story-generator.js"
+  },
   "api_endpoints": {
     "execute_task": "/tasks/execute",
     "get_task_status": "/tasks/:id/status",
@@ -46,26 +154,10 @@
     "write_log": "/shared-log/write",
     "read_logs": "/shared-log/read",
     "get_task_logs": "/shared-log/task/:id",
-    "load_context_injection": "/shared-context-injection/developer-injection.context7.json",
-    "read_injection_config": "/shared-context-injection/*.context7.json",
-    "validate_injection_data": "/shared-context-injection/validate",
-    "merge_context_data": "/shared-context-injection/merge"
+    "generate_story": "/scripts/generate-story.js",
+    "auto_story_generation": "/scripts/auto-story-generator.js"
   },
   "workflow": {
-    "context_injection": {
-      "startup_sequence": {
-        "load_context_injection": true,
-        "validate_injection_data": true,
-        "merge_with_existing_context": true,
-        "apply_global_settings": true
-      },
-      "injection_management": {
-        "auto_refresh": false,
-        "persistent_storage": true,
-        "conflict_resolution": "injection_priority",
-        "rollback_capability": true
-      }
-    },
     "task_execution": {
       "task_discovery": {
         "scan_shared_tasks": true,
@@ -77,27 +169,57 @@
         "requirement_understanding": true,
         "complexity_assessment": true,
         "resource_planning": true,
-        "context_awareness": true
+        "context_awareness": true,
+        "atomic_design_planning": true
       },
       "implementation": {
         "code_generation": true,
         "file_creation": true,
-        "code_review": true
+        "code_review": true,
+        "atomic_design_compliance": true
+      },
+      "story_generation": {
+        "automatic_story_creation": true,
+        "variant_generation": true,
+        "html_preview_creation": true,
+        "storybook_integration": true
       },
       "testing": {
         "unit_testing": true,
         "integration_testing": true,
-        "validation": true
+        "validation": true,
+        "story_testing": true
       },
       "documentation": {
         "code_comments": true,
         "readme_generation": true,
-        "api_documentation": true
+        "api_documentation": true,
+        "story_documentation": true
       },
       "task_completion": {
         "status_update": true,
         "result_logging": true,
-        "context_cleanup": true
+        "context_cleanup": true,
+        "story_verification": true
+      }
+    },
+    "atomic_design_workflow": {
+      "component_analysis": {
+        "identify_level": true,
+        "determine_complexity": true,
+        "plan_structure": true
+      },
+      "component_creation": {
+        "follow_naming_conventions": true,
+        "implement_props_interface": true,
+        "use_material_ui": true,
+        "add_proper_typing": true
+      },
+      "story_creation": {
+        "generate_story_file": true,
+        "create_all_variants": true,
+        "add_html_preview": true,
+        "update_storybook": true
       }
     },
     "shared_logging": {
@@ -113,7 +235,8 @@
         "files_created": true,
         "files_modified": true,
         "code_changes": true,
-        "errors_encountered": true
+        "errors_encountered": true,
+        "stories_generated": true
       },
       "performance_log": {
         "execution_time": true,
@@ -124,7 +247,9 @@
     "quality_assurance": {
       "code_quality_check": true,
       "performance_optimization": true,
-      "security_audit": true
+      "security_audit": true,
+      "atomic_design_compliance": true,
+      "story_quality_check": true
     }
   },
   "development_tools": {
@@ -144,10 +269,17 @@
       "integration_tests": true,
       "e2e_tests": true
     },
+    "story_generation_tools": {
+      "generate_story": "node multi-agent/scripts/generate-story.js",
+      "auto_generate_all": "node multi-agent/scripts/auto-story-generator.js --all",
+      "generate_for_component": "node multi-agent/scripts/auto-story-generator.js --component",
+      "update_stories": "node multi-agent/scripts/auto-story-generator.js --update"
+    },
     "logging_system": {
       "agent_log_file": "/shared-logs/developer-agent.log",
       "system_log_file": "/shared-logs/system.log",
       "task_log_file": "/shared-logs/task-reports.md",
+      "story_generation_log": "/shared-logs/story-generation.log",
       "log_rotation": true,
       "log_compression": true
     }
@@ -159,14 +291,19 @@
       "code_quality_score",
       "bug_rate",
       "log_entries_written",
-      "log_file_size"
+      "log_file_size",
+      "components_created",
+      "stories_generated",
+      "atomic_design_compliance_rate"
     ],
     "alerts": [
       "execution_timeout",
       "high_bug_rate",
       "code_quality_degradation",
       "log_file_full",
-      "logging_failure"
+      "logging_failure",
+      "story_generation_failure",
+      "atomic_design_violation"
     ]
   },
   "security": {
@@ -174,5 +311,13 @@
     "authorization": "role_based",
     "code_signing": true,
     "audit_logging": true
+  },
+  "rules": {
+    "atomic_design_compliance": "Her component atomic design kurallarına uygun olmalı",
+    "story_requirement": "Her atomic design componenti için story dosyası zorunlu",
+    "naming_conventions": "Component ve dosya isimleri belirlenen kurallara uygun olmalı",
+    "material_ui_usage": "UI bileşenleri Material UI kullanmalı",
+    "type_safety": "TypeScript strict mode kullanılmalı",
+    "documentation": "Her component için uygun dokümantasyon yazılmalı"
   }
 }

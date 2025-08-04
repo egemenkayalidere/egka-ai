@@ -8,7 +8,7 @@ Otomatik görev yönetimi ve geliştirme için multi-agent sistemi.
 
 1. **Manager Agent** - Kullanıcı karşılama ve görev delegasyonu
 2. **Analyst Agent** - Görev analizi ve task oluşturma
-3. **Developer Agent** - Kod geliştirme ve implementasyon
+3. **Developer Agent** - Kod geliştirme, Atomic Design implementasyonu ve Storybook entegrasyonu
 
 ### Workflow
 
@@ -53,7 +53,7 @@ Her agent'ın kendi yetki alanında dosya okuma ve yazma yetkileri vardır:
 
 - **Manager Agent**: Kendi log'ları ve sistem log'ları
 - **Analyst Agent**: Task context dosyaları, kendi log'ları, main context
-- **Developer Agent**: Task context dosyaları, kendi log'ları, task raporları, main context
+- **Developer Agent**: Task context dosyaları, kendi log'ları, task raporları, atomic design logları, storybook logları, main context, component dosyaları
 
 ### Task Yönetimi
 
@@ -82,6 +82,9 @@ TASK-{YEAR}-{SEQUENTIAL}
 - **manager-agent.log**: Manager agent aktiviteleri
 - **analyst-agent.log**: Analyst agent aktiviteleri
 - **developer-agent.log**: Developer agent aktiviteleri
+- **atomic-design.log**: Atomic design component oluşturma logları
+- **storybook-setup.log**: Storybook kurulum logları
+- **story-generation.log**: Story oluşturma logları
 - **task-reports.md**: Detaylı task raporları
 
 ## 🔧 Konfigürasyon
@@ -101,6 +104,9 @@ TASK-{YEAR}-{SEQUENTIAL}
 - Performance metrics
 - File access monitoring
 - Context awareness tracking
+- Atomic design compliance
+- Story generation success rate
+- Storybook integration status
 
 ## 📝 Dokümantasyon
 

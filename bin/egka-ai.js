@@ -400,13 +400,15 @@ program
     try {
       // Mevcut proje için cursor rules oluştur
       const currentProjectConfig = {
-        projectName: path.basename((() => {
-        try {
-          return process.cwd();
-        } catch (error) {
-          return path.dirname(__dirname);
-        }
-      })()),
+        projectName: path.basename(
+          (() => {
+            try {
+              return process.cwd();
+            } catch (error) {
+              return path.dirname(__dirname);
+            }
+          })()
+        ),
         framework: "unknown",
         language: "javascript",
         cssFramework: "css",
@@ -414,20 +416,19 @@ program
         packageManager: "npm",
       };
 
-      await createCursorRules((() => {
-        try {
-          return process.cwd();
-        } catch (error) {
-          return path.dirname(__dirname);
-        }
-      })(), currentProjectConfig);
+      await createCursorRules(
+        (() => {
+          try {
+            return process.cwd();
+          } catch (error) {
+            return path.dirname(__dirname);
+          }
+        })(),
+        currentProjectConfig
+      );
 
-      const initScript = path.join(__dirname, "..", "scripts", "init.js");
-      if (await fs.pathExists(initScript)) {
-        require(initScript);
-      } else {
-        console.log(chalk.yellow("⚠️  Init script not found"));
-      }
+      // Multi-Agent sistemini oluştur
+      createMultiAgentSystem(process.cwd());
     } catch (error) {
       console.error(chalk.red("Error during initialization:"), error.message);
     }
@@ -1327,7 +1328,7 @@ async function generateProject(config) {
     // Eğer process.cwd() başarısız olursa, __dirname kullan
     currentCwd = path.dirname(__dirname);
   }
-  
+
   const projectPath = path.join(currentCwd, config.projectName);
 
   console.log(
@@ -1389,7 +1390,10 @@ async function generateProject(config) {
       try {
         process.chdir(projectPath);
       } catch (error) {
-        console.error(chalk.red("Proje klasörüne geçiş hatası:"), error.message);
+        console.error(
+          chalk.red("Proje klasörüne geçiş hatası:"),
+          error.message
+        );
         return;
       }
 
@@ -1406,7 +1410,10 @@ async function generateProject(config) {
       try {
         process.chdir(originalCwd);
       } catch (error) {
-        console.error(chalk.red("Orijinal dizine dönüş hatası:"), error.message);
+        console.error(
+          chalk.red("Orijinal dizine dönüş hatası:"),
+          error.message
+        );
       }
       console.log(chalk.green("✅ Bağımlılıklar başarıyla yüklendi!"));
 
@@ -4075,7 +4082,7 @@ async function createProjectWithFrameworkCLI(config) {
   } catch (error) {
     currentCwd = path.dirname(__dirname);
   }
-  
+
   const projectPath = path.join(currentCwd, config.projectName);
 
   console.log(
@@ -4114,7 +4121,7 @@ async function createProjectWithFrameworkCLI(config) {
 
 async function createNextJSProject(config) {
   // Next.js projesi oluştur
-  
+
   // Güvenli current working directory alma
   let currentCwd;
   try {
@@ -4122,7 +4129,7 @@ async function createNextJSProject(config) {
   } catch (error) {
     currentCwd = path.dirname(__dirname);
   }
-  
+
   const createCommand = `npx create-next-app@latest ${
     config.projectName
   } --typescript=${config.language === "typescript"} --tailwind=${
@@ -4130,17 +4137,19 @@ async function createNextJSProject(config) {
   } --eslint --app --src-dir --import-alias "@/*" --yes`;
 
   console.log(chalk.gray(`   ${createCommand}`));
-  
+
   try {
-    execSync(createCommand, { 
+    execSync(createCommand, {
       stdio: "inherit",
       cwd: currentCwd,
-      env: { ...process.env, FORCE_COLOR: "1" }
+      env: { ...process.env, FORCE_COLOR: "1" },
     });
-    
+
     console.log(chalk.green("✅ Next.js projesi oluşturuldu"));
   } catch (error) {
-    console.log(chalk.yellow("⚠️  Next.js CLI hatası, manuel oluşturma yapılıyor..."));
+    console.log(
+      chalk.yellow("⚠️  Next.js CLI hatası, manuel oluşturma yapılıyor...")
+    );
     throw error; // Manuel oluşturmaya geç
   }
 }
@@ -4148,7 +4157,7 @@ async function createNextJSProject(config) {
 async function createReactProject(config) {
   // Vite ile React projesi oluştur (Create React App deprecated)
   const template = config.language === "typescript" ? "react-ts" : "react";
-  
+
   // Güvenli current working directory alma
   let currentCwd;
   try {
@@ -4156,35 +4165,37 @@ async function createReactProject(config) {
   } catch (error) {
     currentCwd = path.dirname(__dirname);
   }
-  
+
   const createCommand = `npm create vite@latest ${config.projectName} -- --template ${template} --yes`;
 
   console.log(chalk.gray(`   ${createCommand}`));
-  
+
   try {
     // Önce mevcut dizini kaydet
     const originalCwd = currentCwd;
-    
+
     // Proje dizinine geç
     const projectPath = path.join(currentCwd, config.projectName);
-    
+
     // Vite ile proje oluştur
-    execSync(createCommand, { 
+    execSync(createCommand, {
       stdio: "inherit",
       cwd: currentCwd,
-      env: { ...process.env, FORCE_COLOR: "1" }
+      env: { ...process.env, FORCE_COLOR: "1" },
     });
-    
+
     console.log(chalk.green("✅ Vite projesi oluşturuldu"));
   } catch (error) {
-    console.log(chalk.yellow("⚠️  Vite CLI hatası, manuel oluşturma yapılıyor..."));
+    console.log(
+      chalk.yellow("⚠️  Vite CLI hatası, manuel oluşturma yapılıyor...")
+    );
     throw error; // Manuel oluşturmaya geç
   }
 }
 
 async function createLovableProject(config) {
   // Lovable projesi oluştur (varsayılan olarak Vite kullan)
-  
+
   // Güvenli current working directory alma
   let currentCwd;
   try {
@@ -4192,21 +4203,23 @@ async function createLovableProject(config) {
   } catch (error) {
     currentCwd = path.dirname(__dirname);
   }
-  
+
   const createCommand = `npm create vite@latest ${config.projectName} -- --template react-ts --yes`;
 
   console.log(chalk.gray(`   ${createCommand}`));
-  
+
   try {
-    execSync(createCommand, { 
+    execSync(createCommand, {
       stdio: "inherit",
       cwd: currentCwd,
-      env: { ...process.env, FORCE_COLOR: "1" }
+      env: { ...process.env, FORCE_COLOR: "1" },
     });
-    
+
     console.log(chalk.green("✅ Lovable projesi oluşturuldu"));
   } catch (error) {
-    console.log(chalk.yellow("⚠️  Lovable CLI hatası, manuel oluşturma yapılıyor..."));
+    console.log(
+      chalk.yellow("⚠️  Lovable CLI hatası, manuel oluşturma yapılıyor...")
+    );
     throw error; // Manuel oluşturmaya geç
   }
 }
@@ -4241,7 +4254,7 @@ async function createVanillaProject(config) {
   } catch (error) {
     currentCwd = path.dirname(__dirname);
   }
-  
+
   const projectPath = path.join(currentCwd, config.projectName);
 
   // Vanilla projesi oluştur
@@ -4306,7 +4319,7 @@ async function createProjectManually(config) {
   } catch (error) {
     currentCwd = path.dirname(__dirname);
   }
-  
+
   const projectPath = path.join(currentCwd, config.projectName);
 
   console.log(chalk.yellow("📝 Manuel proje oluşturuluyor..."));
@@ -4866,6 +4879,7 @@ async function createMultiAgentSystem(projectPath, config) {
         agent: "developerAgent",
         action: "implement_features",
         timeout: 300000,
+        conditional: "ui_task_required",
       },
     ],
     status: "active",
@@ -4888,6 +4902,7 @@ Bu proje, AI-powered multi-agent sistemi ile geliştirilmiştir.
 - **Analyst Agent**: Görev analizi ve task oluşturma  
 - **Developer Agent**: Kod geliştirme ve implementasyon
 
+
 ## Kullanım
 
 \`\`\`bash
@@ -4899,6 +4914,8 @@ egka-ai task --create
 
 # Agent'ları yönet
 egka-ai agent --list
+
+
 \`\`\`
 
 ## Konfigürasyon
@@ -4906,6 +4923,7 @@ egka-ai agent --list
 Agent konfigürasyonları \`agents/\` klasöründe bulunur.
 Task'lar \`shared/tasks/\` klasöründe saklanır.
 Log'lar \`shared/logs/\` klasöründe tutulur.
+
 `;
 
   await fs.writeFile(path.join(multiAgentPath, "README.md"), readmeContent);
@@ -4926,9 +4944,19 @@ Log'lar \`shared/logs/\` klasöründe tutulur.
   }
 
   // Context injection dosyalarını kopyala
-  const sourceContextInjectionPath = path.join(__dirname, "..", "multi-agent", "shared", "context-injection");
-  const targetContextInjectionPath = path.join(multiAgentPath, "shared", "context-injection");
-  
+  const sourceContextInjectionPath = path.join(
+    __dirname,
+    "..",
+    "multi-agent",
+    "shared",
+    "context-injection"
+  );
+  const targetContextInjectionPath = path.join(
+    multiAgentPath,
+    "shared",
+    "context-injection"
+  );
+
   if (await fs.pathExists(sourceContextInjectionPath)) {
     await fs.copy(sourceContextInjectionPath, targetContextInjectionPath);
     console.log(chalk.green("✅ Context injection dosyaları kopyalandı"));
@@ -4937,21 +4965,32 @@ Log'lar \`shared/logs/\` klasöründe tutulur.
   // Scripts klasörünü oluştur ve dosyaları kopyala
   const scriptsPath = path.join(multiAgentPath, "scripts");
   await fs.ensureDir(scriptsPath);
-  
-  const sourceScriptsPath = path.join(__dirname, "..", "multi-agent", "scripts");
+
+  const sourceScriptsPath = path.join(
+    __dirname,
+    "..",
+    "multi-agent",
+    "scripts"
+  );
   if (await fs.pathExists(sourceScriptsPath)) {
     await fs.copy(sourceScriptsPath, scriptsPath);
     console.log(chalk.green("✅ Scripts dosyaları kopyalandı"));
   }
 
   // Orchestrator dosyalarını kopyala (workflow.context7.json hariç)
-  const sourceOrchestratorPath = path.join(__dirname, "..", "multi-agent", "orchestrator");
+  const sourceOrchestratorPath = path.join(
+    __dirname,
+    "..",
+    "multi-agent",
+    "orchestrator"
+  );
   const targetOrchestratorPath = path.join(multiAgentPath, "orchestrator");
-  
+
   if (await fs.pathExists(sourceOrchestratorPath)) {
     const orchestratorFiles = await fs.readdir(sourceOrchestratorPath);
     for (const file of orchestratorFiles) {
-      if (file !== "workflow.context7.json") { // workflow dosyasını atla, zaten oluşturuldu
+      if (file !== "workflow.context7.json") {
+        // workflow dosyasını atla, zaten oluşturuldu
         const sourceFile = path.join(sourceOrchestratorPath, file);
         const targetFile = path.join(targetOrchestratorPath, file);
         await fs.copy(sourceFile, targetFile);
@@ -4962,5 +5001,308 @@ Log'lar \`shared/logs/\` klasöründe tutulur.
 
   console.log(chalk.green("✅ Multi-agent sistemi oluşturuldu"));
 }
+
+function createMultiAgentSystem(projectPath) {
+  console.log("🤖 Multi-Agent sistemi oluşturuluyor...");
+
+  const multiAgentPath = path.join(projectPath, "multi-agent");
+
+  if (!fs.existsSync(multiAgentPath)) {
+    fs.mkdirSync(multiAgentPath, { recursive: true });
+  }
+
+  // Ana dizinleri oluştur
+  const dirs = [
+    "agents",
+    "shared",
+    "shared/tasks",
+    "shared/logs",
+    "shared/context-injection",
+    "orchestrator",
+    "scripts",
+  ];
+
+  dirs.forEach((dir) => {
+    const dirPath = path.join(multiAgentPath, dir);
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+  });
+
+  // Agent dosyalarını oluştur
+  const agents = [
+    "managerAgent.context7.json",
+    "analystAgent.context7.json",
+    "developerAgent.context7.json",
+  ];
+
+  agents.forEach((agent) => {
+    const agentPath = path.join(multiAgentPath, "agents", agent);
+    const templatePath = path.join(
+      __dirname,
+      "..",
+      "templates",
+      "multi-agent",
+      "agents",
+      agent
+    );
+
+    if (fs.existsSync(templatePath)) {
+      fs.copyFileSync(templatePath, agentPath);
+    }
+  });
+
+  // Ana context dosyası
+  const mainContext = {
+    system_name: "Multi-Agent Development System",
+    version: "2.0.0",
+    description: "AI destekli geliştirme sistemi",
+    created_at: new Date().toISOString(),
+    active_agents: 3,
+    agents: ["managerAgent", "analystAgent", "developerAgent"],
+    file_structure: {
+      "agents/": "Agent konfigürasyonları",
+      "shared/": "Paylaşılan dosyalar",
+      "shared/tasks/": "Task dosyaları",
+      "shared/logs/": "Log dosyaları",
+      "orchestrator/": "Agent koordinasyonu",
+      "scripts/": "Sistem scriptleri",
+    },
+    enhancements: [
+      "Multi-project desteği",
+
+      "Atomic design support",
+      "AI-powered component editing",
+    ],
+  };
+
+  fs.writeFileSync(
+    path.join(multiAgentPath, "main.context7.json"),
+    JSON.stringify(mainContext, null, 2)
+  );
+
+  // Workflow dosyası
+  const workflow = {
+    workflow_name: "Multi-Agent Development Workflow",
+    version: "2.0.0",
+    steps: [
+      {
+        step: 1,
+        agent: "managerAgent",
+        action: "project_analysis",
+        description: "Proje analizi ve görev dağıtımı",
+      },
+      {
+        step: 2,
+        agent: "analystAgent",
+        action: "task_creation",
+        description: "Task oluşturma ve context hazırlama",
+      },
+      {
+        step: 3,
+        agent: "developerAgent",
+        action: "code_development",
+        description: "Kod geliştirme ve implementasyon",
+      },
+    ],
+  };
+
+  fs.writeFileSync(
+    path.join(multiAgentPath, "orchestrator", "workflow.context7.json"),
+    JSON.stringify(workflow, null, 2)
+  );
+
+  // Log dosyaları
+  const logFiles = [
+    "manager-agent.log",
+    "analyst-agent.log",
+    "developer-agent.log",
+
+    "system.log",
+  ];
+
+  logFiles.forEach((logFile) => {
+    const logPath = path.join(multiAgentPath, "shared", "logs", logFile);
+    const logContent = `# ${logFile.replace(".log", "")} Log
+# Başlangıç: ${new Date().toISOString()}
+
+`;
+    fs.writeFileSync(logPath, logContent);
+  });
+
+  // Context injection dosyalarını kopyala
+  const sourceContextInjectionPath = path.join(
+    __dirname,
+    "..",
+    "multi-agent",
+    "shared",
+    "context-injection"
+  );
+  const targetContextInjectionPath = path.join(
+    multiAgentPath,
+    "shared",
+    "context-injection"
+  );
+
+  if (fs.existsSync(sourceContextInjectionPath)) {
+    fs.copySync(sourceContextInjectionPath, targetContextInjectionPath, {
+      recursive: true,
+    });
+    console.log(chalk.green("✅ Context injection dosyaları kopyalandı"));
+  }
+
+  // Orchestrator dosyalarını kopyala
+  const sourceOrchestratorPath = path.join(
+    __dirname,
+    "..",
+    "multi-agent",
+    "orchestrator"
+  );
+  const targetOrchestratorPath = path.join(multiAgentPath, "orchestrator");
+
+  if (fs.existsSync(sourceOrchestratorPath)) {
+    const orchestratorFiles = fs.readdirSync(sourceOrchestratorPath);
+    for (const file of orchestratorFiles) {
+      if (file !== "workflow.context7.json") {
+        // workflow dosyasını atla, zaten oluşturuldu
+        const sourceFile = path.join(sourceOrchestratorPath, file);
+        const targetFile = path.join(targetOrchestratorPath, file);
+        fs.copyFileSync(sourceFile, targetFile);
+      }
+    }
+    console.log(chalk.green("✅ Orchestrator dosyaları kopyalandı"));
+  }
+
+  // Scripts dosyalarını kopyala
+  const sourceScriptsPath = path.join(
+    __dirname,
+    "..",
+    "multi-agent",
+    "scripts"
+  );
+  const targetScriptsPath = path.join(multiAgentPath, "scripts");
+
+  if (fs.existsSync(sourceScriptsPath)) {
+    const scriptFiles = fs.readdirSync(sourceScriptsPath);
+    for (const file of scriptFiles) {
+      const sourceFile = path.join(sourceScriptsPath, file);
+      const targetFile = path.join(targetScriptsPath, file);
+      fs.copyFileSync(sourceFile, targetFile);
+    }
+    console.log(chalk.green("✅ Scripts dosyaları kopyalandı"));
+  }
+
+  // README
+  const readme = `# Multi-Agent Development System
+
+Bu sistem, AI destekli geliştirme için multi-agent mimarisi kullanır.
+
+## 🤖 Agentlar
+
+- **Manager Agent**: Proje analizi ve görev dağıtımı
+- **Analyst Agent**: Task oluşturma ve context hazırlama  
+- **Developer Agent**: Kod geliştirme ve implementasyon
+- **Developer Agent**: Kod geliştirme ve UI düzenleme
+
+## 🚀 Başlatma
+
+\`\`\`bash
+
+
+# Sistem scriptleri
+cd multi-agent/scripts
+node status.js
+\`\`\`
+
+## 📁 Yapı
+
+- \`agents/\`: Agent konfigürasyonları
+- \`shared/tasks/\`: Task dosyaları
+- \`shared/logs/\`: Log dosyaları
+
+- \`orchestrator/\`: Agent koordinasyonu
+
+## 🔄 Workflow
+
+1. Manager Agent → Proje analizi
+2. Analyst Agent → Task oluşturma
+3. Developer Agent → Kod geliştirme
+3. Developer Agent → Kod geliştirme ve UI düzenleme
+`;
+
+  fs.writeFileSync(path.join(multiAgentPath, "README.md"), readme);
+
+  console.log("✅ Multi-Agent sistemi oluşturuldu!");
+  console.log(`📁 Konum: ${multiAgentPath}`);
+}
+
+// ... existing code ...
+
+function create(projectName) {
+  console.log(`🚀 Yeni proje oluşturuluyor: ${projectName}`);
+
+  const projectPath = path.join(process.cwd(), projectName);
+
+  if (fs.existsSync(projectPath)) {
+    console.error(`❌ Hata: ${projectName} projesi zaten mevcut!`);
+    process.exit(1);
+  }
+
+  // Proje dizinini oluştur
+  fs.mkdirSync(projectPath, { recursive: true });
+
+  // Multi-Agent sistemini oluştur
+  createMultiAgentSystem(projectPath);
+
+  // Ana README
+  const mainReadme = `# ${projectName}
+
+Bu proje, Multi-Agent Development System kullanılarak oluşturulmuştur.
+
+## 🚀 Başlatma
+
+\`\`\`bash
+# Sistem durumu
+cd multi-agent/scripts
+node status.js
+\`\`\`
+
+## 📁 Proje Yapısı
+
+- \`multi-agent/\`: Multi-agent sistemi
+
+- \`src/\`: Ana proje kaynak kodları
+
+## 🤖 Agentlar
+
+- Manager Agent: Proje analizi
+- Analyst Agent: Task oluşturma
+- Developer Agent: Kod geliştirme  
+- Developer Agent: Kod geliştirme ve UI düzenleme
+
+
+`;
+
+  fs.writeFileSync(path.join(projectPath, "README.md"), mainReadme);
+
+  console.log(`✅ Proje başarıyla oluşturuldu: ${projectName}`);
+  console.log(`📁 Konum: ${projectPath}`);
+}
+
+function init() {
+  console.log("🔧 Mevcut projeye Multi-Agent sistemi ekleniyor...");
+
+  const projectPath = process.cwd();
+
+  // Multi-Agent sistemini oluştur
+  createMultiAgentSystem(projectPath);
+
+  console.log("✅ Multi-Agent sistemi başarıyla eklendi!");
+  console.log("🚀 Sistem durumunu kontrol etmek için:");
+  console.log("   cd multi-agent/scripts");
+  console.log("   node status.js");
+}
+
+// ... existing code ...
 
 program.parse();

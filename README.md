@@ -1,46 +1,56 @@
 # EGKA AI AGENTS
 
-Multi-Agent System with Context Injection, UI Architecture Rules, and Atomic Design for automated task management and development.
+Multi-Agent System with Context Injection, Atomic Design, and Storybook Integration for automated task management and development.
 
-## ✨ New Features in v1.1.0
+## ✨ New Features in v1.2.0
 
 - **Context Injection Mechanism**: Developer agent automatically loads UI architecture rules
-- **Atomic Design System**: Hierarchical component structure (Atoms, Molecules, Organisms, Templates)
-- **Module System**: Domain-based business logic with Zustand stores
-- **Material UI Integration**: Universal UI rules for all projects
-- **Multi-Project Support**: React, React Native, Next.js with consistent architecture
+- **Atomic Design System**: Hierarchical component structure (Atoms, Molecules, Organisms, Templates, Pages)
+- **Storybook Integration**: Automatic story generation and setup
+- **Component Library**: Automated component creation with Material UI
+- **Multi-Project Support**: React, Next.js with consistent architecture
+- **Enhanced Developer Agent**: Atomic design implementation and story generation
 
 ## 🚀 Installation
 
 ```bash
-# Install from GitHub Packages
-npm install @egkasoft/egka-ai-agents
+# Install globally
+npm install -g @egka/egka-ai-agents
 
-# Or install globally
-npm install -g @egkasoft/egka-ai-agents
+# Or use directly
+npx @egka/egka-ai-agents
 ```
 
-## 📦 Setup
-
-First, you need to configure npm to use GitHub Packages:
-
-1. Create a GitHub Personal Access Token with `read:packages` scope
-2. Create `.npmrc` file in your home directory:
+## 📦 Quick Start
 
 ```bash
-echo "@egkasoft:registry=https://npm.pkg.github.com" > ~/.npmrc
-echo "//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN" >> ~/.npmrc
+# Create a new project
+egka-ai create my-project
+
+# Initialize in existing project
+egka-ai init
+
+# Check system status
+egka-ai status
 ```
 
 ## 🛠️ Usage
 
-### Initialize Multi-Agent System
+### Create New Project
 
 ```bash
-# Initialize in current directory
-egka-ai init
+# Create a new project with interactive wizard
+egka-ai create my-project
 
-# Follow the prompts to set up your project
+# Create with defaults
+egka-ai create my-project --yes
+```
+
+### Initialize in Existing Project
+
+```bash
+# Initialize multi-agent system in current directory
+egka-ai init
 ```
 
 ### Available Commands
@@ -64,7 +74,10 @@ egka-ai log --agent managerAgent
 
 # Test communication
 egka-ai test-communication
-```
+
+# Workflow management
+egka-ai workflow --status
+egka-ai workflow --reset
 
 ## 🤖 Multi-Agent System
 
@@ -72,8 +85,7 @@ This project uses a Multi-Agent System with the following agents:
 
 - **Manager Agent**: User greeting and task delegation
 - **Analyst Agent**: Task analysis and requirements gathering
-- **Developer Agent**: Code development with Context Injection and UI Architecture rules
-- **Backend Agent**: API and database operations
+- **Developer Agent**: Code development with Context Injection, Atomic Design, and Storybook integration
 
 ### Context Injection Mechanism
 
@@ -81,18 +93,18 @@ Developer agent automatically loads UI architecture rules from `multi-agent/shar
 
 ```bash
 # Developer agent startup with context injection
-node multi-agent/scripts/developer-agent-startup.js
+node multi-agent/scripts/developer-agent-startup.cjs
 
 # Test context injection mechanism
-node multi-agent/scripts/test-context-injection.js
+node multi-agent/scripts/test-context-injection.cjs
 ```
 
-### UI Architecture Rules
+### Atomic Design & Storybook Integration
 
-- **Atomic Design**: Atoms → Molecules → Organisms → Templates
-- **Module System**: Domain-based business logic with Zustand stores
-- **Material UI**: Universal UI library integration
-- **State Management**: Zustand with domain-based stores
+- **Atomic Design**: Atoms → Molecules → Organisms → Templates → Pages
+- **Storybook Integration**: Automatic story generation and setup
+- **Component Library**: Automated component creation with Material UI
+- **Story Generation**: Automatic story file creation for all components
 
 ## 📁 Project Structure
 
@@ -106,6 +118,14 @@ project/
 │   │   └── logs/                   # System logs
 │   ├── orchestrator/               # Workflow management
 │   └── scripts/                    # Agent scripts
+├── src/
+│   └── components/                 # Atomic design components
+│       ├── atoms/                  # Basic components
+│       ├── molecules/              # Component combinations
+│       ├── organisms/              # Page sections
+│       ├── templates/              # Layout templates
+│       └── pages/                  # Full pages
+├── .storybook/                     # Storybook configuration
 └── .cursor/rules/
     └── multi-agent-rules.mdc       # Cursor rules
 ```
@@ -114,7 +134,7 @@ project/
 
 ```bash
 # Clone the repository
-git clone https://github.com/egkasoft/egka-ai-agents.git
+git clone https://github.com/egemenkayalidere/egka-ai-agents.git
 
 # Install dependencies
 npm install
@@ -122,7 +142,7 @@ npm install
 # Run tests
 npm test
 
-# Publish to GitHub Packages
+# Publish to npm
 npm publish
 ```
 
