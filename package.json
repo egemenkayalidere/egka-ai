@@ -1,7 +1,7 @@
 {
   "name": "@egka/egka-ai-agents",
-  "version": "1.2.0",
-  "description": "Multi-Agent System with Context Injection, Atomic Design, and Storybook Integration for automated task management and development",
+  "version": "3.0.0",
+  "description": "Multi-Agent V2 System with Performance Optimization, Security Enhancement, Atomic Design V2, and Modern React Practices for automated task management and development",
   "main": "index.js",
   "bin": {
     "egka-ai": "bin/egka-ai.js"
@@ -10,24 +10,30 @@
     "install": "node scripts/install.js",
     "setup": "node scripts/setup.js",
     "init": "node scripts/init.js",
-    "prepublishOnly": "npm run test",
-    "test": "echo \"No tests specified\" && exit 0"
+    "status": "node multi-agent-v2/scripts/status.js",
+    "test": "node multi-agent-v2/scripts/status.js",
+    "prepublishOnly": "npm run test"
   },
   "keywords": [
-    "multi-agent",
+    "multi-agent-v2",
+    "performance-optimization",
+    "security-enhancement",
+    "atomic-design-v2",
+    "modern-react-practices",
     "automation",
     "development",
     "task-management",
     "ai-agents",
     "egkasoft",
     "context-injection",
-    "atomic-design",
     "storybook",
     "material-ui",
-    "zustand",
-    "react",
-    "nextjs",
-    "component-library"
+    "react-memo",
+    "use-callback",
+    "use-memo",
+    "typescript",
+    "xss-protection",
+    "input-validation"
   ],
   "author": "EgKaSoft",
   "license": "MIT",
@@ -50,5 +56,8 @@
   "bugs": {
     "url": "https://github.com/egemenkayalidere/egka-ai-agents/issues"
   },
-  "homepage": "https://github.com/egemenkayalidere/egka-ai-agents#readme"
+  "homepage": "https://github.com/egemenkayalidere/egka-ai-agents#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  }
 }

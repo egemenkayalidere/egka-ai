@@ -1,7 +1,7 @@
 {
-  "name": "Developer Agent",
-  "version": "2.0.0",
-  "description": "Multi-Agent System Developer Agent - Atomic Design Expert with Automatic Story Generation",
+  "name": "Developer Agent V2",
+  "version": "3.0.0",
+  "description": "Geliştirilmiş Multi-Agent System Developer Agent - Gelişmiş Atomic Design Expert with Performance Optimization",
   "type": "agent",
   "capabilities": [
     "code_generation",
@@ -19,7 +19,11 @@
     "atomic_design_implementation",
     "story_generation",
     "component_analysis",
-    "storybook_integration"
+    "storybook_integration",
+    "performance_optimization",
+    "security_validation",
+    "type_safety",
+    "modern_react_practices"
   ],
   "configuration": {
     "supported_languages": [
@@ -32,8 +36,10 @@
       "jsx"
     ],
     "max_file_size": 1000000,
-    "timeout": 60000,
-    "log_level": "info"
+    "timeout": 90000,
+    "log_level": "info",
+    "performance_monitoring": true,
+    "security_validation": true
   },
   "dependencies": ["analyst_agent"],
   "atomic_design_expertise": {
@@ -45,7 +51,9 @@
           "Tek bir işlevi olmalı",
           "Yeniden kullanılabilir olmalı",
           "Props ile özelleştirilebilir olmalı",
-          "Material UI veya HTML elementlerinden türetilmeli"
+          "Material UI veya HTML elementlerinden türetilmeli",
+          "React.memo ile optimize edilmeli",
+          "TypeScript interface kullanmalı"
         ]
       },
       "molecules": {
@@ -61,7 +69,9 @@
           "İki veya daha fazla atom içermeli",
           "Tek bir amaca hizmet etmeli",
           "Kendi state'i olmamalı",
-          "Props ile kontrol edilebilir olmalı"
+          "Props ile kontrol edilebilir olmalı",
+          "useCallback ile optimize edilmeli",
+          "TypeScript strict mode kullanmalı"
         ]
       },
       "organisms": {
@@ -77,7 +87,9 @@
           "Birden fazla molecule ve atom içermeli",
           "Sayfa parçasını temsil etmeli",
           "Store bağlantısı olabilir",
-          "İş mantığı içermemeli"
+          "İş mantığı içermemeli",
+          "useMemo ile optimize edilmeli",
+          "Error boundary kullanmalı"
         ]
       },
       "templates": {
@@ -91,7 +103,9 @@
         "rules": [
           "Layout ve şablonları ifade etmeli",
           "Organizmaları birleştirmeli",
-          "Sayfa düzeyinde yapı oluşturmalı"
+          "Sayfa düzeyinde yapı oluşturmalı",
+          "Responsive design kullanmalı",
+          "Accessibility standartları uygulanmalı"
         ]
       },
       "pages": {
@@ -100,7 +114,9 @@
         "rules": [
           "Tam sayfa içeriğini temsil etmeli",
           "Template ve organismleri kullanmalı",
-          "Route ile bağlantılı olmalı"
+          "Route ile bağlantılı olmalı",
+          "SEO optimizasyonu yapılmalı",
+          "Performance monitoring kullanmalı"
         ]
       }
     },
@@ -115,7 +131,14 @@
       "components": "PascalCase (MyButton, UserCard)",
       "files": "PascalCase.tsx (MyButton.tsx, UserCard.tsx)",
       "folders": "kebab-case (user-profile, product-list)"
-    }
+    },
+    "performance_rules": [
+      "React.memo kullanımı zorunlu",
+      "useCallback ve useMemo optimizasyonu",
+      "Gereksiz re-render'lar engellenmeli",
+      "Arrow function kullanımı",
+      "Explicit return tercih edilmeli"
+    ]
   },
   "story_generation": {
     "automatic": true,
@@ -136,7 +159,7 @@
       "variants": "Tüm varyantlar için story exports",
       "html_preview": "HTML çıktısı için özel hikaye"
     },
-    "script_path": "multi-agent/scripts/auto-story-generator.js"
+    "script_path": "multi-agent-v2/scripts/auto-story-generator.js"
   },
   "api_endpoints": {
     "execute_task": "/tasks/execute",
@@ -155,7 +178,9 @@
     "read_logs": "/shared-log/read",
     "get_task_logs": "/shared-log/task/:id",
     "generate_story": "/scripts/generate-story.js",
-    "auto_story_generation": "/scripts/auto-story-generator.js"
+    "auto_story_generation": "/scripts/auto-story-generator.js",
+    "performance_metrics": "/metrics/performance",
+    "security_audit": "/audit/security"
   },
   "workflow": {
     "task_execution": {
@@ -163,20 +188,24 @@
         "scan_shared_tasks": true,
         "read_task_context": true,
         "read_main_context": true,
-        "priority_sorting": true
+        "priority_sorting": true,
+        "performance_analysis": true
       },
       "task_analysis": {
         "requirement_understanding": true,
         "complexity_assessment": true,
         "resource_planning": true,
         "context_awareness": true,
-        "atomic_design_planning": true
+        "atomic_design_planning": true,
+        "security_requirements": true
       },
       "implementation": {
         "code_generation": true,
         "file_creation": true,
         "code_review": true,
-        "atomic_design_compliance": true
+        "atomic_design_compliance": true,
+        "performance_optimization": true,
+        "security_validation": true
       },
       "story_generation": {
         "automatic_story_creation": true,
@@ -188,7 +217,8 @@
         "unit_testing": true,
         "integration_testing": true,
         "validation": true,
-        "story_testing": true
+        "story_testing": true,
+        "performance_testing": true
       },
       "documentation": {
         "code_comments": true,
@@ -200,20 +230,24 @@
         "status_update": true,
         "result_logging": true,
         "context_cleanup": true,
-        "story_verification": true
+        "story_verification": true,
+        "performance_report": true
       }
     },
     "atomic_design_workflow": {
       "component_analysis": {
         "identify_level": true,
         "determine_complexity": true,
-        "plan_structure": true
+        "plan_structure": true,
+        "performance_planning": true
       },
       "component_creation": {
         "follow_naming_conventions": true,
         "implement_props_interface": true,
         "use_material_ui": true,
-        "add_proper_typing": true
+        "add_proper_typing": true,
+        "apply_performance_optimization": true,
+        "implement_security_measures": true
       },
       "story_creation": {
         "generate_story_file": true,
@@ -228,7 +262,8 @@
         "end_time": true,
         "duration": true,
         "status": true,
-        "details": true
+        "details": true,
+        "performance_metrics": true
       },
       "work_log": {
         "actions_performed": true,
@@ -236,12 +271,15 @@
         "files_modified": true,
         "code_changes": true,
         "errors_encountered": true,
-        "stories_generated": true
+        "stories_generated": true,
+        "performance_optimizations": true
       },
       "performance_log": {
         "execution_time": true,
         "memory_usage": true,
-        "cpu_usage": true
+        "cpu_usage": true,
+        "render_count": true,
+        "bundle_size": true
       }
     },
     "quality_assurance": {
@@ -249,7 +287,8 @@
       "performance_optimization": true,
       "security_audit": true,
       "atomic_design_compliance": true,
-      "story_quality_check": true
+      "story_quality_check": true,
+      "type_safety_validation": true
     }
   },
   "development_tools": {
@@ -262,24 +301,27 @@
     "code_analysis": {
       "syntax_check": true,
       "linting": true,
-      "type_checking": true
+      "type_checking": true,
+      "performance_analysis": true
     },
     "testing_framework": {
       "unit_tests": true,
       "integration_tests": true,
-      "e2e_tests": true
+      "e2e_tests": true,
+      "performance_tests": true
     },
     "story_generation_tools": {
-      "generate_story": "node multi-agent/scripts/generate-story.js",
-      "auto_generate_all": "node multi-agent/scripts/auto-story-generator.js --all",
-      "generate_for_component": "node multi-agent/scripts/auto-story-generator.js --component",
-      "update_stories": "node multi-agent/scripts/auto-story-generator.js --update"
+      "generate_story": "node multi-agent-v2/scripts/generate-story.js",
+      "auto_generate_all": "node multi-agent-v2/scripts/auto-story-generator.js --all",
+      "generate_for_component": "node multi-agent-v2/scripts/auto-story-generator.js --component",
+      "update_stories": "node multi-agent-v2/scripts/auto-story-generator.js --update"
     },
     "logging_system": {
       "agent_log_file": "/shared-logs/developer-agent.log",
       "system_log_file": "/shared-logs/system.log",
       "task_log_file": "/shared-logs/task-reports.md",
       "story_generation_log": "/shared-logs/story-generation.log",
+      "performance_log": "/shared-logs/performance.log",
       "log_rotation": true,
       "log_compression": true
     }
@@ -294,7 +336,9 @@
       "log_file_size",
       "components_created",
       "stories_generated",
-      "atomic_design_compliance_rate"
+      "atomic_design_compliance_rate",
+      "performance_optimization_score",
+      "security_compliance_rate"
     ],
     "alerts": [
       "execution_timeout",
@@ -303,14 +347,19 @@
       "log_file_full",
       "logging_failure",
       "story_generation_failure",
-      "atomic_design_violation"
+      "atomic_design_violation",
+      "performance_degradation",
+      "security_violation"
     ]
   },
   "security": {
     "authentication": "jwt",
     "authorization": "role_based",
     "code_signing": true,
-    "audit_logging": true
+    "audit_logging": true,
+    "input_validation": true,
+    "xss_protection": true,
+    "csrf_protection": true
   },
   "rules": {
     "atomic_design_compliance": "Her component atomic design kurallarına uygun olmalı",
@@ -318,6 +367,15 @@
     "naming_conventions": "Component ve dosya isimleri belirlenen kurallara uygun olmalı",
     "material_ui_usage": "UI bileşenleri Material UI kullanmalı",
     "type_safety": "TypeScript strict mode kullanılmalı",
-    "documentation": "Her component için uygun dokümantasyon yazılmalı"
+    "documentation": "Her component için uygun dokümantasyon yazılmalı",
+    "performance_optimization": "React.memo, useCallback, useMemo kullanımı zorunlu",
+    "security_compliance": "XSS, CSRF koruması ve input validation uygulanmalı"
+  },
+  "performance_optimization": {
+    "caching_enabled": true,
+    "memory_optimization": true,
+    "execution_time_target": "30000ms",
+    "concurrent_execution_limit": 5,
+    "bundle_size_optimization": true
   }
 }

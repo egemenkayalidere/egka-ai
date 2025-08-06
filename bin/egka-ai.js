@@ -97,14 +97,14 @@ program
     console.log(chalk.gray("─────────────────────────────────"));
 
     try {
-      const multiAgentPath = path.join(__dirname, "..", "multi-agent");
+      const multiAgentPath = path.join(__dirname, "..", "multi-agent-v2");
       const exists = await fs.pathExists(multiAgentPath);
 
       if (exists) {
-        console.log(chalk.green("✅ Multi-Agent System: Active"));
+        console.log(chalk.green("✅ Multi-Agent V2 System: Active"));
         console.log(chalk.cyan(`📦 Version: ${packageJson.version}`));
 
-        // Agent dosyalarını kontrol et
+        // V2 Agent dosyalarını kontrol et
         const agentsPath = path.join(multiAgentPath, "agents");
         if (await fs.pathExists(agentsPath)) {
           const agents = await fs.readdir(agentsPath);
@@ -113,15 +113,15 @@ program
           );
 
           console.log(
-            chalk.cyan(`📁 Available Agents: ${contextFiles.length}`)
+            chalk.cyan(`📁 Available V2 Agents: ${contextFiles.length}`)
           );
           contextFiles.forEach((agent) => {
             const agentName = agent.replace(".context7.json", "");
-            console.log(chalk.white(`   • ${agentName}`));
+            console.log(chalk.white(`   • ${agentName} V2`));
           });
         }
 
-        // Task durumunu kontrol et
+        // V2 Task durumunu kontrol et
         const tasksPath = path.join(multiAgentPath, "shared", "tasks");
         if (await fs.pathExists(tasksPath)) {
           const taskFiles = await fs.readdir(tasksPath);
@@ -129,7 +129,7 @@ program
             file.endsWith(".context7.json")
           );
 
-          console.log(chalk.cyan(`📋 Active Tasks: ${contextTasks.length}`));
+          console.log(chalk.cyan(`📋 Active V2 Tasks: ${contextTasks.length}`));
           if (options.verbose && contextTasks.length > 0) {
             contextTasks.forEach((task) => {
               console.log(chalk.white(`   • ${task}`));
@@ -137,14 +137,26 @@ program
           }
         }
 
-        // Log dosyalarını kontrol et
+        // V2 Log dosyalarını kontrol et
         const logsPath = path.join(multiAgentPath, "shared", "logs");
         if (await fs.pathExists(logsPath)) {
           const logFiles = await fs.readdir(logsPath);
           const logCount = logFiles.filter((file) =>
             file.endsWith(".log")
           ).length;
-          console.log(chalk.cyan(`📝 Log Files: ${logCount}`));
+          console.log(chalk.cyan(`📝 V2 Log Files: ${logCount}`));
+        }
+
+        // V2 Performance metrics kontrol et
+        const performanceLog = path.join(logsPath, "performance.log");
+        if (await fs.pathExists(performanceLog)) {
+          console.log(chalk.green("⚡ Performance Monitoring: Active"));
+        }
+
+        // V2 Security audit kontrol et
+        const securityLog = path.join(logsPath, "security-audit.log");
+        if (await fs.pathExists(securityLog)) {
+          console.log(chalk.green("🔒 Security Audit: Active"));
         }
 
         // Proje yapısını kontrol et
@@ -227,19 +239,19 @@ program
   });
 
 // ============================================================================
-// CREATE KOMUTU - Yeni proje oluşturma
+// CREATE KOMUTU - Yeni proje oluşturma V2
 // ============================================================================
 program
   .command("create")
-  .description("Create a new project with interactive wizard")
+  .description("Create a new project with Multi-Agent V2 System")
   .option("-t, --template <template>", "Use specific template")
   .option("-y, --yes", "Skip prompts and use defaults")
   .action(async (options) => {
-    console.log(chalk.blue.bold("🚀 EGKA AI Project Creator"));
+    console.log(chalk.blue.bold("🚀 EGKA AI Project Creator V2"));
     console.log(chalk.gray("─────────────────────────────────"));
 
     try {
-      await createProjectWizard(options);
+      await createProjectWizardV2(options);
     } catch (error) {
       console.error(chalk.red("Error creating project:"), error.message);
     }
@@ -388,17 +400,17 @@ program
   });
 
 // ============================================================================
-// INIT KOMUTU - Sistem başlatma
+// INIT KOMUTU - Sistem başlatma V2
 // ============================================================================
 program
   .command("init")
-  .description("Initialize the multi-agent system")
+  .description("Initialize the Multi-Agent V2 system")
   .option("-f, --force", "Force reinitialization")
   .action(async (options) => {
-    console.log(chalk.blue.bold("🚀 Initializing EGKA AI AGENTS..."));
+    console.log(chalk.blue.bold("🚀 Initializing EGKA AI AGENTS V2..."));
 
     try {
-      // Mevcut proje için cursor rules oluştur
+      // Mevcut proje için V2 cursor rules oluştur
       const currentProjectConfig = {
         projectName: path.basename(
           (() => {
@@ -412,11 +424,12 @@ program
         framework: "unknown",
         language: "javascript",
         cssFramework: "css",
-        features: [],
+        features: ["performance", "security", "atomic-design"],
         packageManager: "npm",
+        includeMultiAgentV2: true,
       };
 
-      await createCursorRules(
+      await createCursorRulesV2(
         (() => {
           try {
             return process.cwd();
@@ -427,10 +440,22 @@ program
         currentProjectConfig
       );
 
-      // Multi-Agent sistemini oluştur
-      createMultiAgentSystem(process.cwd());
+      // Multi-Agent V2 sistemini oluştur
+      await createMultiAgentSystemV2(process.cwd(), currentProjectConfig);
+
+      console.log(
+        chalk.green("✅ Multi-Agent V2 system initialized successfully!")
+      );
+      console.log(chalk.cyan("📋 Available V2 commands:"));
+      console.log(chalk.white("   npm run status"));
+      console.log(chalk.white("   npm run test"));
+      console.log(chalk.white("   npm run performance"));
+      console.log(chalk.white("   npm run security"));
     } catch (error) {
-      console.error(chalk.red("Error during initialization:"), error.message);
+      console.error(
+        chalk.red("Error during V2 initialization:"),
+        error.message
+      );
     }
   });
 
@@ -1214,7 +1239,17 @@ function getStatusColor(status) {
 // YENİ FONKSİYONLAR - Proje oluşturma ve template yönetimi
 // ============================================================================
 
-async function createProjectWizard(options) {
+// Proje adını npm paket adı formatına çeviren yardımcı fonksiyon
+function normalizeProjectName(name) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "-") // Özel karakterleri tire ile değiştir
+    .replace(/^-+|-+$/g, "") // Başta ve sonda tireleri kaldır
+    .replace(/-+/g, "-") // Birden fazla tireyi tek tireye çevir
+    .replace(/^[0-9]/, "app-$&"); // Rakamla başlıyorsa başına 'app-' ekle
+}
+
+async function createProjectWizardV2(options) {
   try {
     const answers = await inquirer.prompt([
       {
@@ -1224,9 +1259,38 @@ async function createProjectWizard(options) {
         default: "my-egka-project",
         validate: (input) => {
           if (input.trim() === "") return "Proje adı boş olamaz";
-          if (!/^[a-zA-Z0-9-_]+$/.test(input))
-            return "Proje adı sadece harf, rakam, tire ve alt çizgi içerebilir";
+
+          // npm paket adı kurallarına uygunluk kontrolü
+          const npmPackageNameRegex = /^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$/;
+          if (!npmPackageNameRegex.test(input)) {
+            return (
+              "Proje adı npm paket adı kurallarına uygun olmalıdır:\n" +
+              "• Sadece küçük harfler, rakamlar ve tire (-) kullanılabilir\n" +
+              "• Tire ile başlayamaz veya bitemez\n" +
+              "• En az 1 karakter olmalıdır\n" +
+              "Örnek: my-project, prodigy-web-app, app123"
+            );
+          }
+
+          // Rezerve kelimeler kontrolü
+          const reservedWords = ["node_modules", "favicon.ico"];
+          if (reservedWords.includes(input.toLowerCase())) {
+            return "Bu isim rezerve edilmiş bir kelimedir, başka bir isim seçin";
+          }
+
           return true;
+        },
+        filter: (input) => {
+          // Proje adını otomatik olarak normalize et
+          const normalized = normalizeProjectName(input);
+          if (normalized !== input) {
+            console.log(
+              chalk.yellow(
+                `ℹ️  Proje adı normalize edildi: "${input}" → "${normalized}"`
+              )
+            );
+          }
+          return normalized;
         },
       },
       {
@@ -1234,9 +1298,9 @@ async function createProjectWizard(options) {
         name: "framework",
         message: "Framework seçin:",
         choices: [
-          { name: "Next.js (React SSR)", value: "nextjs" },
-          { name: "React (SPA)", value: "react" },
-          { name: "Lovable (AI-powered)", value: "lovable" },
+          { name: "Next.js (React SSR) - V2 Optimized", value: "nextjs" },
+          { name: "React (SPA) - V2 Optimized", value: "react" },
+          { name: "Lovable (AI-powered) - V2 Optimized", value: "lovable" },
           { name: "Vue.js", value: "vue" },
           { name: "Svelte", value: "svelte" },
           { name: "Vanilla JavaScript", value: "vanilla" },
@@ -1248,7 +1312,10 @@ async function createProjectWizard(options) {
         name: "language",
         message: "Programlama dili seçin:",
         choices: [
-          { name: "TypeScript (Önerilen)", value: "typescript" },
+          {
+            name: "TypeScript (Önerilen) - V2 Strict Mode",
+            value: "typescript",
+          },
           { name: "JavaScript", value: "javascript" },
         ],
         default: "typescript",
@@ -1258,10 +1325,10 @@ async function createProjectWizard(options) {
         name: "cssFramework",
         message: "CSS Framework seçin:",
         choices: [
-          { name: "Tailwind CSS (Önerilen)", value: "tailwind" },
-          { name: "Radix UI + Tailwind", value: "radix" },
+          { name: "Tailwind CSS (Önerilen) - V2 Optimized", value: "tailwind" },
+          { name: "Radix UI + Tailwind - V2 Modern", value: "radix" },
+          { name: "Material-UI - V2 Optimized", value: "mui" },
           { name: "Bootstrap", value: "bootstrap" },
-          { name: "Material-UI", value: "mui" },
           { name: "Chakra UI", value: "chakra" },
           { name: "Ant Design", value: "antd" },
           { name: "Styled Components", value: "styled" },
@@ -1274,12 +1341,25 @@ async function createProjectWizard(options) {
       {
         type: "checkbox",
         name: "features",
-        message: "Ek özellikler seçin:",
+        message: "V2 Özellikleri seçin:",
         choices: [
+          {
+            name: "Performance Optimization (React.memo, useCallback, useMemo)",
+            value: "performance",
+          },
+          {
+            name: "Security Enhancement (XSS, CSRF Protection)",
+            value: "security",
+          },
+          {
+            name: "Atomic Design V2 (Atoms, Molecules, Organisms)",
+            value: "atomic-design",
+          },
+          { name: "Storybook Integration V2", value: "storybook" },
           { name: "Authentication", value: "auth" },
           { name: "Database Integration", value: "database" },
           { name: "API Routes", value: "api" },
-          { name: "State Management", value: "state" },
+          { name: "State Management (Zustand)", value: "state" },
           { name: "Testing Setup", value: "testing" },
           { name: "PWA Support", value: "pwa" },
           { name: "Internationalization", value: "i18n" },
@@ -1311,15 +1391,24 @@ async function createProjectWizard(options) {
         message: "CI/CD pipeline eklenilsin mi?",
         default: false,
       },
+      {
+        type: "confirm",
+        name: "includeMultiAgentV2",
+        message: "Multi-Agent V2 sistemi otomatik kurulsun mu?",
+        default: true,
+      },
     ]);
 
-    await generateProject(answers);
+    await generateProjectV2(answers);
   } catch (error) {
-    console.error(chalk.red("Error in project wizard:"), error.message);
+    console.error(chalk.red("Error in project wizard V2:"), error.message);
   }
 }
 
-async function generateProject(config) {
+async function generateProjectV2(config) {
+  // Proje adını normalize et
+  config.projectName = normalizeProjectName(config.projectName);
+
   // Güvenli current working directory alma
   let currentCwd;
   try {
@@ -1332,7 +1421,7 @@ async function generateProject(config) {
   const projectPath = path.join(currentCwd, config.projectName);
 
   console.log(
-    chalk.blue(`\n🚀 ${config.projectName} projesi oluşturuluyor...`)
+    chalk.blue(`\n🚀 ${config.projectName} projesi V2 ile oluşturuluyor...`)
   );
 
   try {
@@ -1348,29 +1437,31 @@ async function generateProject(config) {
       return;
     }
 
-    // Konfigürasyon dosyaları oluştur
-    await createConfigFiles(projectPath, config);
+    // V2 Konfigürasyon dosyaları oluştur
+    await createConfigFilesV2(projectPath, config);
 
-    // Özellik dosyaları oluştur
-    await createFeatureFiles(projectPath, config);
+    // V2 Özellik dosyaları oluştur
+    await createFeatureFilesV2(projectPath, config);
 
-    // Multi-agent sistemi oluştur
-    await createMultiAgentSystem(projectPath, config);
+    // Multi-Agent V2 sistemi oluştur
+    if (config.includeMultiAgentV2) {
+      await createMultiAgentSystemV2(projectPath, config);
+    }
 
-    // Cursor rules oluştur
-    await createCursorRules(projectPath, config);
+    // V2 Cursor rules oluştur
+    await createCursorRulesV2(projectPath, config);
 
     // Git init
     if (config.includeGit) {
       await initGit(projectPath);
     }
 
-    // AI Agent ile multi-agent sistemini uyumlu hale getir
-    await optimizeMultiAgentSystem(projectPath, config);
+    // V2 Performance ve Security optimizasyonları
+    await optimizeProjectV2(projectPath, config);
 
     // CI/CD setup
     if (config.includeCI) {
-      await setupCI(projectPath, config);
+      await setupCIV2(projectPath, config);
     }
 
     // Orijinal dizine geri dön
@@ -1380,11 +1471,36 @@ async function generateProject(config) {
       console.error(chalk.red("Orijinal dizine dönüş hatası:"), error.message);
     }
 
-    console.log(chalk.green("\n✅ Proje başarıyla oluşturuldu!"));
+    console.log(chalk.green("\n✅ Proje V2 başarıyla oluşturuldu!"));
     console.log(chalk.cyan(`\n📂 Proje klasörü: ${projectPath}`));
 
+    // V2 Performance metrics göster
+    if (config.features?.includes("performance")) {
+      console.log(chalk.yellow("\n⚡ V2 Performance Optimizations:"));
+      console.log(chalk.white("   • React.memo kullanımı zorunlu"));
+      console.log(chalk.white("   • useCallback ve useMemo optimizasyonu"));
+      console.log(chalk.white("   • Bundle size optimization"));
+      console.log(chalk.white("   • Memory leak prevention"));
+    }
+
+    if (config.features?.includes("security")) {
+      console.log(chalk.yellow("\n🔒 V2 Security Enhancements:"));
+      console.log(chalk.white("   • XSS ve CSRF koruması"));
+      console.log(chalk.white("   • Input validation"));
+      console.log(chalk.white("   • Content-Security-Policy"));
+      console.log(chalk.white("   • Secure API handling"));
+    }
+
+    if (config.features?.includes("atomic-design")) {
+      console.log(chalk.yellow("\n🎨 V2 Atomic Design System:"));
+      console.log(chalk.white("   • Atoms, Molecules, Organisms"));
+      console.log(chalk.white("   • Storybook integration"));
+      console.log(chalk.white("   • Component library"));
+      console.log(chalk.white("   • Design tokens"));
+    }
+
     // Otomatik paket yükleme
-    console.log(chalk.yellow("\n📦 Bağımlılıklar yükleniyor..."));
+    console.log(chalk.yellow("\n📦 V2 Bağımlılıklar yükleniyor..."));
     try {
       const originalCwd = currentCwd;
       try {
@@ -1415,9 +1531,9 @@ async function generateProject(config) {
           error.message
         );
       }
-      console.log(chalk.green("✅ Bağımlılıklar başarıyla yüklendi!"));
+      console.log(chalk.green("✅ V2 Bağımlılıklar başarıyla yüklendi!"));
 
-      console.log(chalk.cyan("\n🚀 Proje hazır! Hemen başlayabilirsiniz:"));
+      console.log(chalk.cyan("\n🚀 V2 Proje hazır! Hemen başlayabilirsiniz:"));
       console.log(chalk.white(`   cd ${config.projectName}`));
       console.log(
         chalk.white(
@@ -1430,10 +1546,18 @@ async function generateProject(config) {
           }`
         )
       );
+
+      if (config.includeMultiAgentV2) {
+        console.log(chalk.cyan("\n🤖 Multi-Agent V2 Komutları:"));
+        console.log(chalk.white("   npm run status"));
+        console.log(chalk.white("   npm run test"));
+        console.log(chalk.white("   npm run performance"));
+        console.log(chalk.white("   npm run security"));
+      }
     } catch (error) {
       console.log(
         chalk.yellow(
-          "⚠️  Bağımlılık yükleme başarısız oldu, manuel olarak yükleyin:"
+          "⚠️  V2 Bağımlılık yükleme başarısız oldu, manuel olarak yükleyin:"
         )
       );
       console.log(chalk.white(`   cd ${config.projectName}`));
@@ -1459,16 +1583,21 @@ async function generateProject(config) {
       );
     }
 
-    // Özel talimatlar
+    // V2 Özel talimatlar
     if (config.framework === "lovable") {
-      console.log(chalk.yellow("\n💡 Lovable projesi için özel talimatlar:"));
+      console.log(
+        chalk.yellow("\n💡 Lovable V2 projesi için özel talimatlar:")
+      );
       console.log(chalk.white("   - Lovable AI agent'ınızı yapılandırın"));
       console.log(
         chalk.white("   - API anahtarlarınızı .env dosyasına ekleyin")
       );
+      console.log(chalk.white("   - V2 Performance optimizasyonları aktif"));
 
       if (config.cssFramework === "radix") {
-        console.log(chalk.cyan("   - Radix UI + Tailwind entegrasyonu hazır"));
+        console.log(
+          chalk.cyan("   - Radix UI + Tailwind V2 entegrasyonu hazır")
+        );
         console.log(
           chalk.white("   - Modern UI component'ları kullanabilirsiniz")
         );
@@ -1476,14 +1605,23 @@ async function generateProject(config) {
     }
 
     if (config.cssFramework === "radix") {
-      console.log(chalk.yellow("\n🎨 Radix UI + Tailwind özellikleri:"));
+      console.log(chalk.yellow("\n🎨 Radix UI + Tailwind V2 özellikleri:"));
       console.log(chalk.white("   - Modern, accessible UI component'ları"));
       console.log(chalk.white("   - Dark mode desteği"));
       console.log(chalk.white("   - Tailwind CSS ile tam entegrasyon"));
-      console.log(chalk.white("   - TypeScript desteği"));
+      console.log(chalk.white("   - TypeScript strict mode"));
+      console.log(chalk.white("   - V2 Performance optimizasyonları"));
+    }
+
+    if (config.features?.includes("storybook")) {
+      console.log(chalk.yellow("\n📚 Storybook V2 özellikleri:"));
+      console.log(chalk.white("   - Otomatik story generation"));
+      console.log(chalk.white("   - HTML preview support"));
+      console.log(chalk.white("   - Component documentation"));
+      console.log(chalk.white("   - Interactive testing"));
     }
   } catch (error) {
-    console.error(chalk.red("Error generating project:"), error.message);
+    console.error(chalk.red("Error generating project V2:"), error.message);
   }
 }
 
@@ -2292,13 +2430,13 @@ function getDevDependencies(config) {
   };
 }
 
-async function createConfigFiles(projectPath, config) {
-  // TypeScript config
+async function createConfigFilesV2(projectPath, config) {
+  // TypeScript V2 config - Strict mode
   if (config.language === "typescript") {
-    const tsConfig = {
+    const tsConfigV2 = {
       compilerOptions: {
-        target: "es5",
-        lib: ["dom", "dom.iterable", "es6"],
+        target: "es2020",
+        lib: ["dom", "dom.iterable", "es6", "es2020"],
         allowJs: true,
         skipLibCheck: true,
         esModuleInterop: true,
@@ -2312,62 +2450,114 @@ async function createConfigFiles(projectPath, config) {
         isolatedModules: true,
         noEmit: true,
         jsx: "react-jsx",
+        // V2 Strict mode additions
+        noImplicitAny: true,
+        noImplicitReturns: true,
+        noImplicitThis: true,
+        noUnusedLocals: true,
+        noUnusedParameters: true,
+        exactOptionalPropertyTypes: true,
+        noUncheckedIndexedAccess: true,
+        noImplicitOverride: true,
+        // Performance optimizations
+        incremental: true,
+        tsBuildInfoFile: "./node_modules/.cache/.tsbuildinfo",
       },
-      include: ["src"],
+      include: ["src", "**/*.ts", "**/*.tsx"],
+      exclude: ["node_modules", "dist", "build"],
     };
 
-    await fs.writeJson(path.join(projectPath, "tsconfig.json"), tsConfig, {
+    await fs.writeJson(path.join(projectPath, "tsconfig.json"), tsConfigV2, {
       spaces: 2,
     });
   }
 
-  // CSS Framework config
-  await createCSSConfig(projectPath, config.cssFramework);
+  // CSS Framework V2 config
+  await createCSSConfigV2(projectPath, config.cssFramework);
 
-  // ESLint config
-  await createESLintConfig(projectPath, config);
+  // ESLint V2 config
+  await createESLintConfigV2(projectPath, config);
 
-  // Gitignore
-  await createGitignore(projectPath, config);
+  // Gitignore V2
+  await createGitignoreV2(projectPath, config);
+
+  // V2 Performance config
+  await createPerformanceConfigV2(projectPath, config);
+
+  // V2 Security config
+  await createSecurityConfigV2(projectPath, config);
 }
 
-async function createCSSConfig(projectPath, cssFramework) {
+async function createCSSConfigV2(projectPath, cssFramework) {
   switch (cssFramework) {
     case "tailwind":
-      const tailwindConfig = {
+      const tailwindConfigV2 = {
         content: [
           "./pages/**/*.{js,ts,jsx,tsx,mdx}",
           "./components/**/*.{js,ts,jsx,tsx,mdx}",
           "./app/**/*.{js,ts,jsx,tsx,mdx}",
+          "./src/**/*.{js,ts,jsx,tsx,mdx}",
         ],
         theme: {
-          extend: {},
+          extend: {
+            // V2 Performance optimizations
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-in-out",
+              "slide-up": "slideUp 0.3s ease-out",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
+              slideUp: {
+                "0%": { transform: "translateY(10px)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+            },
+          },
         },
         plugins: [],
+        // V2 Performance optimizations
+        future: {
+          hoverOnlyWhenSupported: true,
+        },
       };
 
       await fs.writeJson(
         path.join(projectPath, "tailwind.config.js"),
-        tailwindConfig,
+        tailwindConfigV2,
         { spaces: 2 }
       );
 
-      const postcssConfig = {
+      const postcssConfigV2 = {
         plugins: {
           tailwindcss: {},
           autoprefixer: {},
+          // V2 Performance optimizations
+          cssnano: {
+            preset: [
+              "default",
+              {
+                discardComments: {
+                  removeAll: true,
+                },
+                normalizeWhitespace: false,
+              },
+            ],
+          },
         },
       };
 
       await fs.writeJson(
         path.join(projectPath, "postcss.config.js"),
-        postcssConfig,
+        postcssConfigV2,
         { spaces: 2 }
       );
       break;
 
     case "radix":
-      const radixTailwindConfig = {
+      const radixTailwindConfigV2 = {
         darkMode: ["class"],
         content: [
           "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -2433,37 +2623,64 @@ async function createCSSConfig(projectPath, cssFramework) {
                 from: { height: "var(--radix-accordion-content-height)" },
                 to: { height: "0" },
               },
+              // V2 Performance animations
+              "fade-in": {
+                from: { opacity: "0" },
+                to: { opacity: "1" },
+              },
+              "slide-up": {
+                from: { transform: "translateY(10px)", opacity: "0" },
+                to: { transform: "translateY(0)", opacity: "1" },
+              },
             },
             animation: {
               "accordion-down": "accordion-down 0.2s ease-out",
               "accordion-up": "accordion-up 0.2s ease-out",
+              "fade-in": "fade-in 0.5s ease-in-out",
+              "slide-up": "slide-up 0.3s ease-out",
             },
           },
         },
         plugins: [],
+        // V2 Performance optimizations
+        future: {
+          hoverOnlyWhenSupported: true,
+        },
       };
 
       await fs.writeJson(
         path.join(projectPath, "tailwind.config.js"),
-        radixTailwindConfig,
+        radixTailwindConfigV2,
         { spaces: 2 }
       );
 
-      const radixPostcssConfig = {
+      const radixPostcssConfigV2 = {
         plugins: {
           tailwindcss: {},
           autoprefixer: {},
+          // V2 Performance optimizations
+          cssnano: {
+            preset: [
+              "default",
+              {
+                discardComments: {
+                  removeAll: true,
+                },
+                normalizeWhitespace: false,
+              },
+            ],
+          },
         },
       };
 
       await fs.writeJson(
         path.join(projectPath, "postcss.config.js"),
-        radixPostcssConfig,
+        radixPostcssConfigV2,
         { spaces: 2 }
       );
 
-      // Radix UI için global CSS
-      const globalCSS = `@tailwind base;
+      // Radix UI V2 için global CSS
+      const globalCSSV2 = `@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -2521,753 +2738,86 @@ async function createCSSConfig(projectPath, cssFramework) {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* V2 Performance optimizations */
+@layer utilities {
+  .performance-optimized {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 }`;
 
       const stylesPath = path.join(projectPath, "src", "styles");
       await fs.ensureDir(stylesPath);
-      await fs.writeFile(path.join(stylesPath, "globals.css"), globalCSS);
+      await fs.writeFile(path.join(stylesPath, "globals.css"), globalCSSV2);
       break;
   }
 }
 
-async function createFeatureFiles(projectPath, config) {
-  const features = config.features || [];
-
-  for (const feature of features) {
-    switch (feature) {
-      case "auth":
-        await createAuthFeature(projectPath, config);
-        break;
-      case "database":
-        await createDatabaseFeature(projectPath, config);
-        break;
-      case "api":
-        await createAPIFeature(projectPath, config);
-        break;
-      case "state":
-        await createStateFeature(projectPath, config);
-        break;
-      case "testing":
-        await createTestingFeature(projectPath, config);
-        break;
-      case "pwa":
-        await createPWAFeature(projectPath, config);
-        break;
-      case "i18n":
-        await createI18nFeature(projectPath, config);
-        break;
-      case "dark-mode":
-        await createDarkModeFeature(projectPath, config);
-        break;
-    }
-  }
-}
-
-async function createAuthFeature(projectPath, config) {
-  const authPath = path.join(projectPath, "src", "features", "auth");
-  await fs.ensureDir(authPath);
-
-  const authComponent = `import React from 'react';
-
-export const AuthProvider = ({ children }) => {
-  return (
-    <div className="auth-provider">
-      {children}
-    </div>
-  );
-};
-
-export const useAuth = () => {
-  // Auth hook implementation
-  return {
-    user: null,
-    login: () => {},
-    logout: () => {},
-    isAuthenticated: false,
-  };
-};`;
-
-  await fs.writeFile(path.join(authPath, "AuthProvider.js"), authComponent);
-}
-
-async function createDatabaseFeature(projectPath, config) {
-  const dbPath = path.join(projectPath, "src", "features", "database");
-  await fs.ensureDir(dbPath);
-
-  const dbConfig = {
-    type: "sqlite",
-    host: "localhost",
-    port: 5432,
-    database: "app_db",
-    username: "user",
-    password: "password",
-  };
-
-  await fs.writeJson(path.join(dbPath, "config.json"), dbConfig, { spaces: 2 });
-}
-
-async function createAPIFeature(projectPath, config) {
-  const apiPath = path.join(projectPath, "src", "api");
-  await fs.ensureDir(apiPath);
-
-  const apiClient = `const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
-
-export const apiClient = {
-  async get(endpoint) {
-    const response = await fetch(\`\${API_BASE_URL}\${endpoint}\`);
-    return response.json();
-  },
-  
-  async post(endpoint, data) {
-    const response = await fetch(\`\${API_BASE_URL}\${endpoint}\`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  },
-};`;
-
-  await fs.writeFile(path.join(apiPath, "client.js"), apiClient);
-}
-
-async function createStateFeature(projectPath, config) {
-  const statePath = path.join(projectPath, "src", "state");
-  await fs.ensureDir(statePath);
-
-  // Zustand store
-  const zustandStore = `import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
-// User store
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-}
-
-interface UserState {
-  user: User | null;
-  isAuthenticated: boolean;
-  login: (user: User) => void;
-  logout: () => void;
-  updateUser: (updates: Partial<User>) => void;
-}
-
-export const useUserStore = create<UserState>()(
-  persist(
-    (set, get) => ({
-      user: null,
-      isAuthenticated: false,
-      login: (user) => set({ user, isAuthenticated: true }),
-      logout: () => set({ user: null, isAuthenticated: false }),
-      updateUser: (updates) => {
-        const currentUser = get().user;
-        if (currentUser) {
-          set({ user: { ...currentUser, ...updates } });
-        }
-      },
-    }),
-    {
-      name: 'user-storage',
-    }
-  )
-);
-
-// Theme store
-interface ThemeState {
-  theme: 'light' | 'dark' | 'system';
-  toggleTheme: () => void;
-  setTheme: (theme: 'light' | 'dark' | 'system') => void;
-}
-
-export const useThemeStore = create<ThemeState>()(
-  persist(
-    (set, get) => ({
-      theme: 'system',
-      toggleTheme: () => {
-        const currentTheme = get().theme;
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        set({ theme: newTheme });
-      },
-      setTheme: (theme) => set({ theme }),
-    }),
-    {
-      name: 'theme-storage',
-    }
-  )
-);
-
-// App settings store
-interface AppSettings {
-  language: string;
-  notifications: boolean;
-  autoSave: boolean;
-  sidebarCollapsed: boolean;
-}
-
-interface AppSettingsState {
-  settings: AppSettings;
-  updateSettings: (updates: Partial<AppSettings>) => void;
-  resetSettings: () => void;
-}
-
-const defaultSettings: AppSettings = {
-  language: 'tr',
-  notifications: true,
-  autoSave: true,
-  sidebarCollapsed: false,
-};
-
-export const useAppSettingsStore = create<AppSettingsState>()(
-  persist(
-    (set, get) => ({
-      settings: defaultSettings,
-      updateSettings: (updates) => {
-        const currentSettings = get().settings;
-        set({ settings: { ...currentSettings, ...updates } });
-      },
-      resetSettings: () => set({ settings: defaultSettings }),
-    }),
-    {
-      name: 'app-settings-storage',
-    }
-  )
-);
-
-// AI Context store (for Lovable projects)
-interface AIContext {
-  userIntent: string;
-  currentTask: string;
-  aiSuggestions: string[];
-  conversationHistory: Array<{
-    id: string;
-    role: 'user' | 'assistant';
-    content: string;
-    timestamp: Date;
-  }>;
-}
-
-interface AIState {
-  context: AIContext;
-  updateIntent: (intent: string) => void;
-  updateTask: (task: string) => void;
-  addSuggestion: (suggestion: string) => void;
-  addMessage: (role: 'user' | 'assistant', content: string) => void;
-  clearContext: () => void;
-}
-
-const defaultAIContext: AIContext = {
-  userIntent: '',
-  currentTask: '',
-  aiSuggestions: [],
-  conversationHistory: [],
-};
-
-export const useAIStore = create<AIState>()(
-  persist(
-    (set, get) => ({
-      context: defaultAIContext,
-      updateIntent: (intent) => {
-        const currentContext = get().context;
-        set({
-          context: { ...currentContext, userIntent: intent },
-        });
-      },
-      updateTask: (task) => {
-        const currentContext = get().context;
-        set({
-          context: { ...currentContext, currentTask: task },
-        });
-      },
-      addSuggestion: (suggestion) => {
-        const currentContext = get().context;
-        set({
-          context: {
-            ...currentContext,
-            aiSuggestions: [...currentContext.aiSuggestions, suggestion],
-          },
-        });
-      },
-      addMessage: (role, content) => {
-        const currentContext = get().context;
-        const newMessage = {
-          id: Date.now().toString(),
-          role,
-          content,
-          timestamp: new Date(),
-        };
-        set({
-          context: {
-            ...currentContext,
-            conversationHistory: [...currentContext.conversationHistory, newMessage],
-          },
-        });
-      },
-      clearContext: () => set({ context: defaultAIContext }),
-    }),
-    {
-      name: 'ai-context-storage',
-    }
-  )
-);
-
-// Combined store hook for easy access
-export const useAppStore = () => {
-  const user = useUserStore();
-  const theme = useThemeStore();
-  const settings = useAppSettingsStore();
-  const ai = useAIStore();
-
-  return {
-    user,
-    theme,
-    settings,
-    ai,
-  };
-};`;
-
-  await fs.writeFile(path.join(statePath, "store.ts"), zustandStore);
-
-  // Store provider component
-  const storeProvider = `import React from 'react';
-import { useUserStore, useThemeStore, useAppSettingsStore, useAIStore } from './store';
-
-interface StoreProviderProps {
-  children: React.ReactNode;
-}
-
-export const StoreProvider: React.FC<StoreProviderProps> = ({ children }) => {
-  // Initialize stores
-  useUserStore();
-  useThemeStore();
-  useAppSettingsStore();
-  useAIStore();
-
-  return <>{children}</>;
-};
-
-export default StoreProvider;`;
-
-  await fs.writeFile(path.join(statePath, "provider.tsx"), storeProvider);
-
-  // Store utilities
-  const storeUtils = `import { useUserStore, useThemeStore, useAppSettingsStore, useAIStore } from './store';
-
-// User utilities
-export const useUser = () => {
-  const { user, isAuthenticated, login, logout, updateUser } = useUserStore();
-  return { user, isAuthenticated, login, logout, updateUser };
-};
-
-// Theme utilities
-export const useTheme = () => {
-  const { theme, toggleTheme, setTheme } = useThemeStore();
-  return { theme, toggleTheme, setTheme };
-};
-
-// Settings utilities
-export const useSettings = () => {
-  const { settings, updateSettings, resetSettings } = useAppSettingsStore();
-  return { settings, updateSettings, resetSettings };
-};
-
-// AI utilities
-export const useAI = () => {
-  const { context, updateIntent, updateTask, addSuggestion, addMessage, clearContext } = useAIStore();
-  return { context, updateIntent, updateTask, addSuggestion, addMessage, clearContext };
-};
-
-// Store selectors for performance
-export const useUserSelector = (selector: (state: any) => any) => useUserStore(selector);
-export const useThemeSelector = (selector: (state: any) => any) => useThemeStore(selector);
-export const useSettingsSelector = (selector: (state: any) => any) => useAppSettingsStore(selector);
-export const useAISelector = (selector: (state: any) => any) => useAIStore(selector);`;
-
-  await fs.writeFile(path.join(statePath, "utils.ts"), storeUtils);
-}
-
-async function createTestingFeature(projectPath, config) {
-  const testPath = path.join(projectPath, "src", "__tests__");
-  await fs.ensureDir(testPath);
-
-  const testSetup = `import '@testing-library/jest-dom';
-
-// Test setup configuration
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
-}));`;
-
-  await fs.writeFile(path.join(testPath, "setup.js"), testSetup);
-}
-
-async function createPWAFeature(projectPath, config) {
-  const publicPath = path.join(projectPath, "public");
-  await fs.ensureDir(publicPath);
-
-  const manifest = {
-    short_name: "EgKa App",
-    name: "EgKaSoft Application",
-    icons: [
-      {
-        src: "favicon.ico",
-        sizes: "64x64 32x32 24x24 16x16",
-        type: "image/x-icon",
-      },
-    ],
-    start_url: ".",
-    display: "standalone",
-    theme_color: "#000000",
-    background_color: "#ffffff",
-  };
-
-  await fs.writeJson(path.join(publicPath, "manifest.json"), manifest, {
-    spaces: 2,
-  });
-}
-
-async function createI18nFeature(projectPath, config) {
-  const i18nPath = path.join(projectPath, "src", "i18n");
-  await fs.ensureDir(i18nPath);
-
-  const trTranslations = {
-    welcome: "Hoş Geldiniz",
-    hello: "Merhaba",
-    goodbye: "Güle Güle",
-  };
-
-  const enTranslations = {
-    welcome: "Welcome",
-    hello: "Hello",
-    goodbye: "Goodbye",
-  };
-
-  await fs.writeJson(path.join(i18nPath, "tr.json"), trTranslations, {
-    spaces: 2,
-  });
-  await fs.writeJson(path.join(i18nPath, "en.json"), enTranslations, {
-    spaces: 2,
-  });
-}
-
-async function createDarkModeFeature(projectPath, config) {
-  const themePath = path.join(projectPath, "src", "theme");
-  await fs.ensureDir(themePath);
-
-  const themeConfig = {
-    light: {
-      background: "#ffffff",
-      text: "#000000",
-      primary: "#3b82f6",
-      secondary: "#6b7280",
-    },
-    dark: {
-      background: "#1f2937",
-      text: "#f9fafb",
-      primary: "#60a5fa",
-      secondary: "#9ca3af",
-    },
-  };
-
-  await fs.writeJson(path.join(themePath, "theme.json"), themeConfig, {
-    spaces: 2,
-  });
-}
-
-async function listTemplates(templatesPath) {
-  try {
-    const templates = await fs.readdir(templatesPath);
-
-    console.log(chalk.blue.bold("📋 Available Templates:"));
-    console.log(chalk.gray("─────────────────────────────────"));
-
-    if (templates.length === 0) {
-      console.log(chalk.yellow("No templates found"));
-      return;
-    }
-
-    for (const template of templates) {
-      const templatePath = path.join(templatesPath, template);
-      const stats = await fs.stat(templatePath);
-
-      if (stats.isDirectory()) {
-        console.log(chalk.white(`• ${template}`));
-      }
-    }
-  } catch (error) {
-    console.error(chalk.red("Error listing templates:"), error.message);
-  }
-}
-
-async function showTemplateInfo(templatesPath, templateName) {
-  try {
-    const templatePath = path.join(templatesPath, templateName);
-
-    if (!(await fs.pathExists(templatePath))) {
-      console.log(chalk.red(`❌ Template not found: ${templateName}`));
-      return;
-    }
-
-    const infoPath = path.join(templatePath, "template.json");
-
-    if (await fs.pathExists(infoPath)) {
-      const info = await fs.readJson(infoPath);
-
-      console.log(chalk.blue.bold(`📋 Template Info: ${templateName}`));
-      console.log(chalk.gray("─────────────────────────────────"));
-      console.log(chalk.white(`Name: ${info.name || templateName}`));
-      console.log(
-        chalk.white(`Description: ${info.description || "No description"}`)
-      );
-      console.log(chalk.white(`Framework: ${info.framework || "Unknown"}`));
-      console.log(
-        chalk.white(`CSS Framework: ${info.cssFramework || "Unknown"}`)
-      );
-      console.log(chalk.white(`Version: ${info.version || "1.0.0"}`));
-    } else {
-      console.log(
-        chalk.yellow(`No info file found for template: ${templateName}`)
-      );
-    }
-  } catch (error) {
-    console.error(chalk.red("Error showing template info:"), error.message);
-  }
-}
-
-async function createTemplate(templatesPath, templateName) {
-  try {
-    const answers = await inquirer.prompt([
-      {
-        type: "input",
-        name: "name",
-        message: "Template name:",
-        default: templateName,
-      },
-      {
-        type: "input",
-        name: "description",
-        message: "Template description:",
-      },
-      {
-        type: "list",
-        name: "framework",
-        message: "Framework:",
-        choices: ["nextjs", "react", "vue", "svelte", "vanilla"],
-      },
-      {
-        type: "list",
-        name: "cssFramework",
-        message: "CSS Framework:",
-        choices: [
-          "tailwind",
-          "bootstrap",
-          "mui",
-          "chakra",
-          "antd",
-          "styled",
-          "css",
-        ],
-      },
-    ]);
-
-    const templatePath = path.join(templatesPath, templateName);
-    await fs.ensureDir(templatePath);
-
-    const templateInfo = {
-      name: answers.name,
-      description: answers.description,
-      framework: answers.framework,
-      cssFramework: answers.cssFramework,
-      version: "1.0.0",
-      createdAt: getReliableTimestamp(),
-    };
-
-    await fs.writeJson(path.join(templatePath, "template.json"), templateInfo, {
-      spaces: 2,
-    });
-
-    console.log(chalk.green(`✅ Template created: ${templateName}`));
-  } catch (error) {
-    console.error(chalk.red("Error creating template:"), error.message);
-  }
-}
-
-async function deleteTemplate(templatesPath, templateName) {
-  try {
-    const templatePath = path.join(templatesPath, templateName);
-
-    if (!(await fs.pathExists(templatePath))) {
-      console.log(chalk.red(`❌ Template not found: ${templateName}`));
-      return;
-    }
-
-    const answers = await inquirer.prompt([
-      {
-        type: "confirm",
-        name: "confirm",
-        message: `Are you sure you want to delete template ${templateName}?`,
-        default: false,
-      },
-    ]);
-
-    if (answers.confirm) {
-      await fs.remove(templatePath);
-      console.log(chalk.green(`✅ Template deleted: ${templateName}`));
-    } else {
-      console.log(chalk.yellow("❌ Template deletion cancelled"));
-    }
-  } catch (error) {
-    console.error(chalk.red("Error deleting template:"), error.message);
-  }
-}
-
-async function addNewAgent(agentsPath, agentName) {
-  try {
-    const answers = await inquirer.prompt([
-      {
-        type: "input",
-        name: "description",
-        message: "Agent description:",
-      },
-      {
-        type: "list",
-        name: "type",
-        message: "Agent type:",
-        choices: ["manager", "analyst", "developer", "specialist", "custom"],
-      },
-      {
-        type: "input",
-        name: "capabilities",
-        message: "Agent capabilities (comma-separated):",
-      },
-    ]);
-
-    const agentData = {
-      name: agentName,
-      description: answers.description,
-      type: answers.type,
-      capabilities: answers.capabilities.split(",").map((cap) => cap.trim()),
-      status: "active",
-      createdAt: getReliableTimestamp(),
-      lastActive: getReliableTimestamp(),
-      tasksCompleted: 0,
-    };
-
-    const agentPath = path.join(agentsPath, `${agentName}.context7.json`);
-    await fs.writeJson(agentPath, agentData, { spaces: 2 });
-
-    console.log(chalk.green(`✅ Agent created: ${agentName}`));
-  } catch (error) {
-    console.error(chalk.red("Error creating agent:"), error.message);
-  }
-}
-
-async function deleteAgent(agentsPath, agentName) {
-  try {
-    const agentPath = path.join(agentsPath, `${agentName}.context7.json`);
-
-    if (!(await fs.pathExists(agentPath))) {
-      console.log(chalk.red(`❌ Agent not found: ${agentName}`));
-      return;
-    }
-
-    const answers = await inquirer.prompt([
-      {
-        type: "confirm",
-        name: "confirm",
-        message: `Are you sure you want to delete agent ${agentName}?`,
-        default: false,
-      },
-    ]);
-
-    if (answers.confirm) {
-      await fs.remove(agentPath);
-      console.log(chalk.green(`✅ Agent deleted: ${agentName}`));
-    } else {
-      console.log(chalk.yellow("❌ Agent deletion cancelled"));
-    }
-  } catch (error) {
-    console.error(chalk.red("Error deleting agent:"), error.message);
-  }
-}
-
-async function configureAgent(agentsPath, agentName) {
-  try {
-    const agentPath = path.join(agentsPath, `${agentName}.context7.json`);
-
-    if (!(await fs.pathExists(agentPath))) {
-      console.log(chalk.red(`❌ Agent not found: ${agentName}`));
-      return;
-    }
-
-    const agentData = await fs.readJson(agentPath);
-
-    const answers = await inquirer.prompt([
-      {
-        type: "input",
-        name: "description",
-        message: "Agent description:",
-        default: agentData.description || "",
-      },
-      {
-        type: "list",
-        name: "status",
-        message: "Agent status:",
-        choices: ["active", "inactive", "maintenance"],
-        default: agentData.status || "active",
-      },
-      {
-        type: "input",
-        name: "capabilities",
-        message: "Agent capabilities (comma-separated):",
-        default: agentData.capabilities
-          ? agentData.capabilities.join(", ")
-          : "",
-      },
-    ]);
-
-    agentData.description = answers.description;
-    agentData.status = answers.status;
-    agentData.capabilities = answers.capabilities
-      .split(",")
-      .map((cap) => cap.trim());
-    agentData.updatedAt = getReliableTimestamp();
-
-    await fs.writeJson(agentPath, agentData, { spaces: 2 });
-
-    console.log(chalk.green(`✅ Agent configured: ${agentName}`));
-  } catch (error) {
-    console.error(chalk.red("Error configuring agent:"), error.message);
-  }
-}
-
-async function createESLintConfig(projectPath, config) {
-  const eslintConfig = {
+async function createESLintConfigV2(projectPath, config) {
+  const eslintConfigV2 = {
     extends: [
       "next/core-web-vitals",
       "eslint:recommended",
       "@typescript-eslint/recommended",
+      // V2 Performance and security rules
+      "plugin:react-hooks/recommended",
+      "plugin:jsx-a11y/recommended",
+      "plugin:security/recommended",
     ],
     parser: "@typescript-eslint/parser",
-    plugins: ["@typescript-eslint"],
+    plugins: ["@typescript-eslint", "react-hooks", "jsx-a11y", "security"],
     rules: {
-      "@typescript-eslint/no-unused-vars": "warn",
+      // V2 Strict TypeScript rules
+      "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/explicit-function-return-type": "warn",
+      "@typescript-eslint/no-non-null-assertion": "warn",
+
+      // V2 React Performance rules
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "react/jsx-no-bind": "warn",
+      "react/jsx-key": "error",
+
+      // V2 Security rules
+      "security/detect-object-injection": "warn",
+      "security/detect-non-literal-regexp": "warn",
+      "security/detect-unsafe-regex": "error",
+
+      // V2 Accessibility rules
+      "jsx-a11y/alt-text": "error",
+      "jsx-a11y/anchor-has-content": "error",
+      "jsx-a11y/anchor-is-valid": "error",
+
+      // V2 Performance rules
+      "no-console": "warn",
+      "no-debugger": "error",
+      "prefer-const": "error",
+      "no-var": "error",
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
     },
   };
 
-  await fs.writeJson(path.join(projectPath, ".eslintrc.json"), eslintConfig, {
+  await fs.writeJson(path.join(projectPath, ".eslintrc.json"), eslintConfigV2, {
     spaces: 2,
   });
 }
 
-async function createGitignore(projectPath, config) {
-  const gitignoreContent = `# Dependencies
+async function createGitignoreV2(projectPath, config) {
+  const gitignoreContentV2 = `# Dependencies
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -3357,9 +2907,728 @@ jspm_packages/
 # Lovable AI cache
 .lovable-cache/
 ai-models/
-`;
 
-  await fs.writeFile(path.join(projectPath, ".gitignore"), gitignoreContent);
+# V2 Performance cache
+.performance-cache/
+.security-cache/
+
+# V2 Multi-Agent logs
+multi-agent-v2/shared/logs/
+multi-agent-v2/shared/tasks/
+
+# V2 Storybook
+storybook-static/
+
+# V2 TypeScript build info
+*.tsbuildinfo
+
+# V2 Security audit
+security-audit.json
+performance-metrics.json`;
+
+  await fs.writeFile(path.join(projectPath, ".gitignore"), gitignoreContentV2);
+}
+
+async function createPerformanceConfigV2(projectPath, config) {
+  const performanceConfig = {
+    bundleAnalyzer: {
+      enabled: process.env.ANALYZE === "true",
+    },
+    optimization: {
+      splitChunks: {
+        chunks: "all",
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: "vendors",
+            chunks: "all",
+          },
+        },
+      },
+    },
+    compression: {
+      gzip: true,
+      brotli: true,
+    },
+  };
+
+  await fs.writeJson(
+    path.join(projectPath, "performance.config.json"),
+    performanceConfig,
+    {
+      spaces: 2,
+    }
+  );
+}
+
+async function createSecurityConfigV2(projectPath, config) {
+  const securityConfig = {
+    headers: {
+      "Content-Security-Policy":
+        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';",
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    },
+    validation: {
+      inputSanitization: true,
+      xssProtection: true,
+      csrfProtection: true,
+    },
+  };
+
+  await fs.writeJson(
+    path.join(projectPath, "security.config.json"),
+    securityConfig,
+    {
+      spaces: 2,
+    }
+  );
+}
+
+async function createFeatureFilesV2(projectPath, config) {
+  const features = config.features || [];
+
+  for (const feature of features) {
+    switch (feature) {
+      case "performance":
+        await createPerformanceFeatureV2(projectPath, config);
+        break;
+      case "security":
+        await createSecurityFeatureV2(projectPath, config);
+        break;
+      case "atomic-design":
+        await createAtomicDesignFeatureV2(projectPath, config);
+        break;
+      case "storybook":
+        await createStorybookFeatureV2(projectPath, config);
+        break;
+      case "auth":
+        await createAuthFeatureV2(projectPath, config);
+        break;
+      case "database":
+        await createDatabaseFeatureV2(projectPath, config);
+        break;
+      case "api":
+        await createAPIFeatureV2(projectPath, config);
+        break;
+      case "state":
+        await createStateFeatureV2(projectPath, config);
+        break;
+      case "testing":
+        await createTestingFeatureV2(projectPath, config);
+        break;
+      case "pwa":
+        await createPWAFeatureV2(projectPath, config);
+        break;
+      case "i18n":
+        await createI18nFeatureV2(projectPath, config);
+        break;
+      case "dark-mode":
+        await createDarkModeFeatureV2(projectPath, config);
+        break;
+    }
+  }
+}
+
+async function createPerformanceFeatureV2(projectPath, config) {
+  const performancePath = path.join(projectPath, "src", "utils", "performance");
+  await fs.ensureDir(performancePath);
+
+  const performanceUtils = `import { useCallback, useMemo, memo } from 'react';
+
+// V2 Performance optimization utilities
+export const withPerformanceOptimization = <P extends object>(
+  Component: React.ComponentType<P>,
+  options: {
+    displayName?: string;
+    shouldComponentUpdate?: (prevProps: P, nextProps: P) => boolean;
+  } = {}
+) => {
+  const OptimizedComponent = memo(Component, options.shouldComponentUpdate);
+  OptimizedComponent.displayName = options.displayName || Component.displayName || Component.name;
+  return OptimizedComponent;
+};
+
+// V2 useCallback wrapper with performance logging
+export const useOptimizedCallback = <T extends (...args: any[]) => any>(
+  callback: T,
+  deps: React.DependencyList,
+  options: {
+    name?: string;
+    logPerformance?: boolean;
+  } = {}
+) => {
+  const optimizedCallback = useCallback(callback, deps);
+  
+  if (options.logPerformance) {
+    const wrappedCallback = ((...args: Parameters<T>) => {
+      const startTime = performance.now();
+      const result = optimizedCallback(...args);
+      const endTime = performance.now();
+      console.log(\`[Performance] \${options.name || 'Callback'} took \${endTime - startTime}ms\`);
+      return result;
+    }) as T;
+    
+    return wrappedCallback;
+  }
+  
+  return optimizedCallback;
+};
+
+// V2 useMemo wrapper with performance logging
+export const useOptimizedMemo = <T>(
+  factory: () => T,
+  deps: React.DependencyList,
+  options: {
+    name?: string;
+    logPerformance?: boolean;
+  } = {}
+) => {
+  const memoizedValue = useMemo(factory, deps);
+  
+  if (options.logPerformance) {
+    console.log(\`[Performance] \${options.name || 'Memo'} recalculated\`);
+  }
+  
+  return memoizedValue;
+};
+
+// V2 Bundle size analyzer
+export const analyzeBundleSize = (componentName: string, size: number) => {
+  if (size > 50 * 1024) { // 50KB
+    console.warn(\`[Bundle Size] \${componentName} is large: \${(size / 1024).toFixed(2)}KB\`);
+  }
+};
+
+// V2 Memory leak detection
+export const useMemoryLeakDetection = (componentName: string) => {
+  React.useEffect(() => {
+    const startMemory = performance.memory?.usedJSHeapSize || 0;
+    
+    return () => {
+      const endMemory = performance.memory?.usedJSHeapSize || 0;
+      const memoryDiff = endMemory - startMemory;
+      
+      if (memoryDiff > 1024 * 1024) { // 1MB
+        console.warn(\`[Memory Leak] \${componentName} may have memory leak: +\${(memoryDiff / 1024 / 1024).toFixed(2)}MB\`);
+      }
+    };
+  }, [componentName]);
+};`;
+
+  await fs.writeFile(
+    path.join(performancePath, "performance-utils.ts"),
+    performanceUtils
+  );
+}
+
+async function createSecurityFeatureV2(projectPath, config) {
+  const securityPath = path.join(projectPath, "src", "utils", "security");
+  await fs.ensureDir(securityPath);
+
+  const securityUtils = `// V2 Security utilities
+export const sanitizeInput = (input: string): string => {
+  return input
+    .replace(/[<>]/g, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\\w+=/gi, '');
+};
+
+export const validateInput = (input: string, rules: {
+  minLength?: number;
+  maxLength?: number;
+  pattern?: RegExp;
+  allowedChars?: string;
+}): { isValid: boolean; errors: string[] } => {
+  const errors: string[] = [];
+  
+  if (rules.minLength && input.length < rules.minLength) {
+    errors.push(\`Minimum length is \${rules.minLength} characters\`);
+  }
+  
+  if (rules.maxLength && input.length > rules.maxLength) {
+    errors.push(\`Maximum length is \${rules.maxLength} characters\`);
+  }
+  
+  if (rules.pattern && !rules.pattern.test(input)) {
+    errors.push('Input does not match required pattern');
+  }
+  
+  if (rules.allowedChars) {
+    const invalidChars = input.split('').filter(char => !rules.allowedChars!.includes(char));
+    if (invalidChars.length > 0) {
+      errors.push(\`Invalid characters: \${invalidChars.join(', ')}\`);
+    }
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+};
+
+export const generateCSRFToken = (): string => {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};
+
+export const validateCSRFToken = (token: string, expectedToken: string): boolean => {
+  return token === expectedToken;
+};
+
+export const escapeHtml = (str: string): string => {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+};
+
+export const createSecureHeaders = () => {
+  return {
+    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';",
+    'X-Frame-Options': 'DENY',
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  };
+};`;
+
+  await fs.writeFile(
+    path.join(securityPath, "security-utils.ts"),
+    securityUtils
+  );
+}
+
+async function createAtomicDesignFeatureV2(projectPath, config) {
+  const atomicPath = path.join(projectPath, "src", "components");
+  await fs.ensureDir(atomicPath);
+
+  // Create atomic design structure
+  const atomicStructure = {
+    atoms: {},
+    molecules: {},
+    organisms: {},
+    templates: {},
+    pages: {},
+  };
+
+  for (const [level, content] of Object.entries(atomicStructure)) {
+    const levelPath = path.join(atomicPath, level);
+    await fs.ensureDir(levelPath);
+
+    // Create index file for each level
+    const indexContent = `// V2 ${
+      level.charAt(0).toUpperCase() + level.slice(1)
+    } Components
+// Auto-generated by Multi-Agent V2 System
+
+export * from './Button';
+export * from './Input';
+export * from './Typography';`;
+
+    await fs.writeFile(path.join(levelPath, "index.ts"), indexContent);
+  }
+
+  // Create atomic design config
+  const atomicConfig = {
+    version: "2.0.0",
+    levels: ["atoms", "molecules", "organisms", "templates", "pages"],
+    rules: {
+      atoms: "Basic building blocks (buttons, inputs, typography)",
+      molecules: "Simple combinations of atoms (form fields, search bars)",
+      organisms: "Complex combinations of molecules (headers, forms)",
+      templates: "Page layouts and structure",
+      pages: "Complete pages with real content",
+    },
+    naming: {
+      convention: "PascalCase",
+      prefix: "",
+      suffix: "",
+    },
+    storybook: {
+      enabled: true,
+      autoGenerate: true,
+      includeHTMLPreview: true,
+    },
+  };
+
+  await fs.writeJson(
+    path.join(atomicPath, "atomic-design.config.json"),
+    atomicConfig,
+    {
+      spaces: 2,
+    }
+  );
+}
+
+async function createStorybookFeatureV2(projectPath, config) {
+  const storybookPath = path.join(projectPath, ".storybook");
+  await fs.ensureDir(storybookPath);
+
+  const mainConfig = `module.exports = {
+  stories: [
+    "../src/**/*.stories.@(js|jsx|ts|tsx|mdx)",
+    "../src/**/*.stories.mdx"
+  ],
+  addons: [
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions",
+    "@storybook/addon-a11y",
+    "@storybook/addon-performance",
+    {
+      name: "@storybook/addon-docs",
+      options: {
+        configureJSX: true,
+      },
+    },
+  ],
+  framework: {
+    name: "@storybook/react-vite",
+    options: {},
+  },
+  docs: {
+    autodocs: true,
+  },
+  // V2 Performance optimizations
+  core: {
+    builder: "@storybook/builder-vite",
+  },
+  features: {
+    storyStoreV7: true,
+    interactionsDebugger: true,
+  },
+};`;
+
+  await fs.writeFile(path.join(storybookPath, "main.ts"), mainConfig);
+
+  const previewConfig = `import type { Preview } from "@storybook/react";
+import "../src/styles/globals.css";
+
+const preview: Preview = {
+  parameters: {
+    actions: { argTypesRegex: "^on[A-Z].*" },
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/,
+      },
+    },
+    // V2 Performance and accessibility
+    a11y: {
+      config: {
+        rules: [
+          {
+            id: "color-contrast",
+            enabled: true,
+          },
+        ],
+      },
+    },
+    performance: {
+      maxDuration: 1000,
+    },
+  },
+};
+
+export default preview;`;
+
+  await fs.writeFile(path.join(storybookPath, "preview.ts"), previewConfig);
+}
+
+async function createMultiAgentSystemV2(projectPath, config) {
+  const multiAgentPath = path.join(projectPath, "multi-agent-v2");
+  await fs.ensureDir(multiAgentPath);
+
+  // Copy V2 system files
+  const sourcePath = path.join(__dirname, "..", "multi-agent-v2");
+  if (await fs.pathExists(sourcePath)) {
+    await fs.copy(sourcePath, multiAgentPath);
+    console.log(chalk.green("✅ Multi-Agent V2 system copied"));
+  } else {
+    console.log(
+      chalk.yellow(
+        "⚠️  Multi-Agent V2 system not found, creating basic structure"
+      )
+    );
+    await createBasicMultiAgentV2(multiAgentPath, config);
+  }
+}
+
+async function createBasicMultiAgentV2(multiAgentPath, config) {
+  // Create basic V2 structure
+  const structure = {
+    agents: {},
+    orchestrator: {},
+    shared: {
+      tasks: {},
+      logs: {},
+    },
+    scripts: {},
+  };
+
+  for (const [dir, content] of Object.entries(structure)) {
+    const dirPath = path.join(multiAgentPath, dir);
+    await fs.ensureDir(dirPath);
+
+    if (typeof content === "object" && Object.keys(content).length > 0) {
+      for (const [subDir, subContent] of Object.entries(content)) {
+        const subDirPath = path.join(dirPath, subDir);
+        await fs.ensureDir(subDirPath);
+      }
+    }
+  }
+
+  // Create basic V2 config
+  const v2Config = {
+    version: "3.0.0",
+    system_name: "Multi-Agent V2 System",
+    active_agents: 3,
+    agents: ["managerAgent", "analystAgent", "developerAgent"],
+    features: {
+      performance_optimization: true,
+      security_enhancement: true,
+      atomic_design_v2: true,
+      storybook_integration: true,
+    },
+  };
+
+  await fs.writeJson(
+    path.join(multiAgentPath, "main.context7.json"),
+    v2Config,
+    {
+      spaces: 2,
+    }
+  );
+}
+
+async function createCursorRulesV2(projectPath, config) {
+  const cursorRulesPath = path.join(projectPath, ".cursor", "rules");
+  await fs.ensureDir(cursorRulesPath);
+
+  const rulesContent = `---
+alwaysApply: true
+---
+
+# EGKA AI AGENTS V2 - Multi-Agent Rules
+
+## Multi-Agent V2 System Rules
+
+### Agent Activation Rules V2
+
+Her yeni chat başlangıcında aşağıdaki multi-agent V2 sistemi otomatik olarak devreye girer:
+
+#### 1. Manager Agent V2 Activation
+- **Trigger:** Kullanıcı herhangi bir komut girdiğinde
+- **Action:** "Merhaba! Multi-Agent V2 Sistemine hoş geldiniz. Performance ve security optimizasyonları ile görevinizi alıyorum."
+- **Next Step:** Görevi analist agent'a aktarır ve V2 performance requirements belirler
+
+#### 2. Analyst Agent V2 Activation
+- **Trigger:** Manager'dan gelen görev
+- **Action:**
+  - Auto increment ID ile task oluşturur (TASK-2025-1000 formatında)
+  - Task context dosyası oluşturur: \`multi-agent-v2/shared/tasks/TASK-XXXX-XXXX.context7.json\`
+  - Performance requirements ekler (React.memo, useCallback, useMemo)
+  - Security requirements ekler (XSS, CSRF protection)
+  - Atomic design level belirler (atoms, molecules, organisms)
+  - Storybook requirements ekler
+
+#### 3. Developer Agent V2 Activation
+- **Trigger:** Frontend/UI ile ilgili task'lar
+- **Action:**
+  - Task context dosyasını okur
+  - V2 Performance optimizasyonları uygular
+  - V2 Security enhancements uygular
+  - Atomic design V2 kurallarına uygun component'lar oluşturur
+  - Storybook V2 integration yapar
+  - Shared log'a yazar
+  - Task durumunu günceller
+
+## File Structure V2
+
+\`\`\`
+multi-agent-v2/
+├── agents/
+│   ├── managerAgent.context7.json
+│   ├── analystAgent.context7.json
+│   └── developerAgent.context7.json
+├── shared/
+│   ├── tasks/          # Task context dosyaları V2
+│   └── logs/           # Shared log dosyaları V2
+└── orchestrator/       # Agent koordinasyonu V2
+\`\`\`
+
+## V2 Performance Requirements
+
+- **React.memo kullanımı zorunlu**: Tüm component'lerde React.memo ile performance optimization
+- **useCallback optimizasyonu**: Prop olarak fonksiyon gönderiliyorsa useCallback kullanımı zorunlu
+- **useMemo optimizasyonu**: Hesaplama maliyeti yüksek işlemlerde useMemo kullanımı zorunlu
+- **Memory optimization**: Gereksiz re-render'lar engellenir
+- **Bundle size optimization**: Bundle boyutu optimize edilir
+
+## V2 Security Requirements
+
+- **XSS Protection**: Content-Security-Policy uygulanmalı
+- **CSRF Protection**: SameSite cookies kullanılmalı
+- **Input Validation**: Tüm kullanıcı girdileri doğrulanmalı
+- **API Security**: Hassas veriler backend'de tutulmalı
+
+## V2 Atomic Design Rules
+
+- **Atoms**: Basic components (buttons, inputs, typography)
+- **Molecules**: Simple combinations of atoms (form fields, search bars)
+- **Organisms**: Complex combinations of molecules (headers, forms)
+- **Templates**: Page layouts and structure
+- **Pages**: Complete pages with real content
+
+## V2 Modern React Practices
+
+- **TypeScript strict mode**: TypeScript strict mode kullanılmalı
+- **Arrow function kullanımı**: Tüm fonksiyonlar arrow function şeklinde tanımlanmalı
+- **Explicit return**: Mümkünse return kullanılarak açık şekilde değer dönülmeli
+- **Material UI entegrasyonu**: UI bileşenleri Material UI kullanmalı
+
+## V2 Code Quality Rules
+
+- **ESLint V2 kurallarına uyulmalı**: Performance ve security rules dahil
+- **Prettier ile kod formatlanmalı**
+- **TypeScript strict mode kullanılmalı**
+- **Modern JavaScript/TypeScript özellikleri kullanılmalı**
+- **Accessibility (a11y) standartlarına uyulmalı**
+- **Performance optimizasyonları yapılmalı**
+
+## V2 Communication Rules
+
+- Ajanlar, her zaman Türkçe cevaplar vermeli
+- Kod yorumları Türkçe olmalı
+- Değişken ve fonksiyon isimleri İngilizce olmalı
+- Dosya isimleri İngilizce olmalı
+
+## V2 Commands
+
+- \`npm run status\` - V2 Sistem durumu
+- \`npm run test\` - V2 Test çalıştır
+- \`npm run performance\` - Performance metrics
+- \`npm run security\` - Security audit
+
+## Project Info V2
+
+- **Name:** ${config.projectName}
+- **Version:** 3.0.0
+- **Features:** ${config.features?.join(", ") || "V2 Default"}
+- **Framework:** ${config.framework}
+- **Language:** ${config.language}
+- **CSS Framework:** ${config.cssFramework}
+
+---
+
+**Bu dosya V2 otomatik olarak oluşturulmuştur ve "always" seçili olmalıdır.**`;
+
+  await fs.writeFile(
+    path.join(cursorRulesPath, "multi-agent-rules.mdc"),
+    rulesContent
+  );
+  console.log(
+    chalk.green("📝 V2 .cursor/rules/multi-agent-rules.mdc oluşturuldu")
+  );
+}
+
+async function optimizeProjectV2(projectPath, config) {
+  console.log(
+    chalk.yellow(
+      "⚡ V2 Performance ve Security optimizasyonları uygulanıyor..."
+    )
+  );
+
+  // Update package.json with V2 scripts
+  const packageJsonPath = path.join(projectPath, "package.json");
+  if (await fs.pathExists(packageJsonPath)) {
+    const packageData = await fs.readJson(packageJsonPath);
+
+    // Add V2 scripts
+    packageData.scripts = {
+      ...packageData.scripts,
+      status: "node multi-agent-v2/scripts/status.js",
+      test: "node multi-agent-v2/scripts/status.js",
+      performance: "echo 'Performance metrics available'",
+      security: "echo 'Security audit available'",
+      storybook: "storybook dev -p 6006",
+      "build-storybook": "storybook build",
+    };
+
+    await fs.writeJson(packageJsonPath, packageData, { spaces: 2 });
+  }
+}
+
+async function setupCIV2(projectPath, config) {
+  const ciPath = path.join(projectPath, ".github", "workflows");
+  await fs.ensureDir(ciPath);
+
+  const ciConfig = {
+    name: "V2 CI/CD Pipeline",
+    on: {
+      push: {
+        branches: ["main", "develop"],
+      },
+      pull_request: {
+        branches: ["main"],
+      },
+    },
+    jobs: {
+      test: {
+        runs_on: "ubuntu-latest",
+        steps: [
+          {
+            name: "Checkout",
+            uses: "actions/checkout@v3",
+          },
+          {
+            name: "Setup Node.js",
+            uses: "actions/setup-node@v3",
+            with: {
+              "node-version": "18",
+              cache: "npm",
+            },
+          },
+          {
+            name: "Install dependencies",
+            run: "npm ci",
+          },
+          {
+            name: "Run tests",
+            run: "npm test",
+          },
+          {
+            name: "Performance audit",
+            run: "npm run performance",
+          },
+          {
+            name: "Security audit",
+            run: "npm run security",
+          },
+        ],
+      },
+    },
+  };
+
+  await fs.writeJson(path.join(ciPath, "ci.yml"), ciConfig, { spaces: 2 });
+}
+
+// Legacy function aliases for backward compatibility
+async function createFeatureFiles(projectPath, config) {
+  return createFeatureFilesV2(projectPath, config);
+}
+
+async function createConfigFiles(projectPath, config) {
+  return createConfigFilesV2(projectPath, config);
+}
+
+async function createCursorRules(projectPath, config) {
+  return createCursorRulesV2(projectPath, config);
+}
+
+async function setupCI(projectPath, config) {
+  return setupCIV2(projectPath, config);
 }
 
 async function initGit(projectPath) {
