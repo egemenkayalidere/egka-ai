@@ -94,14 +94,14 @@ async function createProject(config) {
   const cursorRulesPath = path.join(projectPath, ".cursor", "rules");
   await fs.ensureDir(cursorRulesPath);
 
-  // Multi-agent rules dosyasını oluştur
-  await createMultiAgentRules(cursorRulesPath, config);
+  // Multi-agent rules dosyası oluşturma devre dışı
+// await createMultiAgentRules(cursorRulesPath, config);
 
   console.log(chalk.green("\n✅ Multi-Agent System başarıyla oluşturuldu!"));
   console.log(chalk.cyan(`\n📂 Kurulum dizini: ${projectPath}`));
   console.log(chalk.cyan("📁 Oluşturulan dosyalar:"));
   console.log(chalk.white("   • multi-agent/"));
-  console.log(chalk.white("   • .cursor/rules/multi-agent-rules.mdc"));
+  console.log(chalk.white("   • .cursor/rules/ (devre dışı)"));
   console.log(chalk.cyan("\n🚀 Kullanım:"));
   console.log(chalk.white("   npm run status"));
   console.log(chalk.white("   npm run test"));

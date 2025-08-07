@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const MainSystemController = require("../orchestrator/main-system-controller.js");
+import MainSystemController from "../orchestrator/main-system-controller.js";
 
 class MultiAgentSystemTest {
   constructor() {
@@ -413,9 +413,9 @@ class MultiAgentSystemTest {
 }
 
 // Test script'ini çalıştır
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const testRunner = new MultiAgentSystemTest();
   testRunner.runAllTests().catch(console.error);
 }
 
-module.exports = MultiAgentSystemTest;
+export default MultiAgentSystemTest;

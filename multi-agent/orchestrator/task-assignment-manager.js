@@ -1,7 +1,11 @@
-const fs = require("fs");
-const path = require("path");
-const EventEmitter = require("events");
-const AgentCommunicationSystem = require("./agent-communication-system.js");
+import EventEmitter from "events";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import AgentCommunicationSystem from "./agent-communication-system.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class TaskAssignmentManager extends EventEmitter {
   constructor() {
@@ -778,4 +782,4 @@ class TaskAssignmentManager extends EventEmitter {
   }
 }
 
-module.exports = TaskAssignmentManager;
+export default TaskAssignmentManager;

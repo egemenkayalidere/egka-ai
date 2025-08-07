@@ -243,18 +243,18 @@ program
 // ============================================================================
 program
   .command("create")
-  .description("Create a new project with Multi-Agent V2 System")
+  .description("Create a new project with Multi-Agent System")
   .option("-t, --template <template>", "Use specific template")
   .option("-y, --yes", "Skip prompts and use defaults")
-  .option("-v2", "Force V2 system creation")
+  .option("-v2", "Force system creation")
   .action(async (options) => {
-    console.log(chalk.blue.bold("🚀 EGKA AI Project Creator V2"));
+    console.log(chalk.blue.bold("🚀 EGKA AI Project Creator"));
     console.log(chalk.gray("─────────────────────────────────"));
 
     try {
-      // V2 sistemi zorla kullan
-      options.v2 = true;
-      await createProjectWizardV2(options);
+      // Sistemi zorla kullan
+options.v2 = true;
+await createProjectWizard(options);
     } catch (error) {
       console.error(chalk.red("Error creating project:"), error.message);
     }
@@ -407,33 +407,33 @@ program
 // ============================================================================
 program
   .command("init")
-  .description("Initialize the Multi-Agent V2 system")
+  .description("Initialize the Multi-Agent system")
   .option("-f, --force", "Force reinitialization")
   .action(async (options) => {
     console.log(chalk.blue.bold("🚀 Initializing EGKA AI AGENTS..."));
 
     try {
-      // Mevcut proje için V2 cursor rules oluştur
-      const currentProjectConfig = {
-        projectName: path.basename(
-          (() => {
-            try {
-              return process.cwd();
-            } catch (error) {
-              return path.dirname(__dirname);
-            }
-          })()
-        ),
-        framework: "unknown",
-        language: "javascript",
-        cssFramework: "css",
-        features: ["performance", "security", "atomic-design"],
-        packageManager: "npm",
-        includeMultiAgentV2: true,
-      };
+      // Mevcut proje için cursor rules oluştur
+const currentProjectConfig = {
+  projectName: path.basename(
+    (() => {
+      try {
+        return process.cwd();
+      } catch (error) {
+        return path.dirname(__dirname);
+      }
+    })()
+  ),
+  framework: "unknown",
+  language: "javascript",
+  cssFramework: "css",
+  features: ["performance", "security", "atomic-design"],
+  packageManager: "npm",
+  includeMultiAgent: true,
+};
 
-      // Multi-Agent V2 sistemini oluştur
-      await createMultiAgentSystemV2(process.cwd(), currentProjectConfig);
+// Multi-Agent sistemini oluştur
+await createMultiAgentSystem(process.cwd(), currentProjectConfig);
 
       console.log(
         chalk.green("✅ Multi-Agent system initialized successfully!")
@@ -1287,9 +1287,9 @@ async function createProjectWizardV2(options) {
         name: "framework",
         message: "Framework seçin:",
         choices: [
-          { name: "Next.js (React SSR) - V2 Optimized", value: "nextjs" },
-          { name: "React (SPA) - V2 Optimized", value: "react" },
-          { name: "Lovable (AI-powered) - V2 Optimized", value: "lovable" },
+          { name: "Next.js (React SSR) - Optimized", value: "nextjs" },
+{ name: "React (SPA) - Optimized", value: "react" },
+{ name: "Lovable (AI-powered) - Optimized", value: "lovable" },
           { name: "Vue.js", value: "vue" },
           { name: "Svelte", value: "svelte" },
           { name: "Vanilla JavaScript", value: "vanilla" },
@@ -1302,7 +1302,7 @@ async function createProjectWizardV2(options) {
         message: "Programlama dili seçin:",
         choices: [
           {
-            name: "TypeScript (Önerilen) - V2 Strict Mode",
+            name: "TypeScript (Önerilen) - Strict Mode",
             value: "typescript",
           },
           { name: "JavaScript", value: "javascript" },
@@ -1328,64 +1328,42 @@ async function createProjectWizardV2(options) {
         default: "tailwind",
       },
       {
-        type: "checkbox",
-        name: "features",
-        message: "V2 Özellikleri seçin:",
-        choices: [
-          {
-            name: "Performance Optimization (React.memo, useCallback, useMemo)",
-            value: "performance",
-          },
-          {
-            name: "Security Enhancement (XSS, CSRF Protection)",
-            value: "security",
-          },
-          {
-            name: "Atomic Design V2 (Atoms, Molecules, Organisms)",
-            value: "atomic-design",
-          },
-          { name: "Storybook Integration V2", value: "storybook" },
-          { name: "Authentication", value: "auth" },
-          { name: "Database Integration", value: "database" },
-          { name: "API Routes", value: "api" },
-          { name: "State Management (Zustand)", value: "state" },
-          { name: "Testing Setup", value: "testing" },
-          { name: "PWA Support", value: "pwa" },
-          { name: "Internationalization", value: "i18n" },
-          { name: "Dark Mode", value: "dark-mode" },
-          { name: "Analytics", value: "analytics" },
-          { name: "SEO Optimization", value: "seo" },
-        ],
-      },
-      {
-        type: "list",
-        name: "packageManager",
-        message: "Paket yöneticisi seçin:",
-        choices: [
-          { name: "npm", value: "npm" },
-          { name: "yarn", value: "yarn" },
-          { name: "pnpm", value: "pnpm" },
-        ],
-        default: "npm",
-      },
-      {
-        type: "confirm",
-        name: "includeGit",
-        message: "Git repository oluşturulsun mu?",
-        default: true,
-      },
-      {
-        type: "confirm",
-        name: "includeCI",
-        message: "CI/CD pipeline eklenilsin mi?",
-        default: false,
-      },
-      {
-        type: "confirm",
-        name: "includeMultiAgentV2",
-        message: "Multi-Agent V2 sistemi otomatik kurulsun mu?",
-        default: true,
-      },
+  type: "checkbox",
+  name: "features",
+  message: "Özellikler seçin:",
+  choices: [
+    {
+      name: "Performance Optimization (React.memo, useCallback, useMemo)",
+      value: "performance",
+    },
+    {
+      name: "Security Enhancement (XSS, CSRF Protection)",
+      value: "security",
+    },
+    {
+      name: "Atomic Design (Atoms, Molecules, Organisms)",
+      value: "atomic-design",
+    },
+    { name: "Storybook Integration", value: "storybook" },
+    { name: "Authentication", value: "auth" },
+    { name: "Database Integration", value: "database" },
+    { name: "API Routes", value: "api" },
+    { name: "State Management (Zustand)", value: "state" },
+    { name: "Testing Setup", value: "testing" },
+    { name: "PWA Support", value: "pwa" },
+    { name: "Internationalization", value: "i18n" },
+    { name: "Dark Mode", value: "dark-mode" },
+    { name: "Analytics", value: "analytics" },
+    { name: "SEO Optimization", value: "seo" },
+  ],
+  default: ["performance", "security", "atomic-design"],
+},
+{
+  type: "confirm",
+  name: "includeMultiAgent",
+  message: "Multi-Agent sistemi otomatik kurulsun mu?",
+  default: true,
+},
     ]);
 
     await generateProjectV2(answers);
@@ -1410,7 +1388,7 @@ async function generateProjectV2(config) {
   const projectPath = path.join(currentCwd, config.projectName);
 
   console.log(
-    chalk.blue(`\n🚀 ${config.projectName} projesi V2 ile oluşturuluyor...`)
+    chalk.blue(`\n🚀 ${config.projectName} projesi oluşturuluyor...`)
   );
 
   try {
@@ -1426,29 +1404,29 @@ async function generateProjectV2(config) {
       return;
     }
 
-    // V2 Konfigürasyon dosyaları oluştur
-    await createConfigFilesV2(projectPath, config);
+    // Konfigürasyon dosyaları oluştur
+await createConfigFiles(projectPath, config);
 
-    // V2 Özellik dosyaları oluştur
-    await createFeatureFilesV2(projectPath, config);
+// Özellik dosyaları oluştur
+await createFeatureFiles(projectPath, config);
 
-    // Multi-Agent V2 sistemi oluştur (zorunlu)
-    await createMultiAgentSystemV2(projectPath, config);
+// Multi-Agent sistemi oluştur (zorunlu)
+await createMultiAgentSystem(projectPath, config);
 
-    // V2 Cursor rules oluştur
-    await createCursorRulesV2(projectPath, config);
+// Cursor rules oluşturma devre dışı
+// await createCursorRules(projectPath, config);
 
     // Git init
     if (config.includeGit) {
       await initGit(projectPath);
     }
 
-    // V2 Performance ve Security optimizasyonları
-    await optimizeProjectV2(projectPath, config);
+    // Performance ve Security optimizasyonları
+await optimizeProject(projectPath, config);
 
     // CI/CD setup
     if (config.includeCI) {
-      await setupCIV2(projectPath, config);
+      await setupCI(projectPath, config);
     }
 
     // Orijinal dizine geri dön
@@ -1458,20 +1436,20 @@ async function generateProjectV2(config) {
       console.error(chalk.red("Orijinal dizine dönüş hatası:"), error.message);
     }
 
-    console.log(chalk.green("\n✅ Proje V2 başarıyla oluşturuldu!"));
+    console.log(chalk.green("\n✅ Proje başarıyla oluşturuldu!"));
     console.log(chalk.cyan(`\n📂 Proje klasörü: ${projectPath}`));
 
-    // V2 Performance metrics göster
+    // Performance metrics göster
     if (config.features?.includes("performance")) {
-      console.log(chalk.yellow("\n⚡ V2 Performance Optimizations:"));
-      console.log(chalk.white("   • React.memo kullanımı zorunlu"));
-      console.log(chalk.white("   • useCallback ve useMemo optimizasyonu"));
-      console.log(chalk.white("   • Bundle size optimization"));
-      console.log(chalk.white("   • Memory leak prevention"));
-    }
+  console.log(chalk.yellow("\n⚡ Performance Optimizations:"));
+  console.log(chalk.white("   • React.memo kullanımı zorunlu"));
+  console.log(chalk.white("   • useCallback ve useMemo optimizasyonu"));
+  console.log(chalk.white("   • Bundle size optimization"));
+  console.log(chalk.white("   • Memory leak prevention"));
+}
 
     if (config.features?.includes("security")) {
-      console.log(chalk.yellow("\n🔒 V2 Security Enhancements:"));
+      console.log(chalk.yellow("\n🔒 Security Enhancements:"));
       console.log(chalk.white("   • XSS ve CSRF koruması"));
       console.log(chalk.white("   • Input validation"));
       console.log(chalk.white("   • Content-Security-Policy"));
@@ -1479,7 +1457,7 @@ async function generateProjectV2(config) {
     }
 
     if (config.features?.includes("atomic-design")) {
-      console.log(chalk.yellow("\n🎨 V2 Atomic Design System:"));
+      console.log(chalk.yellow("\n🎨 Atomic Design System:"));
       console.log(chalk.white("   • Atoms, Molecules, Organisms"));
       console.log(chalk.white("   • Storybook integration"));
       console.log(chalk.white("   • Component library"));
@@ -1487,7 +1465,7 @@ async function generateProjectV2(config) {
     }
 
     // Otomatik paket yükleme
-    console.log(chalk.yellow("\n📦 V2 Bağımlılıklar yükleniyor..."));
+    console.log(chalk.yellow("\n📦 Bağımlılıklar yükleniyor..."));
     try {
       const originalCwd = currentCwd;
       try {
@@ -1518,9 +1496,9 @@ async function generateProjectV2(config) {
           error.message
         );
       }
-      console.log(chalk.green("✅ V2 Bağımlılıklar başarıyla yüklendi!"));
+      console.log(chalk.green("✅ Bağımlılıklar başarıyla yüklendi!"));
 
-      console.log(chalk.cyan("\n🚀 V2 Proje hazır! Hemen başlayabilirsiniz:"));
+      console.log(chalk.cyan("\n🚀 Proje hazır! Hemen başlayabilirsiniz:"));
       console.log(chalk.white(`   cd ${config.projectName}`));
       console.log(
         chalk.white(
@@ -1534,19 +1512,19 @@ async function generateProjectV2(config) {
         )
       );
 
-      if (config.includeMultiAgentV2) {
-        console.log(chalk.cyan("\n🤖 Multi-Agent V2 Komutları:"));
-        console.log(chalk.white("   npm run status"));
-        console.log(chalk.white("   npm run test"));
-        console.log(chalk.white("   npm run performance"));
-        console.log(chalk.white("   npm run security"));
-      }
+      if (config.includeMultiAgent) {
+  console.log(chalk.cyan("\n🤖 Multi-Agent Komutları:"));
+  console.log(chalk.white("   npm run status"));
+  console.log(chalk.white("   npm run test"));
+  console.log(chalk.white("   npm run performance"));
+  console.log(chalk.white("   npm run security"));
+}
     } catch (error) {
       console.log(
-        chalk.yellow(
-          "⚠️  V2 Bağımlılık yükleme başarısız oldu, manuel olarak yükleyin:"
-        )
-      );
+  chalk.yellow(
+    "⚠️  Bağımlılık yükleme başarısız oldu, manuel olarak yükleyin:"
+  )
+);
       console.log(chalk.white(`   cd ${config.projectName}`));
       console.log(
         chalk.white(
@@ -1570,45 +1548,45 @@ async function generateProjectV2(config) {
       );
     }
 
-    // V2 Özel talimatlar
-    if (config.framework === "lovable") {
-      console.log(
-        chalk.yellow("\n💡 Lovable V2 projesi için özel talimatlar:")
-      );
-      console.log(chalk.white("   - Lovable AI agent'ınızı yapılandırın"));
-      console.log(
-        chalk.white("   - API anahtarlarınızı .env dosyasına ekleyin")
-      );
-      console.log(chalk.white("   - V2 Performance optimizasyonları aktif"));
+    // Özel talimatlar
+if (config.framework === "lovable") {
+  console.log(
+    chalk.yellow("\n💡 Lovable projesi için özel talimatlar:")
+  );
+  console.log(chalk.white("   - Lovable AI agent'ınızı yapılandırın"));
+  console.log(
+    chalk.white("   - API anahtarlarınızı .env dosyasına ekleyin")
+  );
+  console.log(chalk.white("   - Performance optimizasyonları aktif"));
 
-      if (config.cssFramework === "radix") {
-        console.log(
-          chalk.cyan("   - Radix UI + Tailwind V2 entegrasyonu hazır")
-        );
-        console.log(
-          chalk.white("   - Modern UI component'ları kullanabilirsiniz")
-        );
-      }
-    }
+  if (config.cssFramework === "radix") {
+    console.log(
+      chalk.cyan("   - Radix UI + Tailwind entegrasyonu hazır")
+    );
+    console.log(
+      chalk.white("   - Modern UI component'ları kullanabilirsiniz")
+    );
+  }
+}
 
-    if (config.cssFramework === "radix") {
-      console.log(chalk.yellow("\n🎨 Radix UI + Tailwind V2 özellikleri:"));
-      console.log(chalk.white("   - Modern, accessible UI component'ları"));
-      console.log(chalk.white("   - Dark mode desteği"));
-      console.log(chalk.white("   - Tailwind CSS ile tam entegrasyon"));
-      console.log(chalk.white("   - TypeScript strict mode"));
-      console.log(chalk.white("   - V2 Performance optimizasyonları"));
-    }
+if (config.cssFramework === "radix") {
+  console.log(chalk.yellow("\n🎨 Radix UI + Tailwind özellikleri:"));
+  console.log(chalk.white("   - Modern, accessible UI component'ları"));
+  console.log(chalk.white("   - Dark mode desteği"));
+  console.log(chalk.white("   - Tailwind CSS ile tam entegrasyon"));
+  console.log(chalk.white("   - TypeScript strict mode"));
+  console.log(chalk.white("   - Performance optimizasyonları"));
+}
 
-    if (config.features?.includes("storybook")) {
-      console.log(chalk.yellow("\n📚 Storybook V2 özellikleri:"));
-      console.log(chalk.white("   - Otomatik story generation"));
-      console.log(chalk.white("   - HTML preview support"));
-      console.log(chalk.white("   - Component documentation"));
-      console.log(chalk.white("   - Interactive testing"));
-    }
+if (config.features?.includes("storybook")) {
+  console.log(chalk.yellow("\n📚 Storybook özellikleri:"));
+  console.log(chalk.white("   - Otomatik story generation"));
+  console.log(chalk.white("   - HTML preview support"));
+  console.log(chalk.white("   - Component documentation"));
+  console.log(chalk.white("   - Interactive testing"));
+}
   } catch (error) {
-    console.error(chalk.red("Error generating project V2:"), error.message);
+    console.error(chalk.red("Error generating project:"), error.message);
   }
 }
 
@@ -3341,8 +3319,8 @@ async function createMultiAgentSystemV2(projectPath, config) {
     await createBasicMultiAgent(multiAgentPath, config);
   }
 
-  // Cursor rules oluştur
-  await createCursorRulesV2(projectPath, config);
+  // Cursor rules oluşturma devre dışı
+// await createCursorRulesV2(projectPath, config);
 
   console.log(chalk.green("✅ Multi-Agent system setup completed"));
 }

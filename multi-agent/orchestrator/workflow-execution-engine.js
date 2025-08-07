@@ -1,7 +1,11 @@
-const fs = require("fs");
-const path = require("path");
-const EventEmitter = require("events");
-const ContextInjectionManager = require("./context-injection-manager.js");
+import EventEmitter from "events";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import ContextInjectionManager from "./context-injection-manager.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class WorkflowExecutionEngine extends EventEmitter {
   constructor() {
@@ -564,4 +568,4 @@ class WorkflowExecutionEngine extends EventEmitter {
   }
 }
 
-module.exports = WorkflowExecutionEngine;
+export default WorkflowExecutionEngine;

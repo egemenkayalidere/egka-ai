@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const MainSystemController = require("./orchestrator/main-system-controller.js");
+import MainSystemController from "./orchestrator/main-system-controller.js";
 
 class MultiAgentMain {
   constructor() {
@@ -248,7 +248,7 @@ class MultiAgentMain {
 }
 
 // Ana giriş noktası
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const main = new MultiAgentMain();
 
   // Command line arguments
@@ -301,4 +301,4 @@ if (require.main === module) {
   run();
 }
 
-module.exports = MultiAgentMain;
+export default MultiAgentMain;

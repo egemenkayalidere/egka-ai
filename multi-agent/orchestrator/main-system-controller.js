@@ -1,6 +1,10 @@
-const fs = require("fs");
-const path = require("path");
-const AutomaticTriggeringSystem = require("./automatic-triggering-system.js");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import AutomaticTriggeringSystem from "./automatic-triggering-system.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class MainSystemController {
   constructor() {
@@ -546,4 +550,4 @@ class MainSystemController {
   }
 }
 
-module.exports = MainSystemController;
+export default MainSystemController;

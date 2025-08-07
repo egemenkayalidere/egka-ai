@@ -1,9 +1,13 @@
-const fs = require("fs");
-const path = require("path");
-const EventEmitter = require("events");
-const WorkflowExecutionEngine = require("./workflow-execution-engine.js");
-const AgentCommunicationSystem = require("./agent-communication-system.js");
-const TaskAssignmentManager = require("./task-assignment-manager.js");
+import EventEmitter from "events";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import AgentCommunicationSystem from "./agent-communication-system.js";
+import TaskAssignmentManager from "./task-assignment-manager.js";
+import WorkflowExecutionEngine from "./workflow-execution-engine.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class AutomaticTriggeringSystem extends EventEmitter {
   constructor() {
@@ -670,4 +674,4 @@ class AutomaticTriggeringSystem extends EventEmitter {
   }
 }
 
-module.exports = AutomaticTriggeringSystem;
+export default AutomaticTriggeringSystem;
