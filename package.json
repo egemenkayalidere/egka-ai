@@ -1,6 +1,6 @@
 {
   "name": "@egka/egka-ai-agents",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Multi-Agent V2 System with Performance Optimization, Security Enhancement, Atomic Design V2, and Modern React Practices for automated task management and development",
   "main": "index.js",
   "bin": {
