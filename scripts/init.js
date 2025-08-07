@@ -97,15 +97,11 @@ async function createProject(config) {
   // V2 Multi-agent rules dosyasını oluştur
   await createMultiAgentV2Rules(cursorRulesPath, config);
 
-  // V2 .mdc dosyasını oluştur
-  await createMDCFile(projectPath, config);
-
   console.log(chalk.green("\n✅ Multi-Agent V2 System başarıyla oluşturuldu!"));
   console.log(chalk.cyan(`\n📂 Kurulum dizini: ${projectPath}`));
   console.log(chalk.cyan("📁 Oluşturulan dosyalar:"));
   console.log(chalk.white("   • multi-agent-v2/"));
-  console.log(chalk.white("   • .cursor/rules/multi-agent-v2-rules.mdc"));
-  console.log(chalk.white("   • .mdc (Cursor Auto Tasks)"));
+  console.log(chalk.white("   • .cursor/rules/multi-agent-rules.mdc"));
   console.log(chalk.cyan("\n🚀 V2 Kullanım:"));
   console.log(chalk.white("   npm run status"));
   console.log(chalk.white("   npm run test"));
@@ -583,104 +579,7 @@ console.log("✅ Multi-Agent V2 System is running");
   await fs.writeFile(path.join(scriptsPath, "status.js"), statusScript);
 }
 
-async function createMDCFile(projectPath, config) {
-  const mdcContent = `# Multi-Agent V2 System - Cursor Auto Tasks Configuration
 
-## System Overview
-This configuration enables automatic tasks for the Multi-Agent V2 development system, including workflow orchestration, agent communication, task assignment, and automatic triggering.
-
-## Auto Tasks Configuration
-
-### 1. Workflow Execution Engine
-\`\`\`javascript
-// Auto task: Initialize workflow execution
-{
-  "task": "workflow_init",
-  "trigger": "file_change",
-  "pattern": "orchestrator/workflow-execution-engine.js",
-  "action": "validate_workflow_structure",
-  "description": "Validate workflow execution engine structure and dependencies"
-}
-\`\`\`
-
-### 2. Agent Communication System
-\`\`\`javascript
-// Auto task: Monitor agent communication
-{
-  "task": "agent_communication_monitor",
-  "trigger": "file_change",
-  "pattern": "orchestrator/agent-communication-system.js",
-  "action": "validate_communication_protocols",
-  "description": "Monitor and validate agent communication protocols"
-}
-\`\`\`
-
-### 3. Task Assignment Manager
-\`\`\`javascript
-// Auto task: Task assignment validation
-{
-  "task": "task_assignment_validation",
-  "trigger": "file_change",
-  "pattern": "orchestrator/task-assignment-manager.js",
-  "action": "validate_task_assignment_logic",
-  "description": "Validate task assignment logic and agent workload management"
-}
-\`\`\`
-
-### 4. Automatic Triggering System
-\`\`\`javascript
-// Auto task: Trigger system validation
-{
-  "task": "trigger_system_validation",
-  "trigger": "file_change",
-  "pattern": "orchestrator/automatic-triggering-system.js",
-  "action": "validate_trigger_rules",
-  "description": "Validate automatic triggering rules and conditions"
-}
-\`\`\`
-
-## Performance Optimization Tasks
-
-### React Component Optimization
-\`\`\`javascript
-// Auto task: React optimization validation
-{
-  "task": "react_optimization_check",
-  "trigger": "file_change",
-  "pattern": "**/*.tsx",
-  "action": "validate_react_optimization",
-  "rules": [
-    "React.memo kullanımı zorunlu",
-    "useCallback ile fonksiyon optimizasyonu",
-    "useMemo ile hesaplama optimizasyonu",
-    "Arrow function kullanımı",
-    "Explicit return tercih edilmeli"
-  ],
-  "description": "Validate React component optimization rules"
-}
-\`\`\`
-
-### TypeScript Strict Mode
-\`\`\`javascript
-// Auto task: TypeScript validation
-{
-  "task": "typescript_validation",
-  "trigger": "file_change",
-  "pattern": "**/*.ts",
-  "action": "validate_typescript_strict",
-  "rules": [
-    "Strict mode kullanımı",
-    "Proper interface tanımlamaları",
-    "Type safety sağlanmalı"
-  ],
-  "description": "Validate TypeScript strict mode compliance"
-}
-\`\`\`
-
-## Security Validation Tasks
-
-### XSS Protection
-\`\`\`javascript
 // Auto task: XSS protection validation
 {
   "task": "xss_protection_check",

@@ -3355,9 +3355,6 @@ async function createMultiAgentSystemV2(projectPath, config) {
     await createBasicMultiAgentV2(multiAgentPath, config);
   }
 
-  // V2 .mdc dosyasını oluştur
-  await createMDCFile(projectPath, config);
-
   // V2 Cursor rules oluştur
   await createCursorRulesV2(projectPath, config);
 
@@ -3433,17 +3430,21 @@ async function createBasicAgentFiles(multiAgentPath, config) {
     id: "manager",
     name: "Manager Agent V2",
     version: "2.0.0",
-    capabilities: ["project_analysis", "workflow_orchestration", "resource_allocation"],
+    capabilities: [
+      "project_analysis",
+      "workflow_orchestration",
+      "resource_allocation",
+    ],
     performance_requirements: {
       response_time: 1000,
       memory_usage: "50MB",
-      cpu_usage: "10%"
+      cpu_usage: "10%",
     },
     security_requirements: {
       input_validation: true,
       xss_protection: true,
-      data_encryption: false
-    }
+      data_encryption: false,
+    },
   };
 
   await fs.writeJson(
@@ -3457,17 +3458,21 @@ async function createBasicAgentFiles(multiAgentPath, config) {
     id: "analyst",
     name: "Analyst Agent V2",
     version: "2.0.0",
-    capabilities: ["requirements_analysis", "task_planning", "complexity_assessment"],
+    capabilities: [
+      "requirements_analysis",
+      "task_planning",
+      "complexity_assessment",
+    ],
     performance_requirements: {
       response_time: 2000,
       memory_usage: "75MB",
-      cpu_usage: "15%"
+      cpu_usage: "15%",
     },
     security_requirements: {
       input_validation: true,
       xss_protection: true,
-      data_encryption: false
-    }
+      data_encryption: false,
+    },
   };
 
   await fs.writeJson(
@@ -3481,17 +3486,21 @@ async function createBasicAgentFiles(multiAgentPath, config) {
     id: "developer",
     name: "Developer Agent V2",
     version: "2.0.0",
-    capabilities: ["frontend_development", "component_creation", "performance_optimization"],
+    capabilities: [
+      "frontend_development",
+      "component_creation",
+      "performance_optimization",
+    ],
     performance_requirements: {
       response_time: 5000,
       memory_usage: "100MB",
-      cpu_usage: "25%"
+      cpu_usage: "25%",
     },
     security_requirements: {
       input_validation: true,
       xss_protection: true,
-      data_encryption: false
-    }
+      data_encryption: false,
+    },
   };
 
   await fs.writeJson(
@@ -3515,12 +3524,12 @@ async function createBasicOrchestratorFiles(multiAgentPath, config) {
         action: "project_analysis",
         performance_requirements: {
           timeout: 30000,
-          memory_limit: "100MB"
+          memory_limit: "100MB",
         },
         security_validation: {
           input_validation: true,
-          xss_protection: true
-        }
+          xss_protection: true,
+        },
       },
       {
         step: 2,
@@ -3528,12 +3537,12 @@ async function createBasicOrchestratorFiles(multiAgentPath, config) {
         action: "task_creation",
         performance_requirements: {
           timeout: 45000,
-          memory_limit: "150MB"
+          memory_limit: "150MB",
         },
         security_validation: {
           input_validation: true,
-          xss_protection: true
-        }
+          xss_protection: true,
+        },
       },
       {
         step: 3,
@@ -3541,24 +3550,24 @@ async function createBasicOrchestratorFiles(multiAgentPath, config) {
         action: "code_development",
         performance_requirements: {
           timeout: 120000,
-          memory_limit: "200MB"
+          memory_limit: "200MB",
         },
         security_validation: {
           input_validation: true,
-          xss_protection: true
-        }
-      }
+          xss_protection: true,
+        },
+      },
     ],
     global_performance_optimization: {
       enable_caching: true,
       enable_compression: true,
-      enable_minification: true
+      enable_minification: true,
     },
     global_security_features: {
       enable_audit_logging: true,
       enable_performance_monitoring: true,
-      enable_error_tracking: true
-    }
+      enable_error_tracking: true,
+    },
   };
 
   await fs.writeJson(
@@ -3610,497 +3619,7 @@ if (fs.existsSync(logsPath)) {
 console.log("✅ Multi-Agent V2 System is running");
 `;
 
-  await fs.writeFile(path.join(scriptsPath, "status.js"), statusScript);
-}
-
-async function createMDCFile(projectPath, config) {
-  const mdcContent = `# Multi-Agent V2 System - Cursor Auto Tasks Configuration
-
-## System Overview
-This configuration enables automatic tasks for the Multi-Agent V2 development system, including workflow orchestration, agent communication, task assignment, and automatic triggering.
-
-## Auto Tasks Configuration
-
-### 1. Workflow Execution Engine
-\`\`\`javascript
-// Auto task: Initialize workflow execution
-{
-  "task": "workflow_init",
-  "trigger": "file_change",
-  "pattern": "orchestrator/workflow-execution-engine.js",
-  "action": "validate_workflow_structure",
-  "description": "Validate workflow execution engine structure and dependencies"
-}
-\`\`\`
-
-### 2. Agent Communication System
-\`\`\`javascript
-// Auto task: Monitor agent communication
-{
-  "task": "agent_communication_monitor",
-  "trigger": "file_change",
-  "pattern": "orchestrator/agent-communication-system.js",
-  "action": "validate_communication_protocols",
-  "description": "Monitor and validate agent communication protocols"
-}
-\`\`\`
-
-### 3. Task Assignment Manager
-\`\`\`javascript
-// Auto task: Task assignment validation
-{
-  "task": "task_assignment_validation",
-  "trigger": "file_change",
-  "pattern": "orchestrator/task-assignment-manager.js",
-  "action": "validate_task_assignment_logic",
-  "description": "Validate task assignment logic and agent workload management"
-}
-\`\`\`
-
-### 4. Automatic Triggering System
-\`\`\`javascript
-// Auto task: Trigger system validation
-{
-  "task": "trigger_system_validation",
-  "trigger": "file_change",
-  "pattern": "orchestrator/automatic-triggering-system.js",
-  "action": "validate_trigger_rules",
-  "description": "Validate automatic triggering rules and conditions"
-}
-\`\`\`
-
-## Performance Optimization Tasks
-
-### React Component Optimization
-\`\`\`javascript
-// Auto task: React optimization validation
-{
-  "task": "react_optimization_check",
-  "trigger": "file_change",
-  "pattern": "**/*.tsx",
-  "action": "validate_react_optimization",
-  "rules": [
-    "React.memo kullanımı zorunlu",
-    "useCallback ile fonksiyon optimizasyonu",
-    "useMemo ile hesaplama optimizasyonu",
-    "Arrow function kullanımı",
-    "Explicit return tercih edilmeli"
-  ],
-  "description": "Validate React component optimization rules"
-}
-\`\`\`
-
-### TypeScript Strict Mode
-\`\`\`javascript
-// Auto task: TypeScript validation
-{
-  "task": "typescript_validation",
-  "trigger": "file_change",
-  "pattern": "**/*.ts",
-  "action": "validate_typescript_strict",
-  "rules": [
-    "Strict mode kullanımı",
-    "Proper interface tanımlamaları",
-    "Type safety sağlanmalı"
-  ],
-  "description": "Validate TypeScript strict mode compliance"
-}
-\`\`\`
-
-## Security Validation Tasks
-
-### XSS Protection
-\`\`\`javascript
-// Auto task: XSS protection validation
-{
-  "task": "xss_protection_check",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_xss_protection",
-  "rules": [
-    "Content-Security-Policy uygulanmalı",
-    "Input validation zorunlu",
-    "XSS pattern kontrolü"
-  ],
-  "description": "Validate XSS protection implementation"
-}
-\`\`\`
-
-### Input Validation
-\`\`\`javascript
-// Auto task: Input validation check
-{
-  "task": "input_validation_check",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_input_validation",
-  "rules": [
-    "Tüm kullanıcı girdileri doğrulanmalı",
-    "Hassas veri kontrolü",
-    "Sanitization uygulanmalı"
-  ],
-  "description": "Validate input validation implementation"
-}
-\`\`\`
-
-## Atomic Design Validation
-
-### Component Structure
-\`\`\`javascript
-// Auto task: Atomic design validation
-{
-  "task": "atomic_design_validation",
-  "trigger": "file_change",
-  "pattern": "**/components/**/*.{tsx,ts}",
-  "action": "validate_atomic_design",
-  "levels": {
-    "atoms": ["Button", "Input", "Icon", "Typography", "Avatar"],
-    "molecules": ["FormField", "Card", "SearchBar", "Navigation"],
-    "organisms": ["Header", "Sidebar", "Footer", "ProductList"],
-    "templates": ["MasterPage", "DashboardLayout", "AuthLayout"],
-    "pages": ["HomePage", "LoginPage", "DashboardPage"]
-  },
-  "description": "Validate atomic design structure compliance"
-}
-\`\`\`
-
-## Storybook Generation
-
-### Auto Story Creation
-\`\`\`javascript
-// Auto task: Storybook story generation
-{
-  "task": "storybook_generation",
-  "trigger": "file_change",
-  "pattern": "**/components/**/*.tsx",
-  "action": "generate_storybook_stories",
-  "rules": [
-    "Her component için story oluşturulmalı",
-    "Variant'lar için story exports",
-    "HTML preview generation"
-  ],
-  "description": "Auto-generate Storybook stories for components"
-}
-\`\`\`
-
-## Testing Tasks
-
-### Unit Test Generation
-\`\`\`javascript
-// Auto task: Unit test generation
-{
-  "task": "unit_test_generation",
-  "trigger": "file_change",
-  "pattern": "**/components/**/*.tsx",
-  "action": "generate_unit_tests",
-  "rules": [
-    "Component test coverage",
-    "Props validation tests",
-    "Event handling tests"
-  ],
-  "description": "Auto-generate unit tests for components"
-}
-\`\`\`
-
-## Code Quality Tasks
-
-### ESLint Validation
-\`\`\`javascript
-// Auto task: ESLint validation
-{
-  "task": "eslint_validation",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_eslint_rules",
-  "rules": [
-    "Modern JavaScript/TypeScript kullanımı",
-    "Code formatting standards",
-    "Best practices compliance"
-  ],
-  "description": "Validate ESLint rules compliance"
-}
-\`\`\`
-
-### Prettier Formatting
-\`\`\`javascript
-// Auto task: Prettier formatting
-{
-  "task": "prettier_formatting",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx,json}",
-  "action": "format_with_prettier",
-  "description": "Auto-format code with Prettier"
-}
-\`\`\`
-
-## Multi-Agent System Tasks
-
-### Workflow Monitoring
-\`\`\`javascript
-// Auto task: Workflow monitoring
-{
-  "task": "workflow_monitoring",
-  "trigger": "file_change",
-  "pattern": "orchestrator/**/*.js",
-  "action": "monitor_workflow_execution",
-  "metrics": [
-    "Execution time tracking",
-    "Step completion rates",
-    "Error rate monitoring",
-    "Performance optimization"
-  ],
-  "description": "Monitor workflow execution performance"
-}
-\`\`\`
-
-### Agent Status Monitoring
-\`\`\`javascript
-// Auto task: Agent status monitoring
-{
-  "task": "agent_status_monitoring",
-  "trigger": "file_change",
-  "pattern": "agents/**/*.json",
-  "action": "monitor_agent_status",
-  "metrics": [
-    "Agent availability",
-    "Message processing rates",
-    "Task completion rates",
-    "Error handling"
-  ],
-  "description": "Monitor agent status and performance"
-}
-\`\`\`
-
-### Task Assignment Monitoring
-\`\`\`javascript
-// Auto task: Task assignment monitoring
-{
-  "task": "task_assignment_monitoring",
-  "trigger": "file_change",
-  "pattern": "shared/tasks/**/*.json",
-  "action": "monitor_task_assignment",
-  "metrics": [
-    "Task assignment efficiency",
-    "Agent workload balance",
-    "Priority handling",
-    "Completion tracking"
-  ],
-  "description": "Monitor task assignment and management"
-}
-\`\`\`
-
-## Security Audit Tasks
-
-### Security Compliance
-\`\`\`javascript
-// Auto task: Security compliance check
-{
-  "task": "security_compliance_check",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_security_compliance",
-  "rules": [
-    "XSS protection",
-    "CSRF protection",
-    "Input validation",
-    "Secure headers",
-    "Content Security Policy"
-  ],
-  "description": "Validate security compliance"
-}
-\`\`\`
-
-### Audit Logging
-\`\`\`javascript
-// Auto task: Audit logging
-{
-  "task": "audit_logging",
-  "trigger": "file_change",
-  "pattern": "shared/logs/**/*.log",
-  "action": "validate_audit_logging",
-  "rules": [
-    "Security events logging",
-    "Performance metrics logging",
-    "Error tracking",
-    "User activity logging"
-  ],
-  "description": "Validate audit logging implementation"
-}
-\`\`\`
-
-## Performance Monitoring Tasks
-
-### Performance Metrics
-\`\`\`javascript
-// Auto task: Performance metrics collection
-{
-  "task": "performance_metrics_collection",
-  "trigger": "file_change",
-  "pattern": "shared/logs/performance.log",
-  "action": "collect_performance_metrics",
-  "metrics": [
-    "Execution time tracking",
-    "Memory usage monitoring",
-    "Bundle size analysis",
-    "Render count monitoring"
-  ],
-  "description": "Collect and analyze performance metrics"
-}
-\`\`\`
-
-### Memory Optimization
-\`\`\`javascript
-// Auto task: Memory optimization check
-{
-  "task": "memory_optimization_check",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_memory_optimization",
-  "rules": [
-    "Gereksiz re-render'lar engellenmeli",
-    "Bundle size optimization",
-    "Caching stratejileri",
-    "Memory leak prevention"
-  ],
-  "description": "Validate memory optimization"
-}
-\`\`\`
-
-## File Structure Validation
-
-### Project Structure
-\`\`\`javascript
-// Auto task: Project structure validation
-{
-  "task": "project_structure_validation",
-  "trigger": "file_change",
-  "pattern": "**/*",
-  "action": "validate_project_structure",
-  "structure": {
-    "multi-agent-v2/": {
-      "orchestrator/": ["workflow-execution-engine.js", "agent-communication-system.js", "task-assignment-manager.js", "automatic-triggering-system.js", "main-system-controller.js"],
-      "agents/": ["managerAgent.context7.json", "analystAgent.context7.json", "developerAgent.context7.json"],
-      "shared/": {
-        "tasks/": "*.context7.json",
-        "logs/": "*.log",
-        "context-injection/": "*-injection.context7.json"
-      },
-      "scripts/": ["status.js", "test-system.js"],
-      "main.js": "Entry point"
-    }
-  },
-  "description": "Validate project structure compliance"
-}
-\`\`\`
-
-## Auto-Execution Rules
-
-### Execution Priority
-\`\`\`javascript
-// Auto execution priority rules
-{
-  "priority_order": [
-    "security_validation",
-    "performance_optimization",
-    "code_quality_validation",
-    "atomic_design_validation",
-    "testing_generation",
-    "documentation_update"
-  ],
-  "parallel_execution": [
-    "eslint_validation",
-    "prettier_formatting",
-    "typescript_validation"
-  ],
-  "sequential_execution": [
-    "workflow_validation",
-    "agent_communication_validation",
-    "task_assignment_validation"
-  ]
-}
-\`\`\`
-
-### Error Handling
-\`\`\`javascript
-// Auto error handling rules
-{
-  "error_severity": {
-    "critical": ["security_violation", "workflow_failure"],
-    "high": ["performance_degradation", "agent_failure"],
-    "medium": ["code_quality_issues", "test_failures"],
-    "low": ["formatting_issues", "documentation_updates"]
-  },
-  "retry_policy": {
-    "max_retries": 3,
-    "retry_delay": 1000,
-    "exponential_backoff": true
-  },
-  "notification_rules": {
-    "critical": "immediate_notification",
-    "high": "notification_within_5_minutes",
-    "medium": "notification_within_30_minutes",
-    "low": "daily_summary"
-  }
-}
-\`\`\`
-
-## Integration with Multi-Agent V2 System
-
-### System Integration
-\`\`\`javascript
-// Auto integration with Multi-Agent V2 system
-{
-  "system_integration": {
-    "workflow_engine": "orchestrator/workflow-execution-engine.js",
-    "communication_system": "orchestrator/agent-communication-system.js",
-    "task_manager": "orchestrator/task-assignment-manager.js",
-    "triggering_system": "orchestrator/automatic-triggering-system.js",
-    "main_controller": "orchestrator/main-system-controller.js"
-  },
-  "auto_tasks": {
-    "workflow_monitoring": "Monitor workflow execution",
-    "agent_communication": "Monitor agent communication",
-    "task_assignment": "Monitor task assignment",
-    "performance_tracking": "Track system performance",
-    "security_auditing": "Audit security compliance"
-  },
-  "trigger_conditions": {
-    "file_change": "Trigger on file modification",
-    "workflow_start": "Trigger on workflow start",
-    "task_completion": "Trigger on task completion",
-    "error_occurrence": "Trigger on error occurrence",
-    "performance_threshold": "Trigger on performance threshold"
-  }
-}
-\`\`\`
-
-## Summary
-
-This \`.mdc\` configuration enables comprehensive automatic task management for the Multi-Agent V2 system, including:
-
-1. **Workflow Orchestration**: Automatic workflow execution monitoring
-2. **Agent Communication**: Real-time agent communication monitoring
-3. **Task Assignment**: Intelligent task assignment and management
-4. **Performance Optimization**: React optimization and memory management
-5. **Security Validation**: XSS protection and input validation
-6. **Code Quality**: ESLint, Prettier, and TypeScript validation
-7. **Atomic Design**: Component structure validation
-8. **Testing**: Auto-generation of unit tests and Storybook stories
-9. **Monitoring**: Performance metrics and audit logging
-10. **Error Handling**: Comprehensive error handling and retry policies
-
-The configuration ensures that all aspects of the Multi-Agent V2 system are automatically monitored, validated, and optimized according to the established rules and best practices.
-
-description:
-globs:
-alwaysApply: false
-
----
-
-`;
-
-  await fs.writeFile(path.join(projectPath, ".mdc"), mdcContent);
-  console.log(chalk.green("📝 .mdc (Cursor Auto Tasks) oluşturuldu"));
+    await fs.writeFile(path.join(scriptsPath, "status.js"), statusScript);
 }
 
 async function createCursorRulesV2(projectPath, config) {
