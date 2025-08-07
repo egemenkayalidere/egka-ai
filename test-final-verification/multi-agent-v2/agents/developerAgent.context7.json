@@ -1,0 +1,20 @@
+{
+  "id": "developer",
+  "name": "Developer Agent V2",
+  "version": "2.0.0",
+  "capabilities": [
+    "frontend_development",
+    "component_creation",
+    "performance_optimization"
+  ],
+  "performance_requirements": {
+    "response_time": 5000,
+    "memory_usage": "100MB",
+    "cpu_usage": "25%"
+  },
+  "security_requirements": {
+    "input_validation": true,
+    "xss_protection": true,
+    "data_encryption": false
+  }
+}

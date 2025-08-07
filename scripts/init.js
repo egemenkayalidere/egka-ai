@@ -164,7 +164,7 @@ Her yeni chat başlangıcında aşağıdaki multi-agent sistemi otomatik olarak 
 ## File Structure
 
 \`\`\`
-multi-agent-v2/
+multi-agent/
 ├── agents/
 │   ├── managerAgent.context7.json
 │   ├── analystAgent.context7.json
@@ -853,7 +853,7 @@ console.log("✅ Multi-Agent V2 System is running");
   "pattern": "**/*",
   "action": "validate_project_structure",
   "structure": {
-    "multi-agent-v2/": {
+    "multi-agent/": {
       "orchestrator/": ["workflow-execution-engine.js", "agent-communication-system.js", "task-assignment-manager.js", "automatic-triggering-system.js", "main-system-controller.js"],
       "agents/": ["managerAgent.context7.json", "analystAgent.context7.json", "developerAgent.context7.json"],
       "shared/": {

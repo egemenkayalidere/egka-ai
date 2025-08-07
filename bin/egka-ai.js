@@ -97,7 +97,7 @@ program
     console.log(chalk.gray("─────────────────────────────────"));
 
     try {
-      const multiAgentPath = path.join(__dirname, "..", "multi-agent-v2");
+      const multiAgentPath = path.join(__dirname, "..", "multi-agent");
       const exists = await fs.pathExists(multiAgentPath);
 
       if (exists) {
@@ -2900,8 +2900,8 @@ ai-models/
 .security-cache/
 
 # V2 Multi-Agent logs
-multi-agent-v2/shared/logs/
-multi-agent-v2/shared/tasks/
+multi-agent/shared/logs/
+multi-agent/shared/tasks/
 
 # V2 Storybook
 storybook-static/
@@ -3324,11 +3324,11 @@ export default preview;`;
 }
 
 async function createMultiAgentSystemV2(projectPath, config) {
-  const multiAgentPath = path.join(projectPath, "multi-agent-v2");
+  const multiAgentPath = path.join(projectPath, "multi-agent");
   await fs.ensureDir(multiAgentPath);
 
   // Copy V2 system files
-  const sourcePath = path.join(__dirname, "..", "multi-agent-v2");
+  const sourcePath = path.join(__dirname, "..", "multi-agent");
   if (await fs.pathExists(sourcePath)) {
     await fs.copy(sourcePath, multiAgentPath);
     console.log(chalk.green("✅ Multi-Agent system copied"));
@@ -3639,7 +3639,7 @@ Her yeni chat başlangıcında aşağıdaki multi-agent V2 sistemi otomatik olar
 - **Trigger:** Manager'dan gelen görev
 - **Action:**
   - Auto increment ID ile task oluşturur (TASK-2025-1000 formatında)
-  - Task context dosyası oluşturur: \`multi-agent-v2/shared/tasks/TASK-XXXX-XXXX.context7.json\`
+  - Task context dosyası oluşturur: \`multi-agent/shared/tasks/TASK-XXXX-XXXX.context7.json\`
   - Performance requirements ekler (React.memo, useCallback, useMemo)
   - Security requirements ekler (XSS, CSRF protection)
   - Atomic design level belirler (atoms, molecules, organisms)
@@ -3659,15 +3659,15 @@ Her yeni chat başlangıcında aşağıdaki multi-agent V2 sistemi otomatik olar
 ## File Structure V2
 
 \`\`\`
-multi-agent-v2/
+multi-agent/
 ├── agents/
 │   ├── managerAgent.context7.json
 │   ├── analystAgent.context7.json
 │   └── developerAgent.context7.json
 ├── shared/
-│   ├── tasks/          # Task context dosyaları V2
-│   └── logs/           # Shared log dosyaları V2
-└── orchestrator/       # Agent koordinasyonu V2
+│   ├── tasks/          # Task context dosyaları
+│   └── logs/           # Shared log dosyaları
+└── orchestrator/       # Agent koordinasyonu
 \`\`\`
 
 ## V2 Performance Requirements
@@ -3760,8 +3760,8 @@ async function optimizeProjectV2(projectPath, config) {
     // Add V2 scripts
     packageData.scripts = {
       ...packageData.scripts,
-      status: "node multi-agent-v2/scripts/status.js",
-      test: "node multi-agent-v2/scripts/status.js",
+      status: "node multi-agent/scripts/status.js",
+test: "node multi-agent/scripts/status.js",
       performance: "echo 'Performance metrics available'",
       security: "echo 'Security audit available'",
       storybook: "storybook dev -p 6006",

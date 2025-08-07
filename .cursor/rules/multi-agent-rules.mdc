@@ -23,7 +23,7 @@ Her yeni chat başlangıcında aşağıdaki multi-agent sistemi otomatik olarak 
 - **Trigger:** Manager'dan gelen görev
 - **Action:**
   - Auto increment ID ile task oluşturur (TASK-2025-1000 formatında)
-  - Task context dosyası oluşturur: `multi-agent-v2/shared/tasks/TASK-XXXX-XXXX.context7.json`
+  - Task context dosyası oluşturur: `multi-agent/shared/tasks/TASK-XXXX-XXXX.context7.json`
   - Performance requirements ekler (React.memo, useCallback, useMemo)
   - Security requirements ekler (XSS protection, input validation)
   - Atomic design level belirler (atoms|molecules|organisms|templates|pages)
@@ -49,7 +49,7 @@ Her yeni chat başlangıcında aşağıdaki multi-agent sistemi otomatik olarak 
 ## File Structure
 
 ```
-multi-agent-v2/
+multi-agent/
 ├── agents/
 │   ├── managerAgent.context7.json
 │   ├── analystAgent.context7.json
@@ -119,8 +119,8 @@ multi-agent-v2/
 
 ## Logging V2
 
-- Tüm aktiviteler `multi-agent-v2/shared/logs/` klasöründe loglanır
-- Task durumları `multi-agent-v2/shared/tasks/` klasöründe takip edilir
+- Tüm aktiviteler `multi-agent/shared/logs/` klasöründe loglanır
+- Task durumları `multi-agent/shared/tasks/` klasöründe takip edilir
 - Performance metrics kaydedilir
 - Security audit logları tutulur
 - Her agent'ın kendi log dosyası vardır:
