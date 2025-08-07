@@ -109,6 +109,13 @@ async function createProject(config) {
 }
 
 async function createMultiAgentV2Rules(cursorRulesPath, config) {
+  // Mevcut dosyayı sil
+  const existingFile = path.join(cursorRulesPath, "multi-agent-rules.mdc");
+  if (await fs.pathExists(existingFile)) {
+    await fs.remove(existingFile);
+    console.log(chalk.yellow("🗑️  Mevcut multi-agent-rules.mdc dosyası silindi"));
+  }
+
   const rulesContent = `---
 alwaysApply: true
 ---
@@ -968,8 +975,6 @@ alwaysApply: false
 
 `;
 
-  await fs.writeFile(path.join(projectPath, ".mdc"), mdcContent);
-  console.log(chalk.green("📝 .mdc (Cursor Auto Tasks) oluşturuldu"));
 }
 
 init();

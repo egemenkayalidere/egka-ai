@@ -3626,6 +3626,13 @@ async function createCursorRulesV2(projectPath, config) {
   const cursorRulesPath = path.join(projectPath, ".cursor", "rules");
   await fs.ensureDir(cursorRulesPath);
 
+  // Mevcut dosyayı sil
+  const existingFile = path.join(cursorRulesPath, "multi-agent-rules.mdc");
+  if (await fs.pathExists(existingFile)) {
+    await fs.remove(existingFile);
+    console.log(chalk.yellow("🗑️  Mevcut multi-agent-rules.mdc dosyası silindi"));
+  }
+
   const rulesContent = `---
 alwaysApply: true
 ---
