@@ -1,8 +1,8 @@
 {
-  "task_id": "TASK-2025-2111",
+  "task_id": "TASK-2025-4201",
   "assigned_to": "developer",
   "assigned_by": "task_manager",
-  "assigned_at": "2025-08-07T08:27:19.107Z",
+  "assigned_at": "2025-08-07T09:25:17.055Z",
   "task_data": {
     "type": "component_development",
     "description": "UserCard component'i geliştir",

@@ -1,10 +1,10 @@
 {
-  "id": "MSG-1754547562715-8207",
+  "id": "MSG-1754558717054-3503",
   "from": "task_manager",
   "to": "developer",
   "type": "task_assignment",
   "payload": {
-    "taskId": "TASK-2025-8261",
+    "taskId": "TASK-2025-4201",
     "taskData": {
       "type": "component_development",
       "description": "UserCard component'i geliştir",
@@ -27,9 +27,9 @@
     "priority": 6
   },
   "priority": 6,
-  "timestamp": "2025-08-07T06:19:22.715Z",
+  "timestamp": "2025-08-07T09:25:17.054Z",
   "status": "delivered",
   "retryCount": 0,
   "maxRetries": 3,
-  "responseTime": 0
+  "responseTime": 1
 }
