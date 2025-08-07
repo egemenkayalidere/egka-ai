@@ -78,38 +78,38 @@ async function createProject(config) {
 
   console.log(chalk.green(`\n📁 Kurulum dizini: ${projectPath}`));
 
-  // Multi-Agent V2 System dosyalarını kopyala
-  const templatePath = path.join(__dirname, "../multi-agent-v2");
-  const targetPath = path.join(projectPath, "multi-agent-v2");
+  // Multi-Agent System dosyalarını kopyala
+  const templatePath = path.join(__dirname, "../multi-agent");
+  const targetPath = path.join(projectPath, "multi-agent");
 
   if (await fs.pathExists(templatePath)) {
     await fs.copy(templatePath, targetPath);
-    console.log(chalk.green("🤖 Multi-Agent V2 System dosyaları kopyalandı"));
-  } else {
-    // V2 sistem yoksa temel yapıyı oluştur
-    await createBasicMultiAgentV2(targetPath, config);
+          console.log(chalk.green("🤖 Multi-Agent System dosyaları kopyalandı"));
+    } else {
+      // Sistem yoksa temel yapıyı oluştur
+      await createBasicMultiAgent(targetPath, config);
   }
 
   // .cursor/rules klasörünü oluştur
   const cursorRulesPath = path.join(projectPath, ".cursor", "rules");
   await fs.ensureDir(cursorRulesPath);
 
-  // V2 Multi-agent rules dosyasını oluştur
-  await createMultiAgentV2Rules(cursorRulesPath, config);
+  // Multi-agent rules dosyasını oluştur
+  await createMultiAgentRules(cursorRulesPath, config);
 
-  console.log(chalk.green("\n✅ Multi-Agent V2 System başarıyla oluşturuldu!"));
+  console.log(chalk.green("\n✅ Multi-Agent System başarıyla oluşturuldu!"));
   console.log(chalk.cyan(`\n📂 Kurulum dizini: ${projectPath}`));
   console.log(chalk.cyan("📁 Oluşturulan dosyalar:"));
-  console.log(chalk.white("   • multi-agent-v2/"));
+  console.log(chalk.white("   • multi-agent/"));
   console.log(chalk.white("   • .cursor/rules/multi-agent-rules.mdc"));
-  console.log(chalk.cyan("\n🚀 V2 Kullanım:"));
+  console.log(chalk.cyan("\n🚀 Kullanım:"));
   console.log(chalk.white("   npm run status"));
   console.log(chalk.white("   npm run test"));
   console.log(chalk.white("   npm run performance"));
   console.log(chalk.white("   npm run security"));
 }
 
-async function createMultiAgentV2Rules(cursorRulesPath, config) {
+async function createMultiAgentRules(cursorRulesPath, config) {
   // Mevcut dosyayı sil
   const existingFile = path.join(cursorRulesPath, "multi-agent-rules.mdc");
   if (await fs.pathExists(existingFile)) {
@@ -120,26 +120,26 @@ async function createMultiAgentV2Rules(cursorRulesPath, config) {
 alwaysApply: true
 ---
 
-# EGKA AI AGENTS - Multi-Agent V2 Rules
+# EGKA AI AGENTS - Multi-Agent Rules
 
-## Multi-Agent V2 System Rules
+## Multi-Agent System Rules
 
 ### Agent Activation Rules
 
-Her yeni chat başlangıcında aşağıdaki multi-agent V2 sistemi otomatik olarak devreye girer:
+Her yeni chat başlangıcında aşağıdaki multi-agent sistemi otomatik olarak devreye girer:
 
-#### 1. Manager Agent V2 Activation
+#### 1. Manager Agent Activation
 - **Trigger:** Kullanıcı herhangi bir komut girdiğinde
-- **Action:** "Merhaba! Multi-Agent V2 Sistemine hoş geldiniz. Geliştirilmiş AI destekli geliştirme sistemi ile görevinizi analiz ediyorum."
+- **Action:** "Merhaba! Multi-Agent Sistemine hoş geldiniz. Geliştirilmiş AI destekli geliştirme sistemi ile görevinizi analiz ediyorum."
 - **Next Step:** Görevi analyst agent'a aktarır ve proje kapsamını belirler
 - **Performance Monitoring:** Response time tracking ve memory optimization
 - **Security Validation:** Input validation ve XSS protection
 
-#### 2. Analyst Agent V2 Activation
+#### 2. Analyst Agent Activation
 - **Trigger:** Manager'dan gelen görev
 - **Action:**
   - Auto increment ID ile task oluşturur (TASK-2025-1000 formatında)
-  - Task context dosyası oluşturur: \`multi-agent-v2/shared/tasks/TASK-XXXX-XXXX.context7.json\`
+  - Task context dosyası oluşturur: \`multi-agent/shared/tasks/TASK-XXXX-XXXX.context7.json\`
   - Performance requirements ekler (React.memo, useCallback, useMemo)
   - Security requirements ekler (XSS protection, input validation)
   - Atomic design level belirler (atoms|molecules|organisms|templates|pages)
@@ -147,7 +147,7 @@ Her yeni chat başlangıcında aşağıdaki multi-agent V2 sistemi otomatik olar
 - **Performance Optimization:** Task priority optimization ve resource allocation
 - **Security Validation:** Security risk assessment
 
-#### 3. Developer Agent V2 Activation
+#### 3. Developer Agent Activation
 - **Trigger:** Frontend/UI ile ilgili task'lar
 - **Action:**
   - Task context dosyasını okur
@@ -189,17 +189,17 @@ ${config.projectName}/
 └── backend-api/        # Node.js Express API
 \`\`\`
 
-## Workflow V2
+## Workflow
 
-1. User Input → Manager Agent V2 (Greeting + Project Identification + Performance Monitoring)
-2. Manager V2 → Analyst Agent V2 (Task Creation + Context File + Performance/Security Requirements)
-3. Analyst V2 → Shared Tasks (TASK-XXXX-XXXX.context7.json with V2 requirements)
-4. Developer Agent V2 → Reads Task → Executes with V2 rules → Logs → Updates Status
+1. User Input → Manager Agent (Greeting + Project Identification + Performance Monitoring)
+2. Manager → Analyst Agent (Task Creation + Context File + Performance/Security Requirements)
+3. Analyst → Shared Tasks (TASK-XXXX-XXXX.context7.json with requirements)
+4. Developer Agent → Reads Task → Executes with rules → Logs → Updates Status
 
-## Logging V2
+## Logging
 
-- Tüm aktiviteler \`multi-agent-v2/shared/logs/\` klasöründe loglanır
-- Task durumları \`multi-agent-v2/shared/tasks/\` klasöründe takip edilir
+- Tüm aktiviteler \`multi-agent/shared/logs/\` klasöründe loglanır
+- Task durumları \`multi-agent/shared/tasks/\` klasöründe takip edilir
 - Performance metrics kaydedilir
 - Security audit logları tutulur
 - Her agent'ın kendi log dosyası vardır:
@@ -212,7 +212,7 @@ ${config.projectName}/
   - \`atomic-design.log\`
   - \`story-generation.log\`
 
-## Performance Requirements V2
+## Performance Requirements
 
 ### React Optimization Rules
 - **React.memo**: Tüm component'lerde kullanım zorunlu
@@ -226,7 +226,7 @@ ${config.projectName}/
 - Bundle size optimization yapılmalı
 - Caching stratejileri uygulanmalı
 
-## Security Requirements V2
+## Security Requirements
 
 ### Frontend Security
 - **XSS Protection**: Content-Security-Policy uygulanmalı
@@ -240,7 +240,7 @@ ${config.projectName}/
 - Code signing uygulanmalı
 - Audit logging yapılmalı
 
-## Atomic Design V2 Rules
+## Atomic Design Rules
 
 ### Component Levels
 - **Atoms**: Temel UI bileşenleri (Button, Input, Icon, Typography, Avatar)
@@ -260,7 +260,7 @@ ${config.projectName}/
 - Tüm varyantlar için story exports
 - HTML preview creation
 
-## Modern React Practices V2
+## Modern React Practices
 
 ### TypeScript Usage
 - TypeScript strict mode kullanılmalı
@@ -280,7 +280,7 @@ ${config.projectName}/
 - Değişken ve fonksiyon isimleri İngilizce olmalı
 - Dosya isimleri İngilizce olmalı
 
-## Code Quality Rules V2
+## Code Quality Rules
 
 - ESLint kurallarına uyulmalı
 - Prettier ile kod formatlanmalı
@@ -297,7 +297,7 @@ ${config.projectName}/
 - Erişilebilirlik standartları uygulanmalı
 - Modern UI/UX pratikleri kullanılmalı
 
-## Monitoring V2
+## Monitoring
 
 ### Performance Metrics
 - Task completion rate
@@ -318,12 +318,12 @@ ${config.projectName}/
 - Story generation success rate
 - Security compliance rate
 
-## Commands V2
+## Commands
 
 - \`npm run status\` - Sistem durumu
 - \`npm run test\` - Test çalıştır
-- \`node multi-agent-v2/main.js demo\` - Demo çalıştır
-- \`node multi-agent-v2/scripts/status.js\` - Detaylı durum
+- \`node multi-agent/main.js demo\` - Demo çalıştır
+- \`node multi-agent/scripts/status.js\` - Detaylı durum
 
 ## Project Info
 
@@ -334,7 +334,7 @@ ${config.projectName}/
 
 ---
 
-**Bu dosya Multi-Agent V2 sistemi için otomatik olarak oluşturulmuştur ve "always" seçili olmalıdır.**
+**Bu dosya Multi-Agent sistemi için otomatik olarak oluşturulmuştur ve "always" seçili olmalıdır.**
 `;
 
   await fs.writeFile(
@@ -342,12 +342,12 @@ ${config.projectName}/
     rulesContent
   );
   console.log(
-    chalk.green("📝 V2 .cursor/rules/multi-agent-rules.mdc oluşturuldu")
+    chalk.green("📝 .cursor/rules/multi-agent-rules.mdc oluşturuldu")
   );
 }
 
-async function createBasicMultiAgentV2(targetPath, config) {
-  console.log(chalk.yellow("📝 Temel Multi-Agent V2 yapısı oluşturuluyor..."));
+async function createBasicMultiAgent(targetPath, config) {
+  console.log(chalk.yellow("📝 Temel Multi-Agent yapısı oluşturuluyor..."));
 
   // Temel dizin yapısını oluştur
   const structure = {
@@ -372,7 +372,7 @@ async function createBasicMultiAgentV2(targetPath, config) {
   // Temel script dosyalarını oluştur
   await createBasicScriptFiles(targetPath, config);
 
-  console.log(chalk.green("✅ Temel Multi-Agent V2 yapısı oluşturuldu"));
+  console.log(chalk.green("✅ Temel Multi-Agent yapısı oluşturuldu"));
 }
 
 async function createDirectoryStructure(basePath, structure) {

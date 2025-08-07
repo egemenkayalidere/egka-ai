@@ -1,7 +1,7 @@
 {
   "name": "@egka/egka-ai-agents",
   "version": "3.0.7",
-  "description": "Multi-Agent V2 System with Performance Optimization, Security Enhancement, Atomic Design V2, and Modern React Practices for automated task management and development",
+  "description": "Multi-Agent System with Performance Optimization, Security Enhancement, Atomic Design, and Modern React Practices for automated task management and development",
   "main": "index.js",
   "bin": {
     "egka-ai": "bin/egka-ai.js"
@@ -10,20 +10,20 @@
     "install": "node scripts/install.js",
     "setup": "node scripts/setup.js",
     "init": "node scripts/init.js",
-    "status": "node multi-agent-v2/scripts/status.js",
-    "test": "node multi-agent-v2/scripts/test-system.js",
-    "demo": "node multi-agent-v2/main.js demo",
-    "start": "node multi-agent-v2/main.js start",
-    "stop": "node multi-agent-v2/main.js stop",
-    "performance": "node multi-agent-v2/scripts/status.js --performance",
-    "security": "node multi-agent-v2/scripts/status.js --security",
+    "status": "node multi-agent/scripts/status.js",
+    "test": "node multi-agent/scripts/test-system.js",
+    "demo": "node multi-agent/main.js demo",
+    "start": "node multi-agent/main.js start",
+    "stop": "node multi-agent/main.js stop",
+    "performance": "node multi-agent/scripts/status.js --performance",
+    "security": "node multi-agent/scripts/status.js --security",
     "prepublishOnly": "npm run test"
   },
   "keywords": [
-    "multi-agent-v2",
+    "multi-agent",
     "performance-optimization",
     "security-enhancement",
-    "atomic-design-v2",
+    "atomic-design",
     "modern-react-practices",
     "automation",
     "development",

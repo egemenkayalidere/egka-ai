@@ -410,7 +410,7 @@ program
   .description("Initialize the Multi-Agent V2 system")
   .option("-f, --force", "Force reinitialization")
   .action(async (options) => {
-    console.log(chalk.blue.bold("🚀 Initializing EGKA AI AGENTS V2..."));
+    console.log(chalk.blue.bold("🚀 Initializing EGKA AI AGENTS..."));
 
     try {
       // Mevcut proje için V2 cursor rules oluştur
@@ -436,18 +436,15 @@ program
       await createMultiAgentSystemV2(process.cwd(), currentProjectConfig);
 
       console.log(
-        chalk.green("✅ Multi-Agent V2 system initialized successfully!")
+        chalk.green("✅ Multi-Agent system initialized successfully!")
       );
-      console.log(chalk.cyan("📋 Available V2 commands:"));
+      console.log(chalk.cyan("📋 Available commands:"));
       console.log(chalk.white("   npm run status"));
       console.log(chalk.white("   npm run test"));
       console.log(chalk.white("   npm run performance"));
       console.log(chalk.white("   npm run security"));
     } catch (error) {
-      console.error(
-        chalk.red("Error during V2 initialization:"),
-        error.message
-      );
+      console.error(chalk.red("Error during initialization:"), error.message);
     }
   });
 
@@ -3334,24 +3331,24 @@ async function createMultiAgentSystemV2(projectPath, config) {
   const sourcePath = path.join(__dirname, "..", "multi-agent-v2");
   if (await fs.pathExists(sourcePath)) {
     await fs.copy(sourcePath, multiAgentPath);
-    console.log(chalk.green("✅ Multi-Agent V2 system copied"));
+    console.log(chalk.green("✅ Multi-Agent system copied"));
   } else {
     console.log(
       chalk.yellow(
-        "⚠️  Multi-Agent V2 system not found, creating basic structure..."
+        "⚠️  Multi-Agent system not found, creating basic structure..."
       )
     );
-    await createBasicMultiAgentV2(multiAgentPath, config);
+    await createBasicMultiAgent(multiAgentPath, config);
   }
 
-  // V2 Cursor rules oluştur
+  // Cursor rules oluştur
   await createCursorRulesV2(projectPath, config);
 
-  console.log(chalk.green("✅ Multi-Agent V2 system setup completed"));
+  console.log(chalk.green("✅ Multi-Agent system setup completed"));
 }
 
-async function createBasicMultiAgentV2(multiAgentPath, config) {
-  console.log(chalk.yellow("📝 Creating basic Multi-Agent V2 structure..."));
+async function createBasicMultiAgent(multiAgentPath, config) {
+  console.log(chalk.yellow("📝 Creating basic Multi-Agent structure..."));
 
   // Create basic V2 structure
   const structure = {
@@ -3408,7 +3405,7 @@ async function createBasicMultiAgentV2(multiAgentPath, config) {
     }
   );
 
-  console.log(chalk.green("✅ Basic Multi-Agent V2 structure created"));
+  console.log(chalk.green("✅ Basic Multi-Agent structure created"));
 }
 
 async function createBasicAgentFiles(multiAgentPath, config) {
@@ -3608,7 +3605,7 @@ if (fs.existsSync(logsPath)) {
 console.log("✅ Multi-Agent V2 System is running");
 `;
 
-    await fs.writeFile(path.join(scriptsPath, "status.js"), statusScript);
+  await fs.writeFile(path.join(scriptsPath, "status.js"), statusScript);
 }
 
 async function createCursorRulesV2(projectPath, config) {
