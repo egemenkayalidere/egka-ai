@@ -24,7 +24,8 @@
       "atomic_design": true,
       "performance_optimization": true,
       "security_validation": true,
-      "code_quality": true
+      "code_quality": true,
+      "lovable_knowledge_guide": true
     },
     "shared_resources": {
       "components_path": "src/components",

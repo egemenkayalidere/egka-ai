@@ -2,23 +2,23 @@
 alwaysApply: true
 ---
 
-# EGKA AI AGENTS - Multi-Agent V2 Rules
+# EGKA AI AGENTS - Multi-Agent Rules
 
-## Multi-Agent V2 System Rules
+## Multi-Agent System Rules
 
 ### Agent Activation Rules
 
-Her yeni chat başlangıcında aşağıdaki multi-agent V2 sistemi otomatik olarak devreye girer:
+Her yeni chat başlangıcında aşağıdaki multi-agent sistemi otomatik olarak devreye girer:
 
-#### 1. Manager Agent V2 Activation
+#### 1. Manager Agent Activation
 
 - **Trigger:** Kullanıcı herhangi bir komut girdiğinde
-- **Action:** "Merhaba! Multi-Agent V2 Sistemine hoş geldiniz. Geliştirilmiş AI destekli geliştirme sistemi ile görevinizi analiz ediyorum."
+- **Action:** "Merhaba! Multi-Agent Sistemine hoş geldiniz. Geliştirilmiş AI destekli geliştirme sistemi ile görevinizi analiz ediyorum."
 - **Next Step:** Görevi analyst agent'a aktarır ve proje kapsamını belirler
 - **Performance Monitoring:** Response time tracking ve memory optimization
 - **Security Validation:** Input validation ve XSS protection
 
-#### 2. Analyst Agent V2 Activation
+#### 2. Analyst Agent Activation
 
 - **Trigger:** Manager'dan gelen görev
 - **Action:**
@@ -31,7 +31,7 @@ Her yeni chat başlangıcında aşağıdaki multi-agent V2 sistemi otomatik olar
 - **Performance Optimization:** Task priority optimization ve resource allocation
 - **Security Validation:** Security risk assessment
 
-#### 3. Developer Agent V2 Activation
+#### 3. Developer Agent Activation
 
 - **Trigger:** Frontend/UI ile ilgili task'lar
 - **Action:**
@@ -64,14 +64,14 @@ multi-agent-v2/
     └── status.js
 ```
 
-## Workflow V2
+## Workflow
 
-1. User Input → Manager Agent V2 (Greeting + Project Identification + Performance Monitoring)
-2. Manager V2 → Analyst Agent V2 (Task Creation + Context File + Performance/Security Requirements)
-3. Analyst V2 → Shared Tasks (TASK-XXXX-XXXX.context7.json with V2 requirements)
-4. Developer Agent V2 → Reads Task → Executes with V2 rules → Logs → Updates Status
+1. User Input → Manager Agent (Greeting + Project Identification + Performance Monitoring)
+2. Manager → Analyst Agent (Task Creation + Context File + Performance/Security Requirements)
+3. Analyst → Shared Tasks (TASK-XXXX-XXXX.context7.json with requirements)
+4. Developer Agent → Reads Task → Executes with rules → Logs → Updates Status
 
-## Performance Requirements V2
+## Performance Requirements
 
 ### React Optimization Rules
 
@@ -87,7 +87,7 @@ multi-agent-v2/
 - **Interface Definitions:** Proper interface tanımlamaları
 - **Type Safety:** Type safety sağlanmalı
 
-## Security Requirements V2
+## Security Requirements
 
 ### XSS Protection
 
@@ -375,16 +375,241 @@ multi-agent-v2/
 }
 ```
 
-## V2 Communication Rules
+## Communication Rules
 
 - Ajanlar, her zaman Türkçe cevaplar vermeli
 - Kod yorumları Türkçe olmalı
 - Değişken ve fonksiyon isimleri İngilizce olmalı
 - Dosya isimleri İngilizce olmalı
 
+## LOVABLE Knowledge Guide Integration
+
+### İletişim ve Aksiyon Prensipleri
+
+#### Yanıt Formatı
+
+- **Dil:** Tüm yanıtlar Türkçe olacak
+- **Sıralama:** Önce açıklayıcı bilgi, sonra uygulama
+- **Onay:** Her öneri sonrasında kullanıcıdan açık onay alınacak
+- **Değişiklik:** Hiçbir değişiklik kullanıcı onayı alınmadan yapılmayacak
+- **Context7:** Mutlaka context7 kullanılacak
+
+### Kod Kalitesi Kuralları
+
+#### JavaScript/TypeScript Standartları
+
+```typescript
+// ✅ Doğru Kullanım
+const Component = React.memo(({ prop1, prop2 }: ComponentProps) => {
+  const memoizedValue = useMemo(() => {
+    return expensiveCalculation(prop1, prop2);
+  }, [prop1, prop2]);
+
+  const handleClick = useCallback(() => {
+    // işlem
+  }, []);
+
+  return <div>{memoizedValue}</div>;
+});
+```
+
+#### Naming Conventions
+
+- **Dosya İsimlendirme:** PascalCase (Button.tsx, UserProfile.tsx)
+- **Değişken İsimlendirme:** camelCase (userName, isActive)
+- **Component İsimlendirme:** PascalCase (UserProfile, DashboardOverview)
+- **Interface/Type İsimlendirme:** PascalCase + Props/Type suffix (ButtonProps, UserData)
+
+### React Performance Optimizasyonu
+
+#### React.memo Kullanımı
+
+- **Zorunlu:** Tüm component'lerde React.memo kullanılmalı
+
+#### useCallback Kullanım Kuralları
+
+```typescript
+// ✅ Kullanılmalı
+const handleClick = useCallback(() => {
+  // Prop olarak fonksiyon gönderiliyorsa
+  // useEffect veya useMemo içinde bağımlılık olarak kullanılıyorsa
+  // Fonksiyon referansının sabit kalması gerekiyorsa
+}, [dependency]);
+
+// ❌ Kullanılmamalı
+const handleClick = () => {
+  // Sadece setState içinde kullanılıyorsa
+  // JSX içinde tanımlanan basit fonksiyonlar için
+};
+```
+
+#### useMemo Kullanım Kuralları
+
+```typescript
+// ✅ Kullanılmalı
+const expensiveValue = useMemo(() => {
+  // Hesaplama maliyeti yüksek işlemlerde
+  // Değerin referansının stabil kalması gerekiyorsa
+  return heavyCalculation(data);
+}, [data]);
+
+// ❌ Kullanılmamalı
+const simpleValue = useMemo(() => {
+  // Basit matematiksel veya hafif hesaplamalarda
+  return a + b;
+}, [a, b]);
+```
+
+### Atomic Design Kuralları
+
+#### Atoms (Temel Bileşenler)
+
+- **Amaç:** En küçük, yeniden kullanılabilir bileşenler
+- **Örnekler:** Button, Input, Typography, Icon, Avatar
+- **Kural:** Sadece kendi içinde state tutabilir
+
+#### Molecules (Molekül Bileşenler)
+
+- **Amaç:** Atom'ların basit kombinasyonları
+- **Örnekler:** SearchBar, Card, NavigationItem, Breadcrumbs
+- **Kural:** Birkaç atom'u birleştirir
+
+#### Organisms (Organizma Bileşenler)
+
+- **Amaç:** Karmaşık molekül kombinasyonları
+- **Örnekler:** Header, Sidebar, DashboardOverview, Footer
+- **Kural:** Sayfa bölümlerini oluşturur
+
+#### Templates (Şablon Bileşenler)
+
+- **Amaç:** Sayfa düzeni ve yapısı
+- **Örnekler:** MainLayout, DashboardLayout, LearningLayout
+- **Kural:** Organism'ları düzenler
+
+#### Pages (Sayfalar)
+
+- **Amaç:** Gerçek içerikle tamamlanmış sayfalar
+- **Örnekler:** DashboardPage, LearningPage, ProfilePage
+- **Kural:** Template'leri gerçek verilerle doldurur
+
+### UI Tutarlılığı ve Güvenlik
+
+#### UI Kuralları
+
+- **JSX Yapısı:** Return içindeki JSX yapısı izinsiz değiştirilmemeli
+- **Tasarım Sistemi:** UI/UX tutarlılığı korunmalı
+- **Stil Değişiklikleri:** Sadece erişilebilirlik veya performans gerekçesiyle yapılmalı
+
+#### Güvenlik Kuralları
+
+```typescript
+// ❌ YANLIŞ - Hassas veri frontend'de tutulmamalı
+const API_KEY = "secret-key-123";
+localStorage.setItem("token", "sensitive-data");
+
+// ✅ DOĞRU - Hassas veriler backend'de tutulmalı
+const API_KEY = process.env.REACT_APP_API_KEY;
+// Token'lar güvenli HTTP-only cookie'lerde saklanmalı
+```
+
+### Modern React Practices
+
+#### TypeScript Strict Mode
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true
+  }
+}
+```
+
+#### Arrow Function Kullanımı
+
+```typescript
+// ✅ DOĞRU
+const Component = ({ prop }: ComponentProps) => {
+  return <div>{prop}</div>;
+};
+
+// ❌ YANLIŞ
+function Component({ prop }: ComponentProps) {
+  return <div>{prop}</div>;
+}
+```
+
+#### Explicit Return
+
+```typescript
+// ✅ DOĞRU
+const getValue = (): string => {
+  return "value";
+};
+
+// ✅ DOĞRU (basit durumlar için)
+const getValue = (): string => "value";
+```
+
+### Error Handling
+
+#### Try-Catch Kullanımı
+
+```typescript
+// ✅ DOĞRU
+const fetchData = async (): Promise<void> => {
+  try {
+    const response = await api.get("/users");
+    setUsers(response.data);
+  } catch (error) {
+    console.error("Veri çekme hatası:", error);
+    setError("Veriler yüklenirken bir hata oluştu");
+  }
+};
+```
+
+### Testing Strategies
+
+#### Unit Test Yazımı
+
+```typescript
+// ✅ DOĞRU - Button.test.tsx
+import { render, screen, fireEvent } from "@testing-library/react";
+import { Button } from "./Button";
+
+describe("Button Component", () => {
+  it("renders with correct text", () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByText("Click me")).toBeInTheDocument();
+  });
+
+  it("calls onClick when clicked", () => {
+    const handleClick = jest.fn();
+    render(<Button onClick={handleClick}>Click me</Button>);
+
+    fireEvent.click(screen.getByText("Click me"));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+### Accessibility Standards
+
+```typescript
+// ✅ DOĞRU
+<button aria-label="Close dialog" onClick={handleClose}>
+  <Icon name="close" />
+</button>
+
+// ✅ DOĞRU
+<img src="image.jpg" alt="Descriptive text" />
+```
+
 ---
 
-**Bu dosya V2 otomatik olarak oluşturulmuştur ve "always" seçili olmalıdır.**
+**Bu dosya otomatik olarak oluşturulmuştur ve "always" seçili olmalıdır.**
 description:
 globs:
 alwaysApply: false

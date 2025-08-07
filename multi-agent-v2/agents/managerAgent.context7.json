@@ -1,5 +1,5 @@
 {
-  "name": "Manager Agent V2",
+  "name": "Manager Agent",
   "version": "2.0.0",
   "description": "Geliştirilmiş Multi-Agent System Manager Agent - Gelişmiş kullanıcı karşılama ve görev delegasyonu",
   "type": "agent",
@@ -39,7 +39,7 @@
   },
   "workflow": {
     "user_interaction": {
-      "greeting_message": "Merhaba! Multi-Agent V2 Sistemine hoş geldiniz. Geliştirilmiş AI destekli geliştirme sistemi ile görevinizi analiz ediyorum.",
+      "greeting_message": "Merhaba! Multi-Agent Sistemine hoş geldiniz. Geliştirilmiş AI destekli geliştirme sistemi ile görevinizi analiz ediyorum.",
       "task_confirmation": true,
       "delegation_notification": true,
       "context_awareness": true
