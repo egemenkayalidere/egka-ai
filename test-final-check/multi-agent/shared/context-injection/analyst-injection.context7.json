@@ -1,0 +1,75 @@
+{
+  "name": "analyst_injection",
+  "type": "context_injection",
+  "version": "2.0.0",
+  "created_at": "2025-08-07T06:18:34.000Z",
+  "injection_config": {
+    "priority": "high",
+    "auto_load": true,
+    "validation_required": true
+  },
+  "context_data": {
+    "global_settings": {
+      "language": "tr",
+      "timezone": "Europe/Istanbul",
+      "debug_mode": false
+    },
+    "project_configs": {
+      "framework": "react",
+      "typescript": true,
+      "material_ui": true,
+      "storybook": true
+    },
+    "development_workflow": {
+      "atomic_design": true,
+      "performance_optimization": true,
+      "security_validation": true,
+      "code_quality": true,
+      "lovable_knowledge_guide": true
+    },
+    "shared_resources": {
+      "components_path": "src/components",
+      "stories_path": "src/stories",
+      "tests_path": "src/tests"
+    },
+    "quality_standards": {
+      "eslint": true,
+      "prettier": true,
+      "typescript_strict": true,
+      "accessibility": true
+    },
+    "performance_rules": [
+      "React.memo kullanımı zorunlu",
+      "useCallback ile fonksiyon optimizasyonu",
+      "useMemo ile hesaplama optimizasyonu",
+      "Bundle size optimization",
+      "Lazy loading uygulanmalı"
+    ],
+    "security_rules": [
+      "XSS protection",
+      "Input validation",
+      "CSRF protection",
+      "Content Security Policy",
+      "Secure headers"
+    ],
+    "ui_consistency": {
+      "design_system": "material_ui",
+      "color_palette": "consistent",
+      "typography": "unified",
+      "spacing": "systematic"
+    },
+    "task_analysis": {
+      "complexity_assessment": true,
+      "effort_estimation": true,
+      "risk_analysis": true,
+      "dependency_mapping": true
+    },
+    "atomic_design_levels": {
+      "atoms": ["Button", "Input", "Icon", "Typography", "Avatar"],
+      "molecules": ["FormField", "Card", "SearchBar", "Navigation"],
+      "organisms": ["Header", "Sidebar", "Footer", "ProductList"],
+      "templates": ["MasterPage", "DashboardLayout", "AuthLayout"],
+      "pages": ["HomePage", "LoginPage", "DashboardPage"]
+    }
+  }
+}

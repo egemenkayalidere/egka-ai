@@ -1,0 +1,86 @@
+{
+  "workflow_name": "Multi-Agent Development Workflow",
+  "version": "3.0.0",
+  "description": "Geliştirilmiş multi-agent workflow with performance optimization and security validation",
+  "created_at": "2025-01-27T10:00:00.000Z",
+  "steps": [
+    {
+      "step": 1,
+      "agent": "managerAgent",
+      "action": "project_analysis",
+      "description": "Proje analizi ve görev dağıtımı",
+      "performance_requirements": {
+        "timeout": 45000,
+        "memory_limit": "512MB",
+        "response_time_target": "2000ms"
+      },
+      "security_validation": {
+        "input_validation": true,
+        "xss_protection": true,
+        "authentication": true
+      }
+    },
+    {
+      "step": 2,
+      "agent": "analystAgent",
+      "action": "task_creation",
+      "description": "Task oluşturma ve context hazırlama",
+      "performance_requirements": {
+        "timeout": 60000,
+        "memory_limit": "1GB",
+        "response_time_target": "5000ms"
+      },
+      "security_validation": {
+        "input_validation": true,
+        "data_encryption": true,
+        "audit_logging": true
+      }
+    },
+    {
+      "step": 3,
+      "agent": "developerAgent",
+      "action": "code_development",
+      "description": "Kod geliştirme ve implementasyon",
+      "performance_requirements": {
+        "timeout": 90000,
+        "memory_limit": "2GB",
+        "response_time_target": "30000ms"
+      },
+      "security_validation": {
+        "code_signing": true,
+        "security_audit": true,
+        "type_safety": true
+      }
+    }
+  ],
+  "performance_optimization": {
+    "caching_enabled": true,
+    "concurrent_execution": true,
+    "memory_optimization": true,
+    "response_time_monitoring": true
+  },
+  "security_features": {
+    "authentication": "jwt",
+    "authorization": "role_based",
+    "encryption": "aes_256",
+    "audit_logging": true,
+    "input_validation": true,
+    "xss_protection": true,
+    "csrf_protection": true
+  },
+  "monitoring": {
+    "metrics": [
+      "workflow_completion_rate",
+      "average_step_duration",
+      "error_rate_per_step",
+      "performance_optimization_score",
+      "security_compliance_rate"
+    ],
+    "alerts": [
+      "workflow_timeout",
+      "step_failure",
+      "performance_degradation",
+      "security_violation"
+    ]
+  }
+}
