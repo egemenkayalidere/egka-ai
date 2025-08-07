@@ -432,17 +432,6 @@ program
         includeMultiAgentV2: true,
       };
 
-      await createCursorRulesV2(
-        (() => {
-          try {
-            return process.cwd();
-          } catch (error) {
-            return path.dirname(__dirname);
-          }
-        })(),
-        currentProjectConfig
-      );
-
       // Multi-Agent V2 sistemini oluştur
       await createMultiAgentSystemV2(process.cwd(), currentProjectConfig);
 
@@ -3630,7 +3619,6 @@ async function createCursorRulesV2(projectPath, config) {
   const existingFile = path.join(cursorRulesPath, "multi-agent-rules.mdc");
   if (await fs.pathExists(existingFile)) {
     await fs.remove(existingFile);
-    console.log(chalk.yellow("🗑️  Mevcut multi-agent-rules.mdc dosyası silindi"));
   }
 
   const rulesContent = `---

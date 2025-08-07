@@ -105,7 +105,8 @@ async function createProject(config) {
   console.log(chalk.cyan("\n🚀 V2 Kullanım:"));
   console.log(chalk.white("   npm run status"));
   console.log(chalk.white("   npm run test"));
-  console.log(chalk.white("   node multi-agent-v2/main.js demo"));
+  console.log(chalk.white("   npm run performance"));
+  console.log(chalk.white("   npm run security"));
 }
 
 async function createMultiAgentV2Rules(cursorRulesPath, config) {
@@ -113,7 +114,6 @@ async function createMultiAgentV2Rules(cursorRulesPath, config) {
   const existingFile = path.join(cursorRulesPath, "multi-agent-rules.mdc");
   if (await fs.pathExists(existingFile)) {
     await fs.remove(existingFile);
-    console.log(chalk.yellow("🗑️  Mevcut multi-agent-rules.mdc dosyası silindi"));
   }
 
   const rulesContent = `---
@@ -338,11 +338,11 @@ ${config.projectName}/
 `;
 
   await fs.writeFile(
-    path.join(cursorRulesPath, "multi-agent-v2-rules.mdc"),
+    path.join(cursorRulesPath, "multi-agent-rules.mdc"),
     rulesContent
   );
   console.log(
-    chalk.green("📝 .cursor/rules/multi-agent-v2-rules.mdc oluşturuldu")
+    chalk.green("📝 V2 .cursor/rules/multi-agent-rules.mdc oluşturuldu")
   );
 }
 
