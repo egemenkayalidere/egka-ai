@@ -3362,11 +3362,6 @@ async function createMultiAgentSystemV2(projectPath, config) {
   await createCursorRulesV2(projectPath, config);
 
   console.log(chalk.green("✅ Multi-Agent V2 system setup completed"));
-}ulti-Agent V2 system not found, creating basic structure"
-      )
-    );
-    await createBasicMultiAgentV2(multiAgentPath, config);
-  }
 }
 
 async function createBasicMultiAgentV2(multiAgentPath, config) {
