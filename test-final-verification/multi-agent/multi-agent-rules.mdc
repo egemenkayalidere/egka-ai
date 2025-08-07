@@ -609,5 +609,4 @@ describe("Button Component", () => {
 description:
 globs:
 alwaysApply: false
-
 ---

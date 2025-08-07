@@ -1,0 +1,165 @@
+{
+  "name": "Analyst Agent",
+  "version": "2.0.0",
+  "description": "Geliştirilmiş Multi-Agent System Analyst Agent - Gelişmiş görev analizi ve otomatik task oluşturma",
+  "type": "agent",
+  "capabilities": [
+    "task_analysis",
+    "auto_increment_id_generation",
+    "requirement_analysis",
+    "task_template_creation",
+    "priority_assessment",
+    "file_reading",
+    "context_analysis",
+    "log_analysis",
+    "performance_optimization",
+    "security_validation",
+    "atomic_design_awareness"
+  ],
+  "configuration": {
+    "auto_increment_start": 1000,
+    "id_format": "TASK-{YEAR}-{SEQUENTIAL}",
+    "max_tasks_per_day": 1000,
+    "log_level": "info",
+    "performance_monitoring": true,
+    "security_validation": true
+  },
+  "dependencies": ["manager_agent", "developer_agent"],
+  "api_endpoints": {
+    "create_task": "/tasks/create",
+    "get_task": "/tasks/:id",
+    "list_tasks": "/tasks",
+    "update_task": "/tasks/:id",
+    "delete_task": "/tasks/:id",
+    "read_task_context": "/shared-tasks/:id",
+    "read_all_tasks": "/shared-tasks/*.context7.json",
+    "read_main_context": "/main.context7.json",
+    "read_agent_log": "/shared-logs/analyst-agent.log",
+    "read_system_log": "/shared-logs/system.log",
+    "write_task_context": "/shared-tasks/write",
+    "write_agent_log": "/shared-logs/analyst-agent.log",
+    "write_system_log": "/shared-logs/system.log",
+    "performance_metrics": "/metrics/performance",
+    "security_audit": "/audit/security"
+  },
+  "workflow": {
+    "task_creation": {
+      "id_generation": {
+        "method": "auto_increment",
+        "format": "TASK-{YEAR}-{SEQUENTIAL}",
+        "start_number": 1000
+      },
+      "template_creation": {
+        "required_fields": [
+          "task_id",
+          "title",
+          "description",
+          "priority",
+          "assigned_agent",
+          "created_at",
+          "status",
+          "performance_requirements",
+          "security_requirements"
+        ],
+        "optional_fields": [
+          "deadline",
+          "tags",
+          "notes",
+          "attachments",
+          "atomic_design_level",
+          "storybook_requirements"
+        ]
+      },
+      "analysis_phase": {
+        "requirement_analysis": true,
+        "complexity_assessment": true,
+        "resource_estimation": true,
+        "priority_calculation": true,
+        "performance_impact_analysis": true,
+        "security_risk_assessment": true
+      },
+      "context_creation": {
+        "task_context_file": true,
+        "shared_tasks_directory": true,
+        "context7_format": true,
+        "performance_context": true,
+        "security_context": true
+      }
+    },
+    "task_management": {
+      "status_tracking": true,
+      "progress_monitoring": true,
+      "completion_verification": true,
+      "performance_tracking": true
+    },
+    "file_operations": {
+      "read_context": {
+        "main_context": "main.context7.json",
+        "existing_tasks": "shared/tasks/*.context7.json",
+        "agent_logs": "shared/logs/analyst-agent.log",
+        "system_log": "shared/logs/system.log"
+      },
+      "context_awareness": {
+        "read_project_story": true,
+        "read_system_rules": true,
+        "read_task_history": true,
+        "read_performance_metrics": true,
+        "read_security_policies": true
+      }
+    },
+    "performance_optimization": {
+      "task_priority_optimization": true,
+      "resource_allocation_optimization": true,
+      "workflow_efficiency_analysis": true
+    }
+  },
+  "task_templates": {
+    "development_task": {
+      "title": "Geliştirme Görevi",
+      "description": "Kullanıcı talebine göre geliştirme görevi",
+      "priority": "medium",
+      "assigned_agent": "developer_agent",
+      "performance_requirements": "React.memo, useCallback, useMemo kullanımı",
+      "security_requirements": "XSS koruması, input validation"
+    },
+    "atomic_design_task": {
+      "title": "Atomic Design Component",
+      "description": "Atomic design pattern'e uygun component geliştirme",
+      "priority": "high",
+      "assigned_agent": "developer_agent",
+      "atomic_design_level": "atoms|molecules|organisms|templates|pages",
+      "storybook_requirements": "Story dosyası otomatik oluşturma"
+    }
+  },
+  "monitoring": {
+    "metrics": [
+      "tasks_created",
+      "average_analysis_time",
+      "template_usage_rate",
+      "error_rate",
+      "performance_optimization_score",
+      "security_compliance_rate"
+    ],
+    "alerts": [
+      "high_task_creation_rate",
+      "analysis_timeout",
+      "template_not_found",
+      "performance_degradation",
+      "security_violation"
+    ]
+  },
+  "security": {
+    "authentication": "jwt",
+    "authorization": "role_based",
+    "encryption": "aes_256",
+    "audit_logging": true,
+    "input_validation": true,
+    "xss_protection": true
+  },
+  "performance_optimization": {
+    "caching_enabled": true,
+    "memory_optimization": true,
+    "analysis_time_target": "5000ms",
+    "concurrent_analysis_limit": 10
+  }
+}
