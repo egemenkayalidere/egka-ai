@@ -11,7 +11,12 @@
     "setup": "node scripts/setup.js",
     "init": "node scripts/init.js",
     "status": "node multi-agent-v2/scripts/status.js",
-    "test": "node multi-agent-v2/scripts/status.js",
+    "test": "node multi-agent-v2/scripts/test-system.js",
+    "demo": "node multi-agent-v2/main.js demo",
+    "start": "node multi-agent-v2/main.js start",
+    "stop": "node multi-agent-v2/main.js stop",
+    "performance": "node multi-agent-v2/scripts/status.js --performance",
+    "security": "node multi-agent-v2/scripts/status.js --security",
     "prepublishOnly": "npm run test"
   },
   "keywords": [
