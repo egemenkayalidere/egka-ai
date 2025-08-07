@@ -1,9 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
-const ContextInjectionManager = require("./context-injection-manager.js");
+const ContextInjectionManagerV2 = require("./context-injection-manager.js");
 
-class WorkflowExecutionEngine extends EventEmitter {
+class WorkflowExecutionEngineV2 extends EventEmitter {
   constructor() {
     super();
     this.basePath = path.join(__dirname, "..");
@@ -17,7 +17,7 @@ class WorkflowExecutionEngine extends EventEmitter {
     this.logsPath = path.join(this.sharedPath, "logs");
     this.tasksPath = path.join(this.sharedPath, "tasks");
 
-    this.contextManager = new ContextInjectionManager();
+    this.contextManager = new ContextInjectionManagerV2();
     this.currentStep = 0;
     this.workflowData = null;
     this.executionHistory = [];
@@ -564,4 +564,4 @@ class WorkflowExecutionEngine extends EventEmitter {
   }
 }
 
-module.exports = WorkflowExecutionEngine;
+module.exports = WorkflowExecutionEngineV2;

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const MainSystemController = require("./orchestrator/main-system-controller.js");
+const MainSystemControllerV2 = require("./orchestrator/main-system-controller.js");
 
-class MultiAgentMain {
+class MultiAgentV2Main {
   constructor() {
-    this.systemController = new MainSystemController();
+    this.systemController = new MainSystemControllerV2();
     this.isRunning = false;
   }
 
@@ -13,7 +13,7 @@ class MultiAgentMain {
    */
   async start() {
     try {
-      console.log("🚀 Multi-Agent Sistemi Başlatılıyor...");
+      console.log("🚀 Multi-Agent V2 Sistemi Başlatılıyor...");
       console.log("==========================================");
 
       // Sistemi başlat
@@ -49,7 +49,7 @@ class MultiAgentMain {
    */
   async stop() {
     try {
-      console.log("\n🛑 Multi-Agent Sistemi Durduruluyor...");
+      console.log("\n🛑 Multi-Agent V2 Sistemi Durduruluyor...");
 
       const result = await this.systemController.shutdownSystem();
 
@@ -249,7 +249,7 @@ class MultiAgentMain {
 
 // Ana giriş noktası
 if (require.main === module) {
-  const main = new MultiAgentMain();
+  const main = new MultiAgentV2Main();
 
   // Command line arguments
   const args = process.argv.slice(2);
@@ -283,7 +283,7 @@ if (require.main === module) {
           break;
 
         default:
-          console.log("🚀 Multi-Agent Sistemi");
+          console.log("🚀 Multi-Agent V2 Sistemi");
           console.log("=========================");
           console.log("\n📋 Kullanım:");
           console.log("   node main.js start    - Sistemi başlat");
@@ -301,4 +301,4 @@ if (require.main === module) {
   run();
 }
 
-module.exports = MultiAgentMain;
+module.exports = MultiAgentV2Main;

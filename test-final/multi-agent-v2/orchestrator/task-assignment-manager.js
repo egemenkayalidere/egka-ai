@@ -1,9 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
-const AgentCommunicationSystem = require("./agent-communication-system.js");
+const AgentCommunicationSystemV2 = require("./agent-communication-system.js");
 
-class TaskAssignmentManager extends EventEmitter {
+class TaskAssignmentManagerV2 extends EventEmitter {
   constructor() {
     super();
     this.basePath = path.join(__dirname, "..");
@@ -11,7 +11,7 @@ class TaskAssignmentManager extends EventEmitter {
     this.tasksPath = path.join(this.sharedPath, "tasks");
     this.logsPath = path.join(this.sharedPath, "logs");
 
-    this.communicationSystem = new AgentCommunicationSystem();
+    this.communicationSystem = new AgentCommunicationSystemV2();
     this.taskQueue = [];
     this.activeTasks = new Map();
     this.completedTasks = new Map();
@@ -778,4 +778,4 @@ class TaskAssignmentManager extends EventEmitter {
   }
 }
 
-module.exports = TaskAssignmentManager;
+module.exports = TaskAssignmentManagerV2;

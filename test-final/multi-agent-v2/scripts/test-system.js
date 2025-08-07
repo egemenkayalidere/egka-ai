@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const MainSystemController = require("../orchestrator/main-system-controller.js");
+const MainSystemControllerV2 = require("../orchestrator/main-system-controller.js");
 
-class MultiAgentSystemTest {
+class MultiAgentV2SystemTest {
   constructor() {
-    this.systemController = new MainSystemController();
+    this.systemController = new MainSystemControllerV2();
     this.testResults = [];
   }
 
@@ -12,7 +12,7 @@ class MultiAgentSystemTest {
    * Tüm testleri çalıştırır
    */
   async runAllTests() {
-    console.log("🧪 Multi-Agent Sistem Testleri Başlatılıyor...\n");
+    console.log("🧪 Multi-Agent V2 Sistem Testleri Başlatılıyor...\n");
 
     try {
       // Test 1: Sistem Başlatma
@@ -414,8 +414,8 @@ class MultiAgentSystemTest {
 
 // Test script'ini çalıştır
 if (require.main === module) {
-  const testRunner = new MultiAgentSystemTest();
+  const testRunner = new MultiAgentV2SystemTest();
   testRunner.runAllTests().catch(console.error);
 }
 
-module.exports = MultiAgentSystemTest;
+module.exports = MultiAgentV2SystemTest;

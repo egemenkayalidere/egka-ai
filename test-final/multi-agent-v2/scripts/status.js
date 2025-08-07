@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 
-class MultiAgentStatus {
+class MultiAgentV2Status {
   constructor() {
     this.basePath = path.join(__dirname, "..");
     this.agentsPath = path.join(this.basePath, "agents");
@@ -17,7 +17,7 @@ class MultiAgentStatus {
    * Sistem durumunu kontrol eder
    */
   async checkSystemStatus() {
-    console.log("🔍 Multi-Agent Sistem Durumu Kontrol Ediliyor...\n");
+    console.log("🔍 Multi-Agent V2 Sistem Durumu Kontrol Ediliyor...\n");
 
     const status = {
       system: await this.checkSystemFiles(),
@@ -305,14 +305,14 @@ class MultiAgentStatus {
     console.log(`   Son Audit'ler: ${status.security.recent_audits}`);
     console.log(`   Log Boyutu: ${status.security.log_size}`);
 
-    console.log("\n✨ Multi-Agent Sistem Durumu Kontrol Tamamlandı!");
+    console.log("\n✨ Multi-Agent V2 Sistem Durumu Kontrol Tamamlandı!");
   }
 }
 
 // Script çalıştırma
 if (require.main === module) {
-  const statusChecker = new MultiAgentStatus();
+  const statusChecker = new MultiAgentV2Status();
   statusChecker.checkSystemStatus().catch(console.error);
 }
 
-module.exports = MultiAgentStatus;
+module.exports = MultiAgentV2Status;

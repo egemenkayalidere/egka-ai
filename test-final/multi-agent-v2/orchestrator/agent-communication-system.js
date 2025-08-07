@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
 
-class AgentCommunicationSystem extends EventEmitter {
+class AgentCommunicationSystemV2 extends EventEmitter {
   constructor() {
     super();
 
@@ -653,4 +653,4 @@ class AgentCommunicationSystem extends EventEmitter {
   }
 }
 
-module.exports = AgentCommunicationSystem;
+module.exports = AgentCommunicationSystemV2;

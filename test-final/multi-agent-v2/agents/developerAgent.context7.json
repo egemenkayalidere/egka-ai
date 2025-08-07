@@ -159,7 +159,7 @@
       "variants": "Tüm varyantlar için story exports",
       "html_preview": "HTML çıktısı için özel hikaye"
     },
-    "script_path": "multi-agent/scripts/auto-story-generator.js"
+    "script_path": "multi-agent-v2/scripts/auto-story-generator.js"
   },
   "api_endpoints": {
     "execute_task": "/tasks/execute",
@@ -311,10 +311,10 @@
       "performance_tests": true
     },
     "story_generation_tools": {
-      "generate_story": "node multi-agent/scripts/generate-story.js",
-"auto_generate_all": "node multi-agent/scripts/auto-story-generator.js --all",
-"generate_for_component": "node multi-agent/scripts/auto-story-generator.js --component",
-"update_stories": "node multi-agent/scripts/auto-story-generator.js --update"
+      "generate_story": "node multi-agent-v2/scripts/generate-story.js",
+      "auto_generate_all": "node multi-agent-v2/scripts/auto-story-generator.js --all",
+      "generate_for_component": "node multi-agent-v2/scripts/auto-story-generator.js --component",
+      "update_stories": "node multi-agent-v2/scripts/auto-story-generator.js --update"
     },
     "logging_system": {
       "agent_log_file": "/shared-logs/developer-agent.log",

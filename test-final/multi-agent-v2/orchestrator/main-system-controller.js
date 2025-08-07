@@ -1,15 +1,15 @@
 const fs = require("fs");
 const path = require("path");
-const AutomaticTriggeringSystem = require("./automatic-triggering-system.js");
+const AutomaticTriggeringSystemV2 = require("./automatic-triggering-system.js");
 
-class MainSystemController {
+class MainSystemControllerV2 {
   constructor() {
     this.basePath = path.join(__dirname, "..");
     this.sharedPath = path.join(this.basePath, "shared");
     this.logsPath = path.join(this.sharedPath, "logs");
 
     // Ana sistem
-    this.triggeringSystem = new AutomaticTriggeringSystem();
+    this.triggeringSystem = new AutomaticTriggeringSystemV2();
 
     // Sistem durumu
     this.isInitialized = false;
@@ -74,7 +74,7 @@ class MainSystemController {
    */
   async initializeSystem() {
     try {
-      console.log("🚀 Multi-Agent Sistemi Başlatılıyor...");
+      console.log("🚀 Multi-Agent V2 Sistemi Başlatılıyor...");
 
       // Gerekli dizinleri oluştur
       this.ensureDirectories();
@@ -86,13 +86,13 @@ class MainSystemController {
         this.isInitialized = true;
         this.updateSystemHealth("healthy", "Sistem başarıyla başlatıldı");
 
-        console.log("✅ Multi-Agent Sistemi Başarıyla Başlatıldı!");
+        console.log("✅ Multi-Agent V2 Sistemi Başarıyla Başlatıldı!");
         console.log(`📊 Session ID: ${result.session_id}`);
         console.log("🎯 Sistem Hazır - Kullanıcı İsteklerini Bekliyor...");
 
         return {
           success: true,
-          message: "Multi-Agent sistemi başarıyla başlatıldı",
+          message: "Multi-Agent V2 sistemi başarıyla başlatıldı",
           session_id: result.session_id,
           version: this.systemVersion,
         };
@@ -115,7 +115,7 @@ class MainSystemController {
    */
   async shutdownSystem() {
     try {
-      console.log("🛑 Multi-Agent Sistemi Durduruluyor...");
+      console.log("🛑 Multi-Agent V2 Sistemi Durduruluyor...");
 
       const result = await this.triggeringSystem.stopSystem();
 
@@ -124,7 +124,7 @@ class MainSystemController {
         this.calculateUptime();
         this.updateSystemHealth("stopped", "Sistem durduruldu");
 
-        console.log("✅ Multi-Agent Sistemi Başarıyla Durduruldu!");
+        console.log("✅ Multi-Agent V2 Sistemi Başarıyla Durduruldu!");
         console.log(
           `⏱️  Toplam Çalışma Süresi: ${this.formatUptime(this.uptime)}`
         );
@@ -351,7 +351,7 @@ class MainSystemController {
   displaySystemStatus() {
     const status = this.getSystemStatus();
 
-    console.log("\n📊 MULTI-AGENT SİSTEM DURUMU");
+    console.log("\n📊 MULTI-AGENT V2 SİSTEM DURUMU");
     console.log("==================================");
 
     // Sistem Bilgileri
@@ -546,4 +546,4 @@ class MainSystemController {
   }
 }
 
-module.exports = MainSystemController;
+module.exports = MainSystemControllerV2;

@@ -1,0 +1,206 @@
+{
+  "system_name": "Multi-Agent Development System",
+  "version": "3.0.0",
+  "description": "Geliştirilmiş AI destekli multi-agent geliştirme sistemi",
+  "created_at": "2025-01-27T10:00:00.000Z",
+  "last_updated": "2025-01-27T10:00:00.000Z",
+  "active_agents": 3,
+  "agents": ["managerAgent", "analystAgent", "developerAgent"],
+  "system_features": {
+    "atomic_design": true,
+    "storybook_integration": true,
+    "context_injection": true,
+    "task_management": true,
+    "performance_optimization": true,
+    "security_compliance": true,
+    "lovable_knowledge_guide": true
+  },
+  "file_structure": {
+    "agents/": "Agent konfigürasyonları ve yetkileri",
+    "shared/": "Paylaşılan dosyalar ve kaynaklar",
+    "shared/tasks/": "Task dosyaları ve context'leri",
+    "shared/logs/": "Sistem ve agent log dosyaları",
+    "orchestrator/": "Agent koordinasyonu ve workflow",
+    "scripts/": "Sistem scriptleri ve yardımcı araçlar"
+  },
+  "enhancements": [
+    "Geliştirilmiş context injection sistemi",
+    "Atomic design pattern desteği",
+    "Storybook otomatik entegrasyonu",
+    "Performans optimizasyonu",
+    "Güvenlik standartları",
+    "Modern React best practices",
+    "TypeScript desteği",
+    "Component library yönetimi",
+    "LOVABLE Knowledge Guide entegrasyonu"
+  ],
+  "security_rules": [
+    "API key'ler frontend'de tutulmamalı",
+    "Hassas veriler backend'e taşınmalı",
+    "Local storage güvenli kullanımı",
+    "XSS ve CSRF koruması",
+    "Content-Security-Policy uygulanmalı"
+  ],
+  "performance_rules": [
+    "React.memo kullanımı zorunlu",
+    "useCallback ve useMemo optimizasyonu",
+    "Gereksiz re-render'lar engellenmeli",
+    "Arrow function kullanımı",
+    "Explicit return tercih edilmeli"
+  ],
+  "ui_consistency": [
+    "JSX yapısı korunmalı",
+    "Tasarım sistemi tutarlılığı",
+    "Erişilebilirlik standartları",
+    "Modern UI/UX pratikleri"
+  ],
+  "lovable_knowledge_guide": {
+    "communication_principles": {
+      "language": "Tüm yanıtlar Türkçe olacak",
+      "response_format": "Önce açıklayıcı bilgi, sonra uygulama",
+      "approval_required": "Her öneri sonrasında kullanıcıdan açık onay alınacak",
+      "no_changes_without_approval": "Hiçbir değişiklik kullanıcı onayı alınmadan yapılmayacak",
+      "context7_required": "Mutlaka context7 kullanılacak"
+    },
+    "code_quality_rules": {
+      "javascript_standards": "Senior seviye ve modern JavaScript (ES6+) standartlarına uygun",
+      "ui_code_separation": "Tekrarlayan UI kodları ayrı fonksiyonlara veya component'lere bölünmeli",
+      "code_readability": "Kodlar sade, temiz, okunabilir ve anlaşılır olacak şekilde yazılmalı"
+    },
+    "react_development_rules": {
+      "performance_optimization": {
+        "react_memo": "Tüm child component'lerde React.memo kullanılmalı",
+        "use_callback_rules": {
+          "use_when": [
+            "Prop olarak fonksiyon gönderiliyorsa",
+            "useEffect veya useMemo içinde bağımlılık olarak kullanılıyorsa",
+            "Fonksiyon referansının sabit kalması gerekiyorsa"
+          ],
+          "dont_use_when": [
+            "Sadece setState içinde kullanılıyorsa",
+            "JSX içinde tanımlanan basit fonksiyonlar için"
+          ]
+        },
+        "use_memo_rules": {
+          "use_when": [
+            "Hesaplama maliyeti yüksek işlemlerde",
+            "Değerin referansının stabil kalması gerekiyorsa",
+            "Component yeniden render olduğunda gereksiz hesaplamaların önüne geçmek için"
+          ],
+          "dont_use_when": ["Basit matematiksel veya hafif hesaplamalarda"]
+        },
+        "function_writing": {
+          "arrow_function": "Tüm fonksiyonlar arrow function şeklinde tanımlanmalı",
+          "explicit_return": "Explicit return tercih edilmeli, mümkünse return kullanılarak açık şekilde değer dönülmeli"
+        }
+      }
+    },
+    "ui_consistency_security": {
+      "ui_rules": [
+        "Return içindeki JSX yapısı izinsiz değiştirilmemeli",
+        "UI/UX tutarlılığı korunmalı, tasarım sistemine aykırı müdahaleler yapılmamalı",
+        "Stil değişiklikleri sadece erişilebilirlik veya performans gerekçesiyle yapılmalı",
+        "Component yapısı yeniden düzenlenebilir ancak görsel bütünlük bozulmamalı"
+      ],
+      "security_rules": [
+        "API key, token, şifre gibi hassas veriler frontend tarafında tutulmamalı",
+        "Local Storage veya Session Storage içinde hassas veri saklanmamalı",
+        "Ortam değişkenleri .env dosyası üzerinden tanımlanmalı",
+        "Statik ve hassas veriler backend'e taşınmalı",
+        "Kimlik doğrulama ve yetkilendirme güvenli şekilde yönetilmeli",
+        "XSS, CSRF gibi yaygın açıklar için güvenlik önlemleri alınmalı"
+      ]
+    },
+    "atomic_design_rules": {
+      "atoms": {
+        "purpose": "En küçük, yeniden kullanılabilir bileşenler",
+        "examples": ["Button", "Input", "Typography", "Icon", "Avatar"],
+        "rule": "Sadece kendi içinde state tutabilir"
+      },
+      "molecules": {
+        "purpose": "Atom'ların basit kombinasyonları",
+        "examples": ["SearchBar", "Card", "NavigationItem", "Breadcrumbs"],
+        "rule": "Birkaç atom'u birleştirir"
+      },
+      "organisms": {
+        "purpose": "Karmaşık molekül kombinasyonları",
+        "examples": ["Header", "Sidebar", "DashboardOverview", "Footer"],
+        "rule": "Sayfa bölümlerini oluşturur"
+      },
+      "templates": {
+        "purpose": "Sayfa düzeni ve yapısı",
+        "examples": ["MainLayout", "DashboardLayout", "LearningLayout"],
+        "rule": "Organism'ları düzenler"
+      },
+      "pages": {
+        "purpose": "Gerçek içerikle tamamlanmış sayfalar",
+        "examples": ["DashboardPage", "LearningPage", "ProfilePage"],
+        "rule": "Template'leri gerçek verilerle doldurur"
+      }
+    },
+    "naming_conventions": {
+      "file_naming": {
+        "correct": [
+          "Button.tsx",
+          "UserProfile.tsx",
+          "DashboardOverview.tsx",
+          "useCustomHook.ts"
+        ],
+        "incorrect": [
+          "button.tsx",
+          "user-profile.tsx",
+          "dashboard-overview.tsx",
+          "use-custom-hook.ts"
+        ]
+      },
+      "variable_naming": {
+        "correct": ["userName", "isActive", "handleClick", "fetchUserData"],
+        "incorrect": [
+          "user_name",
+          "is_active",
+          "handle_click",
+          "fetch_user_data"
+        ]
+      },
+      "component_naming": {
+        "correct": ["UserProfile", "DashboardOverview", "NavigationItem"],
+        "incorrect": ["userProfile", "dashboard_overview", "navigation-item"]
+      },
+      "interface_type_naming": {
+        "correct": ["ButtonProps", "UserData"],
+        "incorrect": ["buttonProps", "userData"]
+      }
+    },
+    "error_handling": {
+      "try_catch": "Async fonksiyonlarda try-catch kullanımı zorunlu",
+      "error_boundary": "React Error Boundary kullanımı",
+      "custom_error_hook": "useErrorHandler custom hook'u"
+    },
+    "testing_strategies": {
+      "unit_tests": "Her component için unit test yazılmalı",
+      "integration_tests": "Karmaşık component'ler için integration test",
+      "mock_usage": "API çağrıları için mock kullanımı"
+    },
+    "storybook_integration": {
+      "story_structure": "Her component için story oluşturulmalı",
+      "variant_support": "Variant'lar için story exports",
+      "html_preview": "HTML preview generation"
+    },
+    "modern_react_practices": {
+      "typescript_strict_mode": "Strict mode kullanımı zorunlu",
+      "arrow_function": "Tüm fonksiyonlar arrow function şeklinde tanımlanmalı",
+      "explicit_return": "Mümkünse return kullanılarak açık şekilde değer dönülmeli"
+    },
+    "accessibility_standards": {
+      "aria_labels": "Button ve link'ler için aria-label kullanımı",
+      "alt_texts": "Image'lar için alt text kullanımı",
+      "semantic_html": "Semantic HTML elementleri kullanımı"
+    },
+    "deployment_guidelines": {
+      "build_process": "Production build süreci",
+      "environment_variables": "Environment variables kullanımı",
+      "ci_cd_pipeline": "CI/CD pipeline konfigürasyonu",
+      "performance_monitoring": "Web Vitals monitoring"
+    }
+  }
+}

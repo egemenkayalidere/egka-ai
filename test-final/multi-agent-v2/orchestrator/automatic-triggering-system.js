@@ -1,11 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
-const WorkflowExecutionEngine = require("./workflow-execution-engine.js");
-const AgentCommunicationSystem = require("./agent-communication-system.js");
-const TaskAssignmentManager = require("./task-assignment-manager.js");
+const WorkflowExecutionEngineV2 = require("./workflow-execution-engine.js");
+const AgentCommunicationSystemV2 = require("./agent-communication-system.js");
+const TaskAssignmentManagerV2 = require("./task-assignment-manager.js");
 
-class AutomaticTriggeringSystem extends EventEmitter {
+class AutomaticTriggeringSystemV2 extends EventEmitter {
   constructor() {
     super();
 
@@ -14,9 +14,9 @@ class AutomaticTriggeringSystem extends EventEmitter {
     this.logsPath = path.join(this.sharedPath, "logs");
 
     // Alt sistemleri başlat
-    this.workflowEngine = new WorkflowExecutionEngine();
-    this.communicationSystem = new AgentCommunicationSystem();
-    this.taskManager = new TaskAssignmentManager();
+    this.workflowEngine = new WorkflowExecutionEngineV2();
+    this.communicationSystem = new AgentCommunicationSystemV2();
+    this.taskManager = new TaskAssignmentManagerV2();
 
     // Sistem durumu
     this.isActive = false;
@@ -151,7 +151,7 @@ class AutomaticTriggeringSystem extends EventEmitter {
       return {
         success: true,
         session_id: this.currentSession.id,
-        message: "Multi-Agent sistemi başarıyla başlatıldı",
+        message: "Multi-Agent V2 sistemi başarıyla başlatıldı",
       };
     } catch (error) {
       this.handleSystemError(error);
@@ -186,7 +186,7 @@ class AutomaticTriggeringSystem extends EventEmitter {
 
       return {
         success: true,
-        message: "Multi-Agent sistemi durduruldu",
+        message: "Multi-Agent V2 sistemi durduruldu",
       };
     } catch (error) {
       this.handleSystemError(error);
@@ -670,4 +670,4 @@ class AutomaticTriggeringSystem extends EventEmitter {
   }
 }
 
-module.exports = AutomaticTriggeringSystem;
+module.exports = AutomaticTriggeringSystemV2;

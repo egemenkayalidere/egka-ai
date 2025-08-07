@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-class ContextInjectionManager {
+class ContextInjectionManagerV2 {
   constructor() {
     this.injectionPath = path.join(__dirname, "../shared/context-injection");
     this.agentPath = path.join(__dirname, "../agents");
@@ -402,4 +402,4 @@ class ContextInjectionManager {
   }
 }
 
-module.exports = ContextInjectionManager;
+module.exports = ContextInjectionManagerV2;
