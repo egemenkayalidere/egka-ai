@@ -1,0 +1,35 @@
+{
+  "id": "MSG-1754554562951-5853",
+  "from": "task_manager",
+  "to": "developer",
+  "type": "task_assignment",
+  "payload": {
+    "taskId": "TASK-2025-8184",
+    "taskData": {
+      "type": "component_development",
+      "description": "UserCard component'i geliştir",
+      "requirements": [
+        "React.memo kullanımı zorunlu",
+        "TypeScript ile yazılmalı",
+        "Material UI kullanılmalı",
+        "Storybook story'si oluşturulmalı"
+      ],
+      "complexity": "medium",
+      "urgency": "normal",
+      "estimated_duration": "2 hours"
+    },
+    "requirements": [
+      "React.memo kullanımı zorunlu",
+      "TypeScript ile yazılmalı",
+      "Material UI kullanılmalı",
+      "Storybook story'si oluşturulmalı"
+    ],
+    "priority": 6
+  },
+  "priority": 6,
+  "timestamp": "2025-08-07T08:16:02.951Z",
+  "status": "delivered",
+  "retryCount": 0,
+  "maxRetries": 3,
+  "responseTime": 0
+}
