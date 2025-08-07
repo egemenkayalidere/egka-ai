@@ -3741,7 +3741,7 @@ multi-agent-v2/
     rulesContent
   );
   console.log(
-    chalk.green("📝 V2 .cursor/rules/multi-agent-rules.mdc oluşturuldu")
+    chalk.green("📝 .cursor/rules/multi-agent-rules.mdc oluşturuldu")
   );
 }
 
