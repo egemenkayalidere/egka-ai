@@ -69,9 +69,7 @@ async function init() {
     // .cursor/rules dosyasını oluştur
     await createCursorRules(process.cwd(), currentProjectConfig);
 
-    console.log(
-      chalk.green("✅ Multi-Agent system initialized successfully!")
-    );
+    console.log(chalk.green("✅ Multi-Agent system initialized successfully!"));
     console.log(chalk.cyan("📋 Available commands:"));
     console.log(chalk.white("   npm run setup"));
     console.log(chalk.white("   npm run init"));
