@@ -1,111 +1,63 @@
 {
   "name": "Manager Agent",
-  "version": "2.0.0",
-  "description": "Geliştirilmiş Multi-Agent System Manager Agent - Gelişmiş kullanıcı karşılama ve görev delegasyonu",
+  "version": "1.0.0",
+  "description": "Multi-Agent System Manager Agent",
   "type": "agent",
   "capabilities": [
-    "user_greeting",
-    "task_reception",
-    "task_delegation_to_analyst",
-    "workflow_initiation",
-    "file_reading",
-    "log_analysis",
-    "system_monitoring",
-    "context_injection",
-    "performance_tracking",
-    "security_validation"
+    "task_management",
+    "agent_coordination",
+    "workflow_orchestration",
+    "status_monitoring",
+    "shared_logging"
   ],
   "configuration": {
-    "max_concurrent_tasks": 15,
-    "timeout": 45000,
-    "retry_attempts": 5,
-    "log_level": "info",
-    "context_injection_enabled": true,
-    "performance_monitoring": true
-  },
-  "dependencies": ["analyst_agent"],
-  "api_endpoints": {
-    "health_check": "/health",
-    "task_status": "/tasks/:id",
-    "agent_status": "/agents/:id",
-    "delegate_task": "/delegate",
-    "get_metrics": "/metrics",
-    "read_agent_log": "/shared-logs/manager-agent.log",
-    "read_system_log": "/shared-logs/system.log",
-    "read_main_context": "/main.context7.json",
-    "write_agent_log": "/shared-logs/manager-agent.log",
-    "write_system_log": "/shared-logs/system.log",
-    "context_injection": "/orchestrator/context-injection-manager.js"
+    "supported_languages": [
+      "typescript",
+      "javascript",
+      "json"
+    ],
+    "max_file_size": 1000000,
+    "timeout": 60000,
+    "log_level": "info"
   },
   "workflow": {
-    "user_interaction": {
-      "greeting_message": "Merhaba! Multi-Agent Sistemine hoş geldiniz. Geliştirilmiş AI destekli geliştirme sistemi ile görevinizi analiz ediyorum.",
-      "task_confirmation": true,
-      "delegation_notification": true,
-      "context_awareness": true
-    },
-    "task_delegation": {
-      "template_creation": true,
-      "analyst_transfer": true,
-      "status_tracking": true,
-      "performance_monitoring": true
-    },
-    "file_operations": {
-      "read_logs": {
-        "agent_log": "shared/logs/manager-agent.log",
-        "system_log": "shared/logs/system.log",
-        "main_context": "main.context7.json"
+    "task_execution": {
+      "task_discovery": {
+        "scan_shared_tasks": true,
+        "read_task_context": true,
+        "priority_sorting": true
       },
-      "context_awareness": {
-        "read_project_story": true,
-        "read_system_status": true,
-        "read_agent_status": true,
-        "read_performance_metrics": true
+      "agent_assignment": {
+        "analyze_requirements": true,
+        "select_appropriate_agent": true,
+        "delegate_task": true
+      },
+      "status_monitoring": {
+        "track_progress": true,
+        "update_status": true,
+        "handle_completion": true
       }
     },
-    "context_injection": {
-      "enabled": true,
-      "injection_points": [
-        "task_creation",
-        "agent_activation",
-        "workflow_transition"
-      ],
-      "context_sources": [
-        "main.context7.json",
-        "workflow.context7.json",
-        "agent_specific_contexts"
-      ]
+    "shared_logging": {
+      "task_execution_log": {
+        "start_time": true,
+        "end_time": true,
+        "duration": true,
+        "status": true,
+        "details": true
+      },
+      "work_log": {
+        "actions_performed": true,
+        "files_created": true,
+        "files_modified": true,
+        "errors_encountered": true
+      }
     }
   },
-  "monitoring": {
-    "metrics": [
-      "task_completion_rate",
-      "average_response_time",
-      "error_rate",
-      "agent_utilization",
-      "context_injection_success_rate",
-      "performance_optimization_score"
-    ],
-    "alerts": [
-      "high_error_rate",
-      "slow_response_time",
-      "agent_failure",
-      "context_injection_failure",
-      "performance_degradation"
-    ]
-  },
-  "security": {
-    "authentication": "jwt",
-    "authorization": "role_based",
-    "encryption": "aes_256",
-    "audit_logging": true,
-    "input_validation": true,
-    "xss_protection": true
-  },
-  "performance_optimization": {
-    "caching_enabled": true,
-    "memory_optimization": true,
-    "response_time_target": "2000ms",
-    "concurrent_task_limit": 15
+  "rules": {
+    "task_management": "Task'ları uygun agent'lara dağıtmalı",
+    "coordination": "Agent'lar arası koordinasyonu sağlamalı",
+    "monitoring": "Sistem durumunu sürekli izlemeli",
+    "logging": "Tüm aktiviteleri loglamalı"
   }
 }

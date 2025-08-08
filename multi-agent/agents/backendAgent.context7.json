@@ -1,0 +1,57 @@
+{
+  "name": "Backend Agent",
+  "version": "1.0.0",
+  "description": "Multi-Agent System Backend Agent",
+  "type": "agent",
+  "capabilities": [
+    "api_development",
+    "nodejs_development",
+    "express_development",
+    "firebase_integration",
+    "authentication",
+    "database_management"
+  ],
+  "configuration": {
+    "supported_languages": [
+      "typescript",
+      "javascript",
+      "json"
+    ],
+    "frameworks": [
+      "express",
+      "node.js"
+    ],
+    "databases": [
+      "firebase",
+      "mongodb",
+      "postgresql"
+    ],
+    "max_file_size": 1000000,
+    "timeout": 60000,
+    "log_level": "info"
+  },
+  "workflow": {
+    "api_development": {
+      "endpoint_creation": {
+        "create_routes": true,
+        "implement_controllers": true,
+        "add_middleware": true
+      },
+      "database_integration": {
+        "setup_database": true,
+        "create_models": true,
+        "implement_crud": true
+      },
+      "authentication": {
+        "implement_auth": true,
+        "add_security": true,
+        "manage_sessions": true
+      }
+    }
+  },
+  "rules": {
+    "development": "Modern Node.js/Express standartlarına uygun geliştirme yapmalı",
+    "security": "Güvenlik önlemlerini uygulamalı",
+    "performance": "API performansını optimize etmeli"
+  }
+}

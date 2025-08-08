@@ -1,211 +1,170 @@
-# Multi-Agent V2 System
+# Multi-Agent System
 
-Geliştirilmiş AI destekli multi-agent geliştirme sistemi.
+Sıfır Multi-Agent Sistemi - Temel Yapı
 
-## 🚀 Yeni Özellikler
-
-### Performance Optimization
-
-- React.memo, useCallback, useMemo kullanımı zorunlu
-- Gereksiz re-render'lar engellenir
-- Memory optimization ve caching
-- Bundle size optimization
-
-### Security Enhancement
-
-- XSS ve CSRF koruması
-- Input validation zorunlu
-- Code signing ve audit logging
-- Hassas veriler backend'e taşınır
-
-### Modern React Practices
-
-- TypeScript strict mode
-- Arrow function kullanımı
-- Explicit return tercih edilir
-- Material UI entegrasyonu
-
-### Atomic Design V2
-
-- Geliştirilmiş atomic design kuralları
-- Otomatik story generation
-- Storybook entegrasyonu
-- Component library yönetimi
-
-## 🏗️ Sistem Mimarisi
-
-### Agent'lar
-
-1. **Manager Agent V2** - Gelişmiş kullanıcı karşılama ve görev delegasyonu
-2. **Analyst Agent V2** - Gelişmiş görev analizi ve task oluşturma
-3. **Developer Agent V2** - Gelişmiş kod geliştirme, Atomic Design implementasyonu ve Storybook entegrasyonu
-
-### Workflow
+## 🏗️ Sistem Yapısı
 
 ```
-User Input → Manager Agent V2 → Analyst Agent V2 → Task Creation → Developer Agent V2 → Execution → Logging
+multi-agent/
+├── main.context7.json              # Ana sistem konfigürasyonu
+├── agents/                         # Agent konfigürasyonları
+│   ├── managerAgent.context7.json  # Manager Agent
+│   ├── analystAgent.context7.json  # Analyst Agent
+│   └── developerAgent.context7.json # Developer Agent
+├── shared/                         # Paylaşılan dosyalar
+│   ├── tasks/                      # Task dosyaları
+│   ├── logs/                       # Log dosyaları
+│   └── context-injection/          # Context injection dosyaları
+├── orchestrator/                   # Sistem orkestrasyonu
+│   └── context-injection-manager.js # Context injection yöneticisi
+└── scripts/                        # Sistem scriptleri
+    ├── auto-story-generator.js     # Otomatik story oluşturucu
+    └── generate-story.js           # Manuel story oluşturucu
 ```
 
-## 📁 Dosya Yapısı
+## 🤖 Agent'lar
 
+### **Manager Agent**
+
+- **Görev:** Task yönetimi ve agent koordinasyonu
+- **Capabilities:** Task management, agent coordination, workflow orchestration
+- **Bağımlılıklar:** Yok
+
+### **Analyst Agent**
+
+- **Görev:** Task analizi ve gereksinim anlama
+- **Capabilities:** Task analysis, requirement understanding, complexity assessment
+- **Bağımlılıklar:** Manager Agent
+
+### **Developer Agent**
+
+- **Görev:** Kod geliştirme ve atomic design implementasyonu
+- **Capabilities:** Code generation, atomic design implementation, story generation
+- **Bağımlılıklar:** Analyst Agent
+
+## 🔄 Context Injection
+
+Sistem, agent'ların çalışma zamanında dinamik context yüklemesi için context injection mekanizması kullanır.
+
+### **Özellikler:**
+
+- Otomatik context yükleme
+- Veri doğrulama
+- Context birleştirme
+- Hata yönetimi
+
+### **Kullanım:**
+
+```javascript
+const ContextInjectionManager = require("./orchestrator/context-injection-manager");
+const manager = new ContextInjectionManager();
+
+// Context injection yükle
+await manager.loadContextInjection("developer");
+
+// Context birleştir
+await manager.mergeContextWithInjection("developer");
+
+// Birleştirilmiş context'i al
+const context = manager.getInjectedContext("developer");
 ```
-multi-agent-v2/
-├── main.context7.json          # Proje hikayesi ve genel bilgiler
-├── agents/
-│   ├── managerAgent.context7.json
-│   ├── analystAgent.context7.json
-│   └── developerAgent.context7.json
-├── orchestrator/               # Agent koordinasyonu
-│   ├── workflow.context7.json
-│   ├── context-injection-manager.js
-│   └── README.md
-├── shared/
-│   ├── tasks/                  # Task context dosyaları
-│   │   └── README.md
-│   └── logs/                   # Shared log dosyaları
-│       └── README.md
-├── scripts/                    # Sistem scriptleri
-│   └── status.js
-└── README.md
+
+## 🎨 Story Generation
+
+Sistem, atomic design componentleri için otomatik story dosyası oluşturma özelliğine sahiptir.
+
+### **Kullanım:**
+
+```bash
+# Tek component için story oluştur
+node scripts/generate-story.js src/components/atoms/MyButton.tsx
+
+# Otomatik story generation
+node scripts/auto-story-generator.js --component src/components/molecules/MyCard.tsx
 ```
+
+## 📊 Logging
+
+Sistem, tüm aktiviteleri loglamak için kapsamlı bir logging sistemi kullanır.
+
+### **Log Dosyaları:**
+
+- `system.log` - Sistem geneli logları
+- `manager-agent.log` - Manager agent logları
+- `analyst-agent.log` - Analyst agent logları
+- `developer-agent.log` - Developer agent logları
+
+## 🧩 Atomic Design
+
+Sistem, atomic design metodolojisine uygun component geliştirme destekler.
+
+### **Seviyeler:**
+
+- **Atoms:** Temel UI bileşenleri (Button, Input, Icon)
+- **Molecules:** Atom birleşimleri (FormField, Card, SearchBar)
+- **Organisms:** Sayfa parçaları (Header, Sidebar, Footer)
+- **Templates:** Layout ve şablonlar (MasterPage, DashboardLayout)
+- **Pages:** Tam sayfalar (HomePage, LoginPage)
 
 ## 🚀 Kullanım
 
-### Agent Aktivasyonu
+### **Sistem Başlatma:**
 
-Her yeni chat başlangıcında sistem otomatik olarak devreye girer:
+```javascript
+// Context injection yükle
+const manager = new ContextInjectionManager();
+await manager.loadContextInjection("developer");
 
-1. **Manager Agent V2**: Kullanıcıyı karşılar ve görevi alır
-2. **Analyst Agent V2**: Görevi analiz eder ve task oluşturur
-3. **Developer Agent V2**: Task'ı okur ve işlemi gerçekleştirir
-
-### Dosya Erişim Yetkileri
-
-Her agent'ın kendi yetki alanında dosya okuma ve yazma yetkileri vardır:
-
-- **Manager Agent V2**: Kendi log'ları ve sistem log'ları
-- **Analyst Agent V2**: Task context dosyaları, kendi log'ları, main context
-- **Developer Agent V2**: Task context dosyaları, kendi log'ları, task raporları, atomic design logları, storybook logları, main context, component dosyaları
-
-### Task Yönetimi
-
-- Task'lar `TASK-{YEAR}-{SEQUENTIAL}` formatında oluşturulur
-- Her task için context dosyası oluşturulur
-- Task durumları takip edilir ve loglanır
-- Performance metrics kaydedilir
-
-## 📊 Task Yönetimi
-
-### Task ID Formatı
-
-```
-TASK-{YEAR}-{SEQUENTIAL}
-Örnek: TASK-2025-1000
+// Agent'ları başlat
+// Manager -> Analyst -> Developer workflow'u
 ```
 
-### Context Dosyaları
+### **Task Oluşturma:**
 
-- **main.context7.json**: Proje hikayesi ve sistem kuralları
-- **TASK-XXXX-XXXX.context7.json**: Her task için detaylı context
-- **workflow.context7.json**: Workflow durumları ve geçişler
-
-### Log Formatı
-
-- **system.log**: Sistem geneli aktiviteler
-- **manager-agent.log**: Manager agent aktiviteleri
-- **analyst-agent.log**: Analyst agent aktiviteleri
-- **developer-agent.log**: Developer agent aktiviteleri
-- **atomic-design.log**: Atomic design component oluşturma logları
-- **storybook-setup.log**: Storybook kurulum logları
-- **story-generation.log**: Story oluşturma logları
-- **task-reports.md**: Detaylı task raporları
-- **performance.log**: Performance metrics
-- **security-audit.log**: Security audit logları
-
-## 🔧 Konfigürasyon
-
-### Task Durumları
-
-- **pending**: Bekleyen task
-- **in_progress**: Devam eden task
-- **completed**: Tamamlanan task
-- **failed**: Başarısız task
-
-### Performance Requirements
-
-- **React.memo**: Tüm component'lerde kullanım zorunlu
-- **useCallback**: Prop olarak fonksiyon gönderiliyorsa kullanım zorunlu
-- **useMemo**: Hesaplama maliyeti yüksek işlemlerde kullanım zorunlu
-- **Arrow function**: Tüm fonksiyonlar arrow function şeklinde tanımlanmalı
-- **Explicit return**: Mümkünse return kullanılarak açık şekilde değer dönülmeli
-
-### Security Requirements
-
-- **XSS Protection**: Content-Security-Policy uygulanmalı
-- **CSRF Protection**: SameSite cookies kullanılmalı
-- **Input Validation**: Tüm kullanıcı girdileri doğrulanmalı
-- **API Security**: Hassas veriler backend'de tutulmalı
-
-## 📈 Monitoring
-
-- Task completion rate
-- Agent utilization
-- Error tracking
-- Performance metrics
-- File access monitoring
-- Context awareness tracking
-- Atomic design compliance
-- Story generation success rate
-- Storybook integration status
-- Security compliance rate
-
-## 📝 Dokümantasyon
-
-- [Tasks README](shared/tasks/README.md)
-- [Logs README](shared/logs/README.md)
-- [Orchestrator README](orchestrator/README.md)
-- [Agent Configurations](agents/)
-- [Main Context](main.context7.json)
-
-## 🚀 Hızlı Başlangıç
-
-### Sistem Durumu Kontrolü
-
-```bash
-node multi-agent-v2/scripts/status.js
+```javascript
+// Analyst agent task oluşturur
+const task = {
+  id: "TASK-2025-1001",
+  title: "Component Oluşturma",
+  description: "Atomic design kurallarına uygun component oluştur",
+  assigned_agent: "developer",
+  status: "pending",
+};
 ```
 
-### Context Injection Test
+### **Component Geliştirme:**
 
-```bash
-node multi-agent-v2/scripts/test-context-injection.js
+```javascript
+// Developer agent component oluşturur
+// Otomatik story generation tetiklenir
+await storyGenerator.generateStoryForNewComponent(componentPath);
 ```
 
-### Story Generation
+## 📋 Kurallar
 
-```bash
-node multi-agent-v2/scripts/auto-story-generator.js
-```
+1. **İletişim:** Tüm agent'lar Türkçe cevap vermeli
+2. **Kod Kalitesi:** Modern JavaScript/TypeScript kullanılmalı
+3. **Atomic Design:** Atomic design kurallarına uyulmalı
+4. **Story Generation:** Her component için story dosyası oluşturulmalı
+5. **Context Injection:** Agent'lar context injection ile çalışmalı
 
-## 🔄 Versiyon Geçişi
+## 🔧 Geliştirme
 
-### V1'den V2'ye Geçiş
+### **Yeni Agent Ekleme:**
 
-1. **Performance Optimization**: Tüm component'ler React.memo ile optimize edildi
-2. **Security Enhancement**: XSS ve CSRF koruması eklendi
-3. **Modern React**: TypeScript strict mode ve arrow function kullanımı
-4. **Atomic Design V2**: Geliştirilmiş atomic design kuralları
-5. **Monitoring**: Performance ve security metrics eklendi
+1. `agents/` klasörüne agent konfigürasyonu ekle
+2. `shared/context-injection/` klasörüne injection dosyası ekle
+3. `orchestrator/context-injection-manager.js` dosyasını güncelle
 
-### Breaking Changes
+### **Yeni Script Ekleme:**
 
-- Context injection formatı güncellendi
-- Agent konfigürasyonları genişletildi
-- Log formatları değiştirildi
-- Performance requirements eklendi
+1. `scripts/` klasörüne script dosyası ekle
+2. Agent konfigürasyonlarında script path'ini güncelle
 
----
+## 📝 Notlar
 
-**Son Güncelleme:** 2025-01-27
-**Versiyon:** 3.0.0
-**Sistem Durumu:** Geliştirilmiş ve optimize edilmiş
+- Sistem %100 context injection ile çalışır
+- Tüm agent'lar shared logging kullanır
+- Atomic design kuralları zorunludur
+- Story generation otomatiktir
+- Sistem modüler ve genişletilebilir yapıdadır
