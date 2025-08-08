@@ -117,23 +117,23 @@ program
     console.log(chalk.blue.bold("🚀 Initializing EGKA AI AGENTS..."));
 
     try {
-      const setupScript = path.join(__dirname, "..", "scripts", "setup.js");
-      if (await fs.pathExists(setupScript)) {
-        // Setup script'ini çalıştır
+      const initScript = path.join(__dirname, "..", "scripts", "init.js");
+      if (await fs.pathExists(initScript)) {
+        // Init script'ini çalıştır
         const { spawn } = require("child_process");
-        const setup = spawn("node", [setupScript, "init"], {
+        const init = spawn("node", [initScript], {
           stdio: "inherit",
         });
 
-        setup.on("close", (code) => {
+        init.on("close", (code) => {
           if (code === 0) {
             console.log(chalk.green("✅ Multi-Agent system initialized successfully!"));
           } else {
-            console.error(chalk.red("❌ Setup failed"));
+            console.error(chalk.red("❌ Init failed"));
           }
         });
       } else {
-        console.log(chalk.yellow("⚠️  Setup script not found"));
+        console.log(chalk.yellow("⚠️  Init script not found"));
       }
     } catch (error) {
       console.error(chalk.red("Error during initialization:"), error.message);
