@@ -4,14 +4,14 @@
   "description": "Multi-Agent System with Performance Optimization, Security Enhancement, Atomic Design, and Modern React Practices for automated task management and development",
   "main": "index.js",
   "bin": {
-    "egka-ai": "bin/egka-ai.js"
+    "egka-ai": "bin/egka-ai-simple.js"
   },
   "scripts": {
     "install": "node scripts/install.js",
     "setup": "node scripts/setup.js",
     "init": "node scripts/init.js",
     "status": "node multi-agent/scripts/status.js",
-    "test": "node multi-agent/scripts/test-system.js",
+    "test": "npm run agent-status",
     "demo": "node multi-agent/main.js demo",
     "start": "node multi-agent/main.js start",
     "stop": "node multi-agent/main.js stop",

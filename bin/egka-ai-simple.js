@@ -5,7 +5,6 @@ const chalk = require("chalk");
 const fs = require("fs-extra");
 const path = require("path");
 const inquirer = require("inquirer");
-const { execSync } = require("child_process");
 
 // Welcome message
 function showWelcome() {
