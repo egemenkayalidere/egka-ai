@@ -20,25 +20,6 @@
     "timeout": 60000,
     "log_level": "info"
   },
-  "workflow": {
-    "task_analysis": {
-      "requirement_analysis": {
-        "analyze_user_input": true,
-        "identify_requirements": true,
-        "create_task_context": true
-      },
-      "task_creation": {
-        "generate_task_id": true,
-        "create_task_file": true,
-        "assign_priority": true
-      },
-      "agent_assignment": {
-        "analyze_task_type": true,
-        "select_appropriate_agent": true,
-        "delegate_to_agent": true
-      }
-    }
-  },
   "rules": {
     "analysis": "Kullanıcı isteklerini detaylı analiz etmeli",
     "task_creation": "Task context dosyaları oluşturmalı",

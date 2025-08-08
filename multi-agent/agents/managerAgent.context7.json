@@ -20,40 +20,6 @@
     "timeout": 60000,
     "log_level": "info"
   },
-  "workflow": {
-    "task_execution": {
-      "task_discovery": {
-        "scan_shared_tasks": true,
-        "read_task_context": true,
-        "priority_sorting": true
-      },
-      "agent_assignment": {
-        "analyze_requirements": true,
-        "select_appropriate_agent": true,
-        "delegate_task": true
-      },
-      "status_monitoring": {
-        "track_progress": true,
-        "update_status": true,
-        "handle_completion": true
-      }
-    },
-    "shared_logging": {
-      "task_execution_log": {
-        "start_time": true,
-        "end_time": true,
-        "duration": true,
-        "status": true,
-        "details": true
-      },
-      "work_log": {
-        "actions_performed": true,
-        "files_created": true,
-        "files_modified": true,
-        "errors_encountered": true
-      }
-    }
-  },
   "rules": {
     "task_management": "Task'ları uygun agent'lara dağıtmalı",
     "coordination": "Agent'lar arası koordinasyonu sağlamalı",

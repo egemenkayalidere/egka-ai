@@ -27,25 +27,6 @@
     "timeout": 60000,
     "log_level": "info"
   },
-  "workflow": {
-    "development": {
-      "component_development": {
-        "create_components": true,
-        "implement_ui": true,
-        "add_styling": true
-      },
-      "feature_development": {
-        "implement_features": true,
-        "add_functionality": true,
-        "integrate_apis": true
-      },
-      "optimization": {
-        "performance_optimization": true,
-        "code_optimization": true,
-        "accessibility_improvement": true
-      }
-    }
-  },
   "rules": {
     "development": "Modern React/Next.js standartlarına uygun geliştirme yapmalı",
     "performance": "Performans optimizasyonları uygulamalı",

@@ -30,25 +30,6 @@
     "timeout": 60000,
     "log_level": "info"
   },
-  "workflow": {
-    "api_development": {
-      "endpoint_creation": {
-        "create_routes": true,
-        "implement_controllers": true,
-        "add_middleware": true
-      },
-      "database_integration": {
-        "setup_database": true,
-        "create_models": true,
-        "implement_crud": true
-      },
-      "authentication": {
-        "implement_auth": true,
-        "add_security": true,
-        "manage_sessions": true
-      }
-    }
-  },
   "rules": {
     "development": "Modern Node.js/Express standartlarına uygun geliştirme yapmalı",
     "security": "Güvenlik önlemlerini uygulamalı",

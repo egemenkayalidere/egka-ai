@@ -1,17 +1,14 @@
 #!/usr/bin/env node
 
 const chalk = require("chalk");
-const inquirer = require("inquirer");
 const fs = require("fs-extra");
 const path = require("path");
-
-console.log(chalk.cyan("🚀 Multi-Agent System Proje Oluşturucu\n"));
 
 // Güvenilir timestamp fonksiyonu
 function getReliableTimestamp() {
   const now = new Date();
   const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1; // 0-based olduğu için +1
+  const currentMonth = now.getMonth() + 1;
 
   // Tarih kontrolü - mantıksız tarihleri engelle
   if (currentYear < 2020 || currentYear > 2030) {
@@ -28,7 +25,6 @@ function getReliableTimestamp() {
     process.exit(1);
   }
 
-  // ISO string formatında döndür
   return now.toISOString();
 }
 
@@ -45,76 +41,88 @@ function formatDateForDisplay(date) {
 }
 
 async function init() {
+  console.log(chalk.blue.bold("🚀 Initializing EGKA AI AGENTS..."));
+
   try {
-    const answers = await inquirer.prompt([
-      {
-        type: "input",
-        name: "projectName",
-        message: "Proje adını girin:",
-        default: "my-project",
-      },
-      {
-        type: "input",
-        name: "projectDescription",
-        message: "Proje açıklaması:",
-        default: "Multi-Agent System ile geliştirilen proje",
-      },
-    ]);
+    // Mevcut proje için cursor rules oluştur
+    const currentProjectConfig = {
+      projectName: path.basename(
+        (() => {
+          try {
+            return process.cwd();
+          } catch (error) {
+            return path.dirname(__dirname);
+          }
+        })()
+      ),
+      framework: "unknown",
+      language: "javascript",
+      cssFramework: "css",
+      features: ["performance", "security", "atomic-design"],
+      packageManager: "npm",
+      includeMultiAgent: true,
+    };
 
-    // Varsayılan değerleri ekle
-    answers.projectType = "agent-only";
-    answers.includeGit = false;
+    // Multi-Agent sistemini oluştur
+    await createMultiAgentSystem(process.cwd(), currentProjectConfig);
 
-    await createProject(answers);
+    // .cursor/rules dosyasını oluştur
+    await createCursorRules(process.cwd(), currentProjectConfig);
+
+    console.log(
+      chalk.green("✅ Multi-Agent system initialized successfully!")
+    );
+    console.log(chalk.cyan("📋 Available commands:"));
+    console.log(chalk.white("   npm run setup"));
+    console.log(chalk.white("   npm run init"));
   } catch (error) {
-    console.error(chalk.red("❌ Hata oluştu:"), error.message);
-    process.exit(1);
+    console.error(chalk.red("Error during initialization:"), error.message);
   }
 }
 
-async function createProject(config) {
-  // Mevcut dizini kullan
-  const projectPath = process.cwd();
+async function createMultiAgentSystem(projectPath, config) {
+  const multiAgentPath = path.join(projectPath, "multi-agent");
+  await fs.ensureDir(multiAgentPath);
 
-  console.log(chalk.green(`\n📁 Kurulum dizini: ${projectPath}`));
+  // Multi-Agent yapısını oluştur
+  const structure = {
+    agents: {},
+    shared: {
+      tasks: {},
+      logs: {},
+      "context-injection": {},
+    },
+    orchestrator: {},
+    scripts: {},
+  };
 
-  // Multi-Agent System dosyalarını kopyala
-  const templatePath = path.join(__dirname, "../multi-agent");
-  const targetPath = path.join(projectPath, "multi-agent");
+  for (const [dir, content] of Object.entries(structure)) {
+    const dirPath = path.join(multiAgentPath, dir);
+    await fs.ensureDir(dirPath);
 
-  if (await fs.pathExists(templatePath)) {
-    await fs.copy(templatePath, targetPath);
-          console.log(chalk.green("🤖 Multi-Agent System dosyaları kopyalandı"));
-    } else {
-      // Sistem yoksa temel yapıyı oluştur
-      await createBasicMultiAgent(targetPath, config);
+    if (typeof content === "object" && Object.keys(content).length > 0) {
+      for (const [subDir, subContent] of Object.entries(content)) {
+        const subDirPath = path.join(dirPath, subDir);
+        await fs.ensureDir(subDirPath);
+      }
+    }
   }
 
-  // .cursor/rules klasörünü oluştur
+  // Agent dosyalarını oluştur
+  await createBasicAgentFiles(multiAgentPath, config);
+
+  // Orchestrator dosyalarını oluştur
+  await createBasicOrchestratorFiles(multiAgentPath, config);
+
+  // Script dosyalarını oluştur
+  await createBasicScriptFiles(multiAgentPath, config);
+
+  console.log(chalk.green("✅ Multi-Agent system created"));
+}
+
+async function createCursorRules(projectPath, config) {
   const cursorRulesPath = path.join(projectPath, ".cursor", "rules");
   await fs.ensureDir(cursorRulesPath);
-
-  // Multi-agent rules dosyası oluşturma devre dışı
-// await createMultiAgentRules(cursorRulesPath, config);
-
-  console.log(chalk.green("\n✅ Multi-Agent System başarıyla oluşturuldu!"));
-  console.log(chalk.cyan(`\n📂 Kurulum dizini: ${projectPath}`));
-  console.log(chalk.cyan("📁 Oluşturulan dosyalar:"));
-  console.log(chalk.white("   • multi-agent/"));
-  console.log(chalk.white("   • .cursor/rules/ (devre dışı)"));
-  console.log(chalk.cyan("\n🚀 Kullanım:"));
-  console.log(chalk.white("   npm run status"));
-  console.log(chalk.white("   npm run test"));
-  console.log(chalk.white("   npm run performance"));
-  console.log(chalk.white("   npm run security"));
-}
-
-async function createMultiAgentRules(cursorRulesPath, config) {
-  // Mevcut dosyayı sil
-  const existingFile = path.join(cursorRulesPath, "multi-agent-rules.mdc");
-  if (await fs.pathExists(existingFile)) {
-    await fs.remove(existingFile);
-  }
 
   const rulesContent = `---
 alwaysApply: true
@@ -130,34 +138,32 @@ Her yeni chat başlangıcında aşağıdaki multi-agent sistemi otomatik olarak 
 
 #### 1. Manager Agent Activation
 - **Trigger:** Kullanıcı herhangi bir komut girdiğinde
-- **Action:** "Merhaba! Multi-Agent Sistemine hoş geldiniz. Geliştirilmiş AI destekli geliştirme sistemi ile görevinizi analiz ediyorum."
-- **Next Step:** Görevi analyst agent'a aktarır ve proje kapsamını belirler
-- **Performance Monitoring:** Response time tracking ve memory optimization
-- **Security Validation:** Input validation ve XSS protection
+- **Action:** "Merhaba! Multi-Agent Sistemine hoş geldiniz. Görevinizi alıyorum ve analist ajanımıza aktarıyorum."
+- **Next Step:** Görevi analist agent'a aktarır ve proje kapsamını belirler
 
 #### 2. Analyst Agent Activation
 - **Trigger:** Manager'dan gelen görev
 - **Action:**
   - Auto increment ID ile task oluşturur (TASK-2025-1000 formatında)
   - Task context dosyası oluşturur: \`multi-agent/shared/tasks/TASK-XXXX-XXXX.context7.json\`
-  - Performance requirements ekler (React.memo, useCallback, useMemo)
-  - Security requirements ekler (XSS protection, input validation)
-  - Atomic design level belirler (atoms|molecules|organisms|templates|pages)
-  - Storybook requirements ekler
-- **Performance Optimization:** Task priority optimization ve resource allocation
-- **Security Validation:** Security risk assessment
+  - Proje türüne göre uygun agent'a atar (developer/backend)
+  - Multi-project desteği ile tüm projeleri analiz eder
 
-#### 3. Developer Agent Activation
+#### 3. Developer Agent Activation (Frontend)
 - **Trigger:** Frontend/UI ile ilgili task'lar
 - **Action:**
   - Task context dosyasını okur
-  - Atomic design kurallarına uygun component geliştirme
-  - React.memo, useCallback, useMemo kullanımı zorunlu
-  - TypeScript strict mode kullanımı
-  - Material UI entegrasyonu
-  - Otomatik story generation
-  - Performance optimization
-  - Security validation
+  - React Native (mobile), React (admin panel) veya Next.js (web-app) geliştirme yapar
+  - Backend gereksinimlerini backend agent'a devreder
+  - Shared log'a yazar
+  - Task durumunu günceller
+
+#### 4. Backend Agent Activation
+- **Trigger:** Backend/API ile ilgili task'lar
+- **Action:**
+  - Task context dosyasını okur
+  - Node.js/Express API geliştirme yapar
+  - Firebase entegrasyonu ve authentication işlemleri
   - Shared log'a yazar
   - Task durumunu günceller
 
@@ -168,21 +174,18 @@ multi-agent/
 ├── agents/
 │   ├── managerAgent.context7.json
 │   ├── analystAgent.context7.json
-│   └── developerAgent.context7.json
-├── orchestrator/
-│   ├── workflow.context7.json
-│   └── context-injection-manager.js
+│   ├── developerAgent.context7.json
+│   └── backendAgent.context7.json
 ├── shared/
 │   ├── tasks/          # Task context dosyaları
 │   └── logs/           # Shared log dosyaları
-└── scripts/
-    └── status.js
+└── orchestrator/       # Agent koordinasyonu
 \`\`\`
 
 ## Project Structure
 
 \`\`\`
-${config.projectName}/
+test-project-2/
 ├── mobile-app/         # React Native mobile app
 ├── admin-panel/        # React admin dashboard
 ├── web-app/           # Next.js web application
@@ -191,87 +194,58 @@ ${config.projectName}/
 
 ## Workflow
 
-1. User Input → Manager Agent (Greeting + Project Identification + Performance Monitoring)
-2. Manager → Analyst Agent (Task Creation + Context File + Performance/Security Requirements)
-3. Analyst → Shared Tasks (TASK-XXXX-XXXX.context7.json with requirements)
-4. Developer Agent → Reads Task → Executes with rules → Logs → Updates Status
+1. User Input → Manager Agent (Greeting + Project Identification)
+2. Manager → Analyst Agent (Task Creation + Context File + Agent Assignment)
+3. Analyst → Shared Tasks (TASK-XXXX-XXXX.context7.json)
+4. Agent Assignment:
+   - Frontend Tasks → Developer Agent (React Native/React/Next.js)
+   - Backend Tasks → Backend Agent (Node.js/Express)
+   - Full-stack Tasks → Both Agents (Coordinated)
+5. Agent Execution → Reads Task → Executes → Logs → Updates Status
 
 ## Logging
 
 - Tüm aktiviteler \`multi-agent/shared/logs/\` klasöründe loglanır
 - Task durumları \`multi-agent/shared/tasks/\` klasöründe takip edilir
-- Performance metrics kaydedilir
-- Security audit logları tutulur
 - Her agent'ın kendi log dosyası vardır:
   - \`manager-agent.log\`
   - \`analyst-agent.log\`
   - \`developer-agent.log\`
+  - \`backend-agent.log\`
   - \`system.log\`
-  - \`performance.log\`
-  - \`security-audit.log\`
-  - \`atomic-design.log\`
-  - \`story-generation.log\`
 
-## Performance Requirements
+## Multi-Project Support
 
-### React Optimization Rules
-- **React.memo**: Tüm component'lerde kullanım zorunlu
-- **useCallback**: Prop olarak fonksiyon gönderiliyorsa kullanım zorunlu
-- **useMemo**: Hesaplama maliyeti yüksek işlemlerde kullanım zorunlu
-- **Arrow function**: Tüm fonksiyonlar arrow function şeklinde tanımlanmalı
-- **Explicit return**: Mümkünse return kullanılarak açık şekilde değer dönülmeli
+- **mobile-app**: React Native/Expo mobile app
+- **admin-panel**: React/TypeScript admin dashboard
+- **web-app**: Next.js web application
+- **backend-api**: Node.js/Express API server
 
-### Memory Optimization
-- Gereksiz re-render'lar engellenmeli
-- Bundle size optimization yapılmalı
-- Caching stratejileri uygulanmalı
+Her proje için uygun agent'lar otomatik olarak seçilir ve görevler dağıtılır.
 
-## Security Requirements
+## Framework Specific Rules
 
-### Frontend Security
-- **XSS Protection**: Content-Security-Policy uygulanmalı
-- **CSRF Protection**: SameSite cookies kullanılmalı
-- **Input Validation**: Tüm kullanıcı girdileri doğrulanmalı
-- **API Security**: Hassas veriler backend'de tutulmalı
+### Vanilla Projects
 
-### Code Security
-- Environment variables kullanılmalı
-- API anahtarları güvenli şekilde saklanmalı
-- Code signing uygulanmalı
-- Audit logging yapılmalı
+- Use modern JavaScript/TypeScript
+- Follow vanilla JS best practices
+- Implement modular architecture
 
-## Atomic Design Rules
+### CSS Framework: css
 
-### Component Levels
-- **Atoms**: Temel UI bileşenleri (Button, Input, Icon, Typography, Avatar)
-- **Molecules**: İki veya daha fazla atomun birleşimi (FormField, Card, SearchBar)
-- **Organisms**: Sayfa parçalarını temsil eden büyük bileşenler (Header, Sidebar, Footer)
-- **Templates**: Layout ve şablonlar (MasterPage, DashboardLayout)
-- **Pages**: Tam sayfalar (HomePage, LoginPage, DashboardPage)
+- Use css for styling
+- Follow css best practices
+- Implement responsive design
 
-### Naming Conventions
-- **Components**: PascalCase (MyButton, UserCard)
-- **Files**: PascalCase.tsx (MyButton.tsx, UserCard.tsx)
-- **Folders**: kebab-case (user-profile, product-list)
+## Language Rules
 
-### Story Generation
-- Her atomic design componenti için story dosyası zorunlu
-- Otomatik story generation
-- Tüm varyantlar için story exports
-- HTML preview creation
+### JavaScript
 
-## Modern React Practices
+- Use modern JavaScript (ES6+)
+- Use proper variable declarations (const/let)
+- Follow JavaScript best practices
 
-### TypeScript Usage
-- TypeScript strict mode kullanılmalı
-- Proper interface tanımlamaları yapılmalı
-- Type safety sağlanmalı
-
-### Component Structure
-- Material UI kullanımı tercih edilmeli
-- Props interface tanımlanmalı
-- Error boundary kullanılmalı
-- Accessibility standartları uygulanmalı
+## Feature Rules
 
 ## Communication Rules
 
@@ -288,693 +262,254 @@ ${config.projectName}/
 - Modern JavaScript/TypeScript özellikleri kullanılmalı
 - Accessibility (a11y) standartlarına uyulmalı
 - Performance optimizasyonları yapılmalı
-- Atomic design kurallarına uyulmalı
 
-## UI Consistency Rules
+## Security Rules
 
-- JSX yapısı korunmalı
-- Tasarım sistemi tutarlılığı sağlanmalı
-- Erişilebilirlik standartları uygulanmalı
-- Modern UI/UX pratikleri kullanılmalı
+- Environment variables kullanılmalı
+- API anahtarları güvenli şekilde saklanmalı
+- Input validation yapılmalı
+- XSS ve CSRF koruması sağlanmalı
+- HTTPS kullanılmalı
 
-## Monitoring
+## Performance Rules
 
-### Performance Metrics
-- Task completion rate
-- Average execution time
-- Memory usage tracking
-- Bundle size analysis
-- Render count monitoring
-
-### Security Metrics
-- Authentication success rate
-- Authorization failures
-- Security violations
-- Audit compliance
-
-### Quality Metrics
-- Code quality scores
-- Atomic design compliance rate
-- Story generation success rate
-- Security compliance rate
-
-## Commands
-
-- \`npm run status\` - Sistem durumu
-- \`npm run test\` - Test çalıştır
-- \`node multi-agent/main.js demo\` - Demo çalıştır
-- \`node multi-agent/scripts/status.js\` - Detaylı durum
-
-## Project Info
-
-- **Name:** ${config.projectName}
-- **Description:** ${config.projectDescription}
-- **Created:** ${formatDateForDisplay(new Date())}
-- **Version:** 2.0.0
+- Code splitting uygulanmalı
+- Lazy loading kullanılmalı
+- Image optimization yapılmalı
+- Bundle size optimize edilmeli
+- Caching stratejileri uygulanmalı
 
 ---
 
-**Bu dosya Multi-Agent sistemi için otomatik olarak oluşturulmuştur ve "always" seçili olmalıdır.**
+**Bu dosya otomatik olarak oluşturulmuştur ve "always" seçili olmalıdır.**
 `;
 
   await fs.writeFile(
     path.join(cursorRulesPath, "multi-agent-rules.mdc"),
     rulesContent
   );
-  console.log(
-    chalk.green("📝 .cursor/rules/multi-agent-rules.mdc oluşturuldu")
-  );
+  console.log(chalk.green("✅ .cursor/rules/multi-agent-rules.mdc created"));
 }
 
-async function createBasicMultiAgent(targetPath, config) {
-  console.log(chalk.yellow("📝 Temel Multi-Agent yapısı oluşturuluyor..."));
-
-  // Temel dizin yapısını oluştur
-  const structure = {
-    agents: {},
-    orchestrator: {},
-    shared: {
-      tasks: {},
-      logs: {},
-      "context-injection": {},
+async function createBasicAgentFiles(multiAgentPath, config) {
+  const agents = [
+    {
+      name: "managerAgent.context7.json",
+      content: {
+        name: "Manager Agent",
+        version: "1.0.0",
+        description: "Multi-Agent System Manager Agent",
+        type: "agent",
+        capabilities: [
+          "task_management",
+          "agent_coordination",
+          "workflow_orchestration",
+          "status_monitoring",
+          "shared_logging",
+        ],
+        configuration: {
+          supported_languages: ["typescript", "javascript", "json"],
+          max_file_size: 1000000,
+          timeout: 60000,
+          log_level: "info",
+        },
+        rules: {
+          task_management: "Task'ları uygun agent'lara dağıtmalı",
+          coordination: "Agent'lar arası koordinasyonu sağlamalı",
+          monitoring: "Sistem durumunu sürekli izlemeli",
+          logging: "Tüm aktiviteleri loglamalı",
+        },
+      },
     },
-    scripts: {},
-  };
+    {
+      name: "analystAgent.context7.json",
+      content: {
+        name: "Analyst Agent",
+        version: "1.0.0",
+        description: "Multi-Agent System Analyst Agent",
+        type: "agent",
+        capabilities: [
+          "task_analysis",
+          "requirement_analysis",
+          "task_creation",
+          "context_management",
+          "priority_assessment",
+        ],
+        configuration: {
+          supported_languages: ["typescript", "javascript", "json"],
+          max_file_size: 1000000,
+          timeout: 60000,
+          log_level: "info",
+        },
+        rules: {
+          analysis: "Kullanıcı isteklerini detaylı analiz etmeli",
+          task_creation: "Task context dosyaları oluşturmalı",
+          assignment: "Uygun agent'ı seçmeli",
+        },
+      },
+    },
+    {
+      name: "developerAgent.context7.json",
+      content: {
+        name: "Developer Agent",
+        version: "1.0.0",
+        description: "Multi-Agent System Developer Agent",
+        type: "agent",
+        capabilities: [
+          "frontend_development",
+          "react_development",
+          "nextjs_development",
+          "react_native_development",
+          "ui_development",
+          "component_development",
+        ],
+        configuration: {
+          supported_languages: ["typescript", "javascript", "jsx", "tsx"],
+          frameworks: ["react", "next.js", "react-native"],
+          max_file_size: 1000000,
+          timeout: 60000,
+          log_level: "info",
+        },
+        rules: {
+          development:
+            "Modern React/Next.js standartlarına uygun geliştirme yapmalı",
+          performance: "Performans optimizasyonları uygulamalı",
+          accessibility: "Accessibility standartlarına uygun kod yazmalı",
+        },
+      },
+    },
+    {
+      name: "backendAgent.context7.json",
+      content: {
+        name: "Backend Agent",
+        version: "1.0.0",
+        description: "Multi-Agent System Backend Agent",
+        type: "agent",
+        capabilities: [
+          "api_development",
+          "nodejs_development",
+          "express_development",
+          "firebase_integration",
+          "authentication",
+          "database_management",
+        ],
+        configuration: {
+          supported_languages: ["typescript", "javascript", "json"],
+          frameworks: ["express", "node.js"],
+          databases: ["firebase", "mongodb", "postgresql"],
+          max_file_size: 1000000,
+          timeout: 60000,
+          log_level: "info",
+        },
+        rules: {
+          development:
+            "Modern Node.js/Express standartlarına uygun geliştirme yapmalı",
+          security: "Güvenlik önlemlerini uygulamalı",
+          performance: "API performansını optimize etmeli",
+        },
+      },
+    },
+  ];
 
-  await createDirectoryStructure(targetPath, structure);
-
-  // Temel agent dosyalarını oluştur
-  await createBasicAgentFiles(targetPath, config);
-
-  // Temel orchestrator dosyalarını oluştur
-  await createBasicOrchestratorFiles(targetPath, config);
-
-  // Temel script dosyalarını oluştur
-  await createBasicScriptFiles(targetPath, config);
-
-  console.log(chalk.green("✅ Temel Multi-Agent yapısı oluşturuldu"));
-}
-
-async function createDirectoryStructure(basePath, structure) {
-  for (const [name, content] of Object.entries(structure)) {
-    const fullPath = path.join(basePath, name);
-    await fs.ensureDir(fullPath);
-
-    if (typeof content === "object" && Object.keys(content).length > 0) {
-      await createDirectoryStructure(fullPath, content);
-    }
+  for (const agent of agents) {
+    await fs.writeJson(
+      path.join(multiAgentPath, "agents", agent.name),
+      agent.content,
+      { spaces: 2 }
+    );
   }
 }
 
-async function createBasicAgentFiles(targetPath, config) {
-  const agentsPath = path.join(targetPath, "agents");
+async function createBasicOrchestratorFiles(multiAgentPath, config) {
+  const orchestratorPath = path.join(multiAgentPath, "orchestrator");
 
-  // Manager Agent
-  const managerAgent = {
-    id: "manager",
-    name: "Manager Agent V2",
-    version: "2.0.0",
-    capabilities: [
-      "project_analysis",
-      "workflow_orchestration",
-      "resource_allocation",
-    ],
-    performance_requirements: {
-      response_time: 1000,
-      memory_usage: "50MB",
-      cpu_usage: "10%",
-    },
-    security_requirements: {
-      input_validation: true,
-      xss_protection: true,
-      data_encryption: false,
-    },
-  };
+  // Context injection manager
+  await fs.writeFile(
+    path.join(orchestratorPath, "context-injection-manager.js"),
+    `#!/usr/bin/env node
 
-  await fs.writeJson(
-    path.join(agentsPath, "managerAgent.context7.json"),
-    managerAgent,
-    { spaces: 2 }
-  );
-
-  // Analyst Agent
-  const analystAgent = {
-    id: "analyst",
-    name: "Analyst Agent V2",
-    version: "2.0.0",
-    capabilities: [
-      "requirements_analysis",
-      "task_planning",
-      "complexity_assessment",
-    ],
-    performance_requirements: {
-      response_time: 2000,
-      memory_usage: "75MB",
-      cpu_usage: "15%",
-    },
-    security_requirements: {
-      input_validation: true,
-      xss_protection: true,
-      data_encryption: false,
-    },
-  };
-
-  await fs.writeJson(
-    path.join(agentsPath, "analystAgent.context7.json"),
-    analystAgent,
-    { spaces: 2 }
-  );
-
-  // Developer Agent
-  const developerAgent = {
-    id: "developer",
-    name: "Developer Agent V2",
-    version: "2.0.0",
-    capabilities: [
-      "frontend_development",
-      "component_creation",
-      "performance_optimization",
-    ],
-    performance_requirements: {
-      response_time: 5000,
-      memory_usage: "100MB",
-      cpu_usage: "25%",
-    },
-    security_requirements: {
-      input_validation: true,
-      xss_protection: true,
-      data_encryption: false,
-    },
-  };
-
-  await fs.writeJson(
-    path.join(agentsPath, "developerAgent.context7.json"),
-    developerAgent,
-    { spaces: 2 }
-  );
-}
-
-async function createBasicOrchestratorFiles(targetPath, config) {
-  const orchestratorPath = path.join(targetPath, "orchestrator");
-
-  // Workflow context
-  const workflowContext = {
-    version: "2.0.0",
-    description: "Multi-Agent V2 Workflow",
-    steps: [
-      {
-        step: 1,
-        agent: "manager",
-        action: "project_analysis",
-        performance_requirements: {
-          timeout: 30000,
-          memory_limit: "100MB",
-        },
-        security_validation: {
-          input_validation: true,
-          xss_protection: true,
-        },
-      },
-      {
-        step: 2,
-        agent: "analyst",
-        action: "task_creation",
-        performance_requirements: {
-          timeout: 45000,
-          memory_limit: "150MB",
-        },
-        security_validation: {
-          input_validation: true,
-          xss_protection: true,
-        },
-      },
-      {
-        step: 3,
-        agent: "developer",
-        action: "code_development",
-        performance_requirements: {
-          timeout: 120000,
-          memory_limit: "200MB",
-        },
-        security_validation: {
-          input_validation: true,
-          xss_protection: true,
-        },
-      },
-    ],
-    global_performance_optimization: {
-      enable_caching: true,
-      enable_compression: true,
-      enable_minification: true,
-    },
-    global_security_features: {
-      enable_audit_logging: true,
-      enable_performance_monitoring: true,
-      enable_error_tracking: true,
-    },
-  };
-
-  await fs.writeJson(
-    path.join(orchestratorPath, "workflow.context7.json"),
-    workflowContext,
-    { spaces: 2 }
-  );
-}
-
-async function createBasicScriptFiles(targetPath, config) {
-  const scriptsPath = path.join(targetPath, "scripts");
-
-  // Status script
-  const statusScript = `#!/usr/bin/env node
-
-const fs = require("fs");
+const fs = require("fs-extra");
 const path = require("path");
 
-console.log("🤖 Multi-Agent V2 System Status");
-console.log("=================================");
-
-const basePath = path.join(__dirname, "..");
-const agentsPath = path.join(basePath, "agents");
-const sharedPath = path.join(basePath, "shared");
-
-// Agent durumlarını kontrol et
-if (fs.existsSync(agentsPath)) {
-  const agents = fs.readdirSync(agentsPath).filter(file => file.endsWith(".context7.json"));
-  console.log(\`📁 Agents: \${agents.length} active\`);
-  agents.forEach(agent => {
-    console.log(\`   • \${agent.replace(".context7.json", "")}\`);
-  });
-}
-
-// Task durumlarını kontrol et
-const tasksPath = path.join(sharedPath, "tasks");
-if (fs.existsSync(tasksPath)) {
-  const tasks = fs.readdirSync(tasksPath).filter(file => file.endsWith(".context7.json"));
-  console.log(\`📋 Tasks: \${tasks.length} active\`);
-}
-
-// Log durumlarını kontrol et
-const logsPath = path.join(sharedPath, "logs");
-if (fs.existsSync(logsPath)) {
-  const logs = fs.readdirSync(logsPath).filter(file => file.endsWith(".log"));
-  console.log(\`📝 Logs: \${logs.length} files\`);
-}
-
-console.log("✅ Multi-Agent V2 System is running");
-`;
-
-  await fs.writeFile(path.join(scriptsPath, "status.js"), statusScript);
-}
-
-
-// Auto task: XSS protection validation
-{
-  "task": "xss_protection_check",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_xss_protection",
-  "rules": [
-    "Content-Security-Policy uygulanmalı",
-    "Input validation zorunlu",
-    "XSS pattern kontrolü"
-  ],
-  "description": "Validate XSS protection implementation"
-}
-\`\`\`
-
-### Input Validation
-\`\`\`javascript
-// Auto task: Input validation check
-{
-  "task": "input_validation_check",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_input_validation",
-  "rules": [
-    "Tüm kullanıcı girdileri doğrulanmalı",
-    "Hassas veri kontrolü",
-    "Sanitization uygulanmalı"
-  ],
-  "description": "Validate input validation implementation"
-}
-\`\`\`
-
-## Atomic Design Validation
-
-### Component Structure
-\`\`\`javascript
-// Auto task: Atomic design validation
-{
-  "task": "atomic_design_validation",
-  "trigger": "file_change",
-  "pattern": "**/components/**/*.{tsx,ts}",
-  "action": "validate_atomic_design",
-  "levels": {
-    "atoms": ["Button", "Input", "Icon", "Typography", "Avatar"],
-    "molecules": ["FormField", "Card", "SearchBar", "Navigation"],
-    "organisms": ["Header", "Sidebar", "Footer", "ProductList"],
-    "templates": ["MasterPage", "DashboardLayout", "AuthLayout"],
-    "pages": ["HomePage", "LoginPage", "DashboardPage"]
-  },
-  "description": "Validate atomic design structure compliance"
-}
-\`\`\`
-
-## Storybook Generation
-
-### Auto Story Creation
-\`\`\`javascript
-// Auto task: Storybook story generation
-{
-  "task": "storybook_generation",
-  "trigger": "file_change",
-  "pattern": "**/components/**/*.tsx",
-  "action": "generate_storybook_stories",
-  "rules": [
-    "Her component için story oluşturulmalı",
-    "Variant'lar için story exports",
-    "HTML preview generation"
-  ],
-  "description": "Auto-generate Storybook stories for components"
-}
-\`\`\`
-
-## Testing Tasks
-
-### Unit Test Generation
-\`\`\`javascript
-// Auto task: Unit test generation
-{
-  "task": "unit_test_generation",
-  "trigger": "file_change",
-  "pattern": "**/components/**/*.tsx",
-  "action": "generate_unit_tests",
-  "rules": [
-    "Component test coverage",
-    "Props validation tests",
-    "Event handling tests"
-  ],
-  "description": "Auto-generate unit tests for components"
-}
-\`\`\`
-
-## Code Quality Tasks
-
-### ESLint Validation
-\`\`\`javascript
-// Auto task: ESLint validation
-{
-  "task": "eslint_validation",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_eslint_rules",
-  "rules": [
-    "Modern JavaScript/TypeScript kullanımı",
-    "Code formatting standards",
-    "Best practices compliance"
-  ],
-  "description": "Validate ESLint rules compliance"
-}
-\`\`\`
-
-### Prettier Formatting
-\`\`\`javascript
-// Auto task: Prettier formatting
-{
-  "task": "prettier_formatting",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx,json}",
-  "action": "format_with_prettier",
-  "description": "Auto-format code with Prettier"
-}
-\`\`\`
-
-## Multi-Agent System Tasks
-
-### Workflow Monitoring
-\`\`\`javascript
-// Auto task: Workflow monitoring
-{
-  "task": "workflow_monitoring",
-  "trigger": "file_change",
-  "pattern": "orchestrator/**/*.js",
-  "action": "monitor_workflow_execution",
-  "metrics": [
-    "Execution time tracking",
-    "Step completion rates",
-    "Error rate monitoring",
-    "Performance optimization"
-  ],
-  "description": "Monitor workflow execution performance"
-}
-\`\`\`
-
-### Agent Status Monitoring
-\`\`\`javascript
-// Auto task: Agent status monitoring
-{
-  "task": "agent_status_monitoring",
-  "trigger": "file_change",
-  "pattern": "agents/**/*.json",
-  "action": "monitor_agent_status",
-  "metrics": [
-    "Agent availability",
-    "Message processing rates",
-    "Task completion rates",
-    "Error handling"
-  ],
-  "description": "Monitor agent status and performance"
-}
-\`\`\`
-
-### Task Assignment Monitoring
-\`\`\`javascript
-// Auto task: Task assignment monitoring
-{
-  "task": "task_assignment_monitoring",
-  "trigger": "file_change",
-  "pattern": "shared/tasks/**/*.json",
-  "action": "monitor_task_assignment",
-  "metrics": [
-    "Task assignment efficiency",
-    "Agent workload balance",
-    "Priority handling",
-    "Completion tracking"
-  ],
-  "description": "Monitor task assignment and management"
-}
-\`\`\`
-
-## Security Audit Tasks
-
-### Security Compliance
-\`\`\`javascript
-// Auto task: Security compliance check
-{
-  "task": "security_compliance_check",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_security_compliance",
-  "rules": [
-    "XSS protection",
-    "CSRF protection",
-    "Input validation",
-    "Secure headers",
-    "Content Security Policy"
-  ],
-  "description": "Validate security compliance"
-}
-\`\`\`
-
-### Audit Logging
-\`\`\`javascript
-// Auto task: Audit logging
-{
-  "task": "audit_logging",
-  "trigger": "file_change",
-  "pattern": "shared/logs/**/*.log",
-  "action": "validate_audit_logging",
-  "rules": [
-    "Security events logging",
-    "Performance metrics logging",
-    "Error tracking",
-    "User activity logging"
-  ],
-  "description": "Validate audit logging implementation"
-}
-\`\`\`
-
-## Performance Monitoring Tasks
-
-### Performance Metrics
-\`\`\`javascript
-// Auto task: Performance metrics collection
-{
-  "task": "performance_metrics_collection",
-  "trigger": "file_change",
-  "pattern": "shared/logs/performance.log",
-  "action": "collect_performance_metrics",
-  "metrics": [
-    "Execution time tracking",
-    "Memory usage monitoring",
-    "Bundle size analysis",
-    "Render count monitoring"
-  ],
-  "description": "Collect and analyze performance metrics"
-}
-\`\`\`
-
-### Memory Optimization
-\`\`\`javascript
-// Auto task: Memory optimization check
-{
-  "task": "memory_optimization_check",
-  "trigger": "file_change",
-  "pattern": "**/*.{js,ts,tsx}",
-  "action": "validate_memory_optimization",
-  "rules": [
-    "Gereksiz re-render'lar engellenmeli",
-    "Bundle size optimization",
-    "Caching stratejileri",
-    "Memory leak prevention"
-  ],
-  "description": "Validate memory optimization"
-}
-\`\`\`
-
-## File Structure Validation
-
-### Project Structure
-\`\`\`javascript
-// Auto task: Project structure validation
-{
-  "task": "project_structure_validation",
-  "trigger": "file_change",
-  "pattern": "**/*",
-  "action": "validate_project_structure",
-  "structure": {
-    "multi-agent/": {
-      "orchestrator/": ["workflow-execution-engine.js", "agent-communication-system.js", "task-assignment-manager.js", "automatic-triggering-system.js", "main-system-controller.js"],
-      "agents/": ["managerAgent.context7.json", "analystAgent.context7.json", "developerAgent.context7.json"],
-      "shared/": {
-        "tasks/": "*.context7.json",
-        "logs/": "*.log",
-        "context-injection/": "*-injection.context7.json"
-      },
-      "scripts/": ["status.js", "test-system.js"],
-      "main.js": "Entry point"
+/**
+ * Context injection manager
+ * Agent'lara context injection uygular
+ */
+class ContextInjectionManager {
+  constructor() {
+    this.contextPath = path.join(__dirname, "../shared/context-injection");
+  }
+  
+  async injectContext(agentName) {
+    try {
+      const contextFile = path.join(this.contextPath, \`\${agentName}-injection.context7.json\`);
+      if (await fs.pathExists(contextFile)) {
+        const context = await fs.readJson(contextFile);
+        return context;
+      }
+      return null;
+    } catch (error) {
+      console.error("Context injection hatası:", error.message);
+      return null;
     }
-  },
-  "description": "Validate project structure compliance"
-}
-\`\`\`
-
-## Auto-Execution Rules
-
-### Execution Priority
-\`\`\`javascript
-// Auto execution priority rules
-{
-  "priority_order": [
-    "security_validation",
-    "performance_optimization",
-    "code_quality_validation",
-    "atomic_design_validation",
-    "testing_generation",
-    "documentation_update"
-  ],
-  "parallel_execution": [
-    "eslint_validation",
-    "prettier_formatting",
-    "typescript_validation"
-  ],
-  "sequential_execution": [
-    "workflow_validation",
-    "agent_communication_validation",
-    "task_assignment_validation"
-  ]
-}
-\`\`\`
-
-### Error Handling
-\`\`\`javascript
-// Auto error handling rules
-{
-  "error_severity": {
-    "critical": ["security_violation", "workflow_failure"],
-    "high": ["performance_degradation", "agent_failure"],
-    "medium": ["code_quality_issues", "test_failures"],
-    "low": ["formatting_issues", "documentation_updates"]
-  },
-  "retry_policy": {
-    "max_retries": 3,
-    "retry_delay": 1000,
-    "exponential_backoff": true
-  },
-  "notification_rules": {
-    "critical": "immediate_notification",
-    "high": "notification_within_5_minutes",
-    "medium": "notification_within_30_minutes",
-    "low": "daily_summary"
   }
 }
-\`\`\`
 
-## Integration with Multi-Agent V2 System
+module.exports = ContextInjectionManager;
+`
+  );
+}
 
-### System Integration
-\`\`\`javascript
-// Auto integration with Multi-Agent V2 system
-{
-  "system_integration": {
-    "workflow_engine": "orchestrator/workflow-execution-engine.js",
-    "communication_system": "orchestrator/agent-communication-system.js",
-    "task_manager": "orchestrator/task-assignment-manager.js",
-    "triggering_system": "orchestrator/automatic-triggering-system.js",
-    "main_controller": "orchestrator/main-system-controller.js"
-  },
-  "auto_tasks": {
-    "workflow_monitoring": "Monitor workflow execution",
-    "agent_communication": "Monitor agent communication",
-    "task_assignment": "Monitor task assignment",
-    "performance_tracking": "Track system performance",
-    "security_auditing": "Audit security compliance"
-  },
-  "trigger_conditions": {
-    "file_change": "Trigger on file modification",
-    "workflow_start": "Trigger on workflow start",
-    "task_completion": "Trigger on task completion",
-    "error_occurrence": "Trigger on error occurrence",
-    "performance_threshold": "Trigger on performance threshold"
+async function createBasicScriptFiles(multiAgentPath, config) {
+  const scriptsPath = path.join(multiAgentPath, "scripts");
+
+  // Status script
+  await fs.writeFile(
+    path.join(scriptsPath, "status.js"),
+    `#!/usr/bin/env node
+
+const chalk = require("chalk");
+const fs = require("fs-extra");
+const path = require("path");
+
+async function showStatus() {
+  try {
+    console.log(chalk.cyan("🤖 Multi-Agent System Durumu\\n"));
+    
+    const logsPath = path.join(__dirname, "../shared/logs");
+    const tasksPath = path.join(__dirname, "../shared/tasks");
+    
+    // Log dosyalarını kontrol et
+    const logFiles = await fs.readdir(logsPath);
+    console.log(chalk.blue("📋 Log Dosyaları:"));
+    for (const file of logFiles) {
+      const stats = await fs.stat(path.join(logsPath, file));
+      console.log(chalk.white(\`   \${file} - \${stats.size} bytes\`));
+    }
+    
+    // Task dosyalarını kontrol et
+    const taskFiles = await fs.readdir(tasksPath);
+    console.log(chalk.blue("\\n📝 Task Dosyaları:"));
+    if (taskFiles.length === 0) {
+      console.log(chalk.yellow("   Henüz task oluşturulmamış"));
+    } else {
+      for (const file of taskFiles) {
+        const stats = await fs.stat(path.join(tasksPath, file));
+        console.log(chalk.white(\`   \${file} - \${stats.size} bytes\`));
+      }
+    }
+    
+    console.log(chalk.green("\\n✅ Sistem durumu kontrol edildi"));
+    
+  } catch (error) {
+    console.error(chalk.red("❌ Status hatası:"), error.message);
   }
 }
-\`\`\`
 
-## Summary
-
-This \`.mdc\` configuration enables comprehensive automatic task management for the Multi-Agent V2 system, including:
-
-1. **Workflow Orchestration**: Automatic workflow execution monitoring
-2. **Agent Communication**: Real-time agent communication monitoring
-3. **Task Assignment**: Intelligent task assignment and management
-4. **Performance Optimization**: React optimization and memory management
-5. **Security Validation**: XSS protection and input validation
-6. **Code Quality**: ESLint, Prettier, and TypeScript validation
-7. **Atomic Design**: Component structure validation
-8. **Testing**: Auto-generation of unit tests and Storybook stories
-9. **Monitoring**: Performance metrics and audit logging
-10. **Error Handling**: Comprehensive error handling and retry policies
-
-The configuration ensures that all aspects of the Multi-Agent V2 system are automatically monitored, validated, and optimized according to the established rules and best practices.
-
-description:
-globs:
-alwaysApply: false
-
----
-
-`;
-
+showStatus();
+`
+  );
 }
 
+// Ana fonksiyonu çalıştır
 init();
