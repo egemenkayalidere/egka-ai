@@ -1,6 +1,6 @@
 {
   "name": "@egka/cursor-ai-agents",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Cursor AI Agent sistemi - .cursor/rules ve agents klasörlerini CLI komutu ile kurar",
   "main": "index.js",
   "bin": {

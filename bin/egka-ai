@@ -55,15 +55,16 @@ program
         await fs.copy(sourceAgentsDir, targetAgentsDir);
         console.log(chalk.green("✅ agents klasörü kopyalandı"));
 
-        // Alt klasörleri oluştur ve boşalt
+        // Alt klasörleri oluştur (mevcut içerikleri koru)
         const subDirs = ["docs", "logs", "prompts", "tasks"];
         for (const subDir of subDirs) {
           const dirPath = path.join(targetAgentsDir, subDir);
           await fs.ensureDir(dirPath);
-          await fs.emptyDir(dirPath);
         }
         console.log(
-          chalk.green("✅ agents alt klasörleri boş olarak hazırlandı")
+          chalk.green(
+            "✅ agents alt klasörleri oluşturuldu (mevcut içerik korunur)"
+          )
         );
       } else {
         console.log(chalk.yellow("⚠️  agents klasörü bulunamadı"));

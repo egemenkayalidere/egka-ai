@@ -36,7 +36,7 @@ Bu komut projenize aşağıdaki yapıyı kopyalar/oluşturur:
 
 ## Komutlar
 
-- `egka-ai init` - `.cursor/rules/new-chat-rules.mdc` dosyasını ve `agents` klasörünü kopyalar; `agents/docs`, `agents/logs`, `agents/prompts`, `agents/tasks` klasörlerini BOŞ olarak oluşturur
+- `egka-ai init` - `.cursor/rules/new-chat-rules.mdc` dosyasını ve `agents` klasörünü kopyalar; `agents/docs`, `agents/logs`, `agents/prompts`, `agents/tasks` klasörlerini (YOKSA) oluşturur, mevcut içerik KORUNUR
 - `egka-ai --help` - Yardım menüsünü gösterir
 - `egka-ai --version` - Versiyon bilgisini gösterir
 
@@ -122,7 +122,7 @@ This command will copy/create the following structure in your project:
 
 ## Commands
 
-- `egka-ai init` — Copies `.cursor/rules/new-chat-rules.mdc` and the `agents` folder; ensures `agents/docs`, `agents/logs`, `agents/prompts`, `agents/tasks` directories are EMPTY
+- `egka-ai init` — Copies `.cursor/rules/new-chat-rules.mdc` and the `agents` folder; creates `agents/docs`, `agents/logs`, `agents/prompts`, `agents/tasks` directories if MISSING, existing content is PRESERVED
 - `egka-ai --help` — Shows the help menu
 - `egka-ai --version` — Shows the version
 
