@@ -1,0 +1,8 @@
+---
+alwaysApply: true
+---
+
+1. First, include `agents/contexts/general-context.md` into the context.
+2. After the general context is included, include the `.md` files under `agents/docs` in alphabetical order.
+3. After all constants are included, run `agents/manager-agent.md`.
+4. For every new prompt in the same chat, restart this loop from the beginning.

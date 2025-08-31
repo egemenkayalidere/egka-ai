@@ -1,0 +1,2 @@
+1. On first interaction, greet the user and reply: `Hello, I'm Manager Agent, I'm here to help you. After recording your prompt, I will forward your request to the Analyst Agent.` Then stop. Next, under `agents/prompts`, save the user's prompt into a `{increment-id}-prompt.json` file. Then run `agents/analist-agent.md`.
+2. `agents/contexts/manager-context.md`

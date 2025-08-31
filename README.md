@@ -1,230 +1,172 @@
-# EGKA AI AGENTS V2
+# EgKa AI Agents
 
-Multi-Agent V2 System with Performance Optimization, Security Enhancement, Atomic Design V2, and Modern React Practices for automated task management and development.
+Cursor IDE için AI Agent sistemi. Bu paket, Cursor'da kullanabileceğiniz AI agent yapısını CLI komutu ile projenize kurar.
 
-## ✨ New Features in v3.0.0
+## İçindekiler
 
-- **Performance Optimization**: React.memo, useCallback, useMemo kullanımı zorunlu
-- **Security Enhancement**: XSS ve CSRF koruması, input validation
-- **Modern React Practices**: TypeScript strict mode, arrow function kullanımı
-- **Atomic Design V2**: Geliştirilmiş atomic design kuralları
-- **Story Generation V2**: Otomatik story generation ve HTML preview
-- **Context Injection V2**: Geliştirilmiş context injection sistemi
-- **Monitoring V2**: Performance ve security metrics
-- **Component Library V2**: Material UI entegrasyonu ve modern practices
+- [Kurulum](#kurulum)
+- [Kullanım](#kullanım)
+- [Komutlar](#komutlar)
+- [Kurulum Notları / Sorun Giderme](#kurulum-notları--sorun-giderme)
+- [Özellikler](#özellikler)
+- [Lisans](#lisans)
+- [Geliştirici](#geliştirici)
+- [English](#english)
 
-## 🚀 Installation
+## Kurulum
 
 ```bash
-# Install globally
-npm install -g @egka/egka-ai-agents
-
-# Or use directly
-npx @egka/egka-ai-agents
+npm install -g @egka/cursor-ai-agents
 ```
 
-## 📦 Quick Start
+## Kullanım
+
+Kurulum tamamlandıktan sonra, projenizin ana dizininde şu komutu çalıştırın:
 
 ```bash
-# Create a new project
-egka-ai create my-project
-
-# Initialize in existing project
-egka-ai init
-
-# Check system status
-egka-ai status
-```
-
-## 🛠️ Usage
-
-### Create New Project
-
-```bash
-# Create a new project with interactive wizard
-egka-ai create my-project
-
-# Create with defaults
-egka-ai create my-project --yes
-```
-
-### Initialize in Existing Project
-
-```bash
-# Initialize multi-agent V2 system in current directory
 egka-ai init
 ```
 
-### Available Commands
+Bu komut projenize aşağıdaki yapıyı kopyalar/oluşturur:
+
+- `.cursor/rules/new-chat-rules.mdc` - Cursor kuralları
+- `agents/` - AI agent paket içerikleri
+  - `contexts/general-context.md` ve agent dosyaları
+  - `docs/`, `logs/`, `prompts/`, `tasks/` klasörleri BOŞ olarak oluşturulur (örnek dosya kopyalanmaz)
+
+## Komutlar
+
+- `egka-ai init` - `.cursor/rules/new-chat-rules.mdc` dosyasını ve `agents` klasörünü kopyalar; `agents/docs`, `agents/logs`, `agents/prompts`, `agents/tasks` klasörlerini BOŞ olarak oluşturur
+- `egka-ai --help` - Yardım menüsünü gösterir
+- `egka-ai --version` - Versiyon bilgisini gösterir
+
+Not: Bu paket kapsamındaki `rules` ve `agents` içerikleri geliştirme sürecinde doğrudan depo içinde kullanılmaz; yalnızca paket kurulumu sırasında hedef projeye kopyalanır.
+
+## Kurulum Notları / Sorun Giderme
+
+- Gereksinimler: Node.js >= 16
+- Global kurulumda izin (EACCES) hatası alırsanız kullanıcı dizininize global prefix tanımlayıp PATH'e ekleyin:
 
 ```bash
-# Show system status
-egka-ai status
-
-# Task management
-egka-ai task --create
-egka-ai task --list
-egka-ai task --status TASK-2025-1001
-
-# Agent management
-egka-ai agent --list
-egka-ai agent --status managerAgent
-
-# Log management
-egka-ai log --system
-egka-ai log --agent managerAgent
-
-# Performance monitoring
-egka-ai performance --metrics
-egka-ai performance --optimize
-
-# Security audit
-egka-ai security --audit
-egka-ai security --validate
-
-# Test communication
-egka-ai test-communication
-
-# Workflow management
-egka-ai workflow --status
-egka-ai workflow --reset
+npm config set prefix "$HOME/.npm-global"
+echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.zshrc
+. ~/.zshrc
 ```
 
-## 🤖 Multi-Agent V2 System
-
-This project uses a Multi-Agent V2 System with the following agents:
-
-- **Manager Agent V2**: User greeting, task delegation, performance monitoring
-- **Analyst Agent V2**: Task analysis, performance requirements, security validation
-- **Developer Agent V2**: Code development with V2 rules, Atomic Design V2, and Storybook integration
-
-### Performance Optimization V2
-
-Developer agent automatically applies performance optimization rules:
-
-```typescript
-// React.memo kullanımı zorunlu
-const Button: React.FC<ButtonProps> = memo(({ ... }) => {
-  // useCallback ile onClick optimization
-  const handleClick = useCallback((event) => {
-    // Input validation - XSS protection
-  }, [dependencies]);
-
-  // useMemo ile mapping optimization
-  const buttonVariant = useMemo(() => {
-    // Variant mapping
-  }, [variant]);
-
-  return <MuiButton {...props} />;
-});
-```
-
-### Security Enhancement V2
-
-- **XSS Protection**: Content-Security-Policy uygulanmalı
-- **CSRF Protection**: SameSite cookies kullanılmalı
-- **Input Validation**: Tüm kullanıcı girdileri doğrulanmalı
-- **API Security**: Hassas veriler backend'de tutulmalı
-
-### Atomic Design V2 & Storybook Integration
-
-- **Atomic Design V2**: Atoms → Molecules → Organisms → Templates → Pages
-- **Storybook Integration V2**: Automatic story generation with HTML preview
-- **Component Library V2**: Automated component creation with Material UI
-- **Story Generation V2**: Automatic story file creation for all components
-
-## 📁 Project Structure
-
-```
-project/
-├── multi-agent-v2/                 # Multi-agent V2 system
-│   ├── agents/                     # Agent configurations V2
-│   ├── shared/                     # Tasks and logs V2
-│   │   ├── context-injection/      # Context injection files V2
-│   │   ├── tasks/                  # Task context files V2
-│   │   └── logs/                   # System logs V2
-│   ├── orchestrator/               # Workflow management V2
-│   └── scripts/                    # Agent scripts V2
-├── src/
-│   └── components/                 # Atomic design V2 components
-│       ├── atoms/                  # Basic components (React.memo)
-│       ├── molecules/              # Component combinations (useCallback)
-│       ├── organisms/              # Page sections (useMemo)
-│       ├── templates/              # Layout templates
-│       └── pages/                  # Full pages
-├── .storybook/                     # Storybook configuration V2
-└── .cursor/rules/
-    └── multi-agent-rules.mdc       # Cursor rules V2
-```
-
-## 🔧 Development
+Ardından tekrar kurulum yapın:
 
 ```bash
-# Clone the repository
-git clone https://github.com/egemenkayalidere/egka-ai-agents.git
-
-# Install dependencies
-npm install
-
-# Run tests
-npm test
-
-# Check system status
-npm run status
-
-# Publish to npm
-npm publish
+npm install -g @egka/cursor-ai-agents
 ```
 
-## 📊 Performance Metrics
+## Özellikler
 
-- **Task completion rate**: 95%
-- **Performance optimization score**: 95/100
-- **Security compliance score**: 90/100
-- **Atomic design compliance score**: 100/100
-- **Modern React practices score**: 95/100
+- 🤖 Multi-agent sistem
+- 📝 Otomatik task yönetimi
+- 📊 Log sistemi
+- 🔄 Context injection
+- ⚡ Otomatik kurulum
 
-## 🔒 Security Features
+## Lisans
 
-- **XSS Protection**: Content-Security-Policy implementation
-- **CSRF Protection**: SameSite cookies usage
-- **Input Validation**: Comprehensive input sanitization
-- **API Security**: Secure data handling
-- **Code Signing**: Digital signature verification
-- **Audit Logging**: Comprehensive security audit trails
+MIT
 
-## 📈 Monitoring V2
+## Geliştirici
 
-### Performance Metrics
+EgKaSoft — Web: https://egkasoft.com — LinkedIn: https://www.linkedin.com/in/egemenkayalidere/
 
-- Task completion rate
-- Average execution time
-- Memory usage tracking
-- Bundle size analysis
-- Render count monitoring
-
-### Security Metrics
-
-- Authentication success rate
-- Authorization failures
-- Security violations
-- Audit compliance
-
-### Quality Metrics
-
-- Code quality scores
-- Atomic design compliance rate
-- Story generation success rate
-- Security compliance rate
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## 🤝 Contributing
-
-This is a private package. For issues and contributions, please contact the maintainer.
+Depo: https://github.com/egemenkayalidere/egka-ai — Hata bildirimi: https://github.com/egemenkayalidere/egka-ai/issues
 
 ---
 
-**Made with ❤️ by EgKaSoft - Multi-Agent V2 System**
+## English
+
+EgKa AI Agents is an AI Agent system for the Cursor IDE. This package installs a ready-to-use agent setup into your project via a CLI command.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Installation Notes / Troubleshooting](#installation-notes--troubleshooting)
+- [Features](#features)
+- [License](#license)
+- [Developer](#developer)
+
+## Installation
+
+```bash
+npm install -g @egka/cursor-ai-agents
+```
+
+## Usage
+
+After installation, run the following command in your project root:
+
+```bash
+egka-ai init
+```
+
+You can also use it via npx without global install:
+
+```bash
+npx @egka/cursor-ai-agents@latest egka-ai init --yes
+```
+
+This command will copy/create the following structure in your project:
+
+- `.cursor/rules/new-chat-rules.mdc` — Cursor rules
+- `agents/` — AI agent package contents
+  - `contexts/general-context.md` and agent files
+  - `docs/`, `logs/`, `prompts/`, `tasks/` directories are created EMPTY (no example files)
+
+## Commands
+
+- `egka-ai init` — Copies `.cursor/rules/new-chat-rules.mdc` and the `agents` folder; ensures `agents/docs`, `agents/logs`, `agents/prompts`, `agents/tasks` directories are EMPTY
+- `egka-ai --help` — Shows the help menu
+- `egka-ai --version` — Shows the version
+
+Flags (planned/for reference):
+
+- `--dry-run` — Print planned operations without writing files
+- `--agents-only` — Only copy/create `agents` structure
+- `--rules-only` — Only copy `.cursor/rules/new-chat-rules.mdc`
+- `--overwrite` — Overwrite existing files (otherwise skip/confirm)
+- `--verbose` — Verbose output
+
+Note: The `rules` and `agents` included in this package are not used directly within this repository during development; they are only copied into the target project during package setup.
+
+## Installation Notes / Troubleshooting
+
+- Requirements: Node.js >= 16
+- If you encounter a permission (EACCES) error on global install, set a user-level global prefix and add it to PATH (zsh example):
+
+```bash
+npm config set prefix "$HOME/.npm-global"
+echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.zshrc
+. ~/.zshrc
+```
+
+Then install again:
+
+```bash
+npm install -g @egka/cursor-ai-agents
+```
+
+## Features
+
+- 🤖 Multi-agent system
+- 📝 Automatic task management
+- 📊 Log system
+- 🔄 Context injection
+- ⚡ One-command setup
+
+## License
+
+MIT
+
+## Developer
+
+EgKaSoft — Web: [egkasoft.com](https://egkasoft.com) — LinkedIn: [Egemen Kayalidere](https://www.linkedin.com/in/egemenkayalidere/)
+
+Repository: https://github.com/egemenkayalidere/egka-ai — Issues: https://github.com/egemenkayalidere/egka-ai/issues

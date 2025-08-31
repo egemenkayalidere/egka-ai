@@ -1,0 +1,89 @@
+#!/usr/bin/env node
+
+const { program } = require("commander");
+const fs = require("fs-extra");
+const path = require("path");
+const chalk = require("chalk");
+const pkg = require(require("path").resolve(__dirname, "..", "package.json"));
+
+program
+  .name("egka-ai")
+  .description("EgKa AI Agents - Cursor IDE için AI Agent sistemi")
+  .version(pkg.version);
+
+program
+  .command("init")
+  .description(".cursor/rules ve agents klasörlerini mevcut dizine kopyalar")
+  .action(async () => {
+    try {
+      console.log(chalk.blue("🚀 EgKa AI Agents kurulumu başlıyor..."));
+
+      // Hedef dizinleri belirle
+      const targetDir = process.cwd();
+      const packageDir = path.dirname(__dirname); // bin klasörünün üst dizini
+
+      console.log(chalk.gray(`📁 Hedef dizin: ${targetDir}`));
+      console.log(chalk.gray(`📦 Paket dizini: ${packageDir}`));
+
+      // .cursor/rules klasörünü oluştur
+      const cursorRulesDir = path.join(targetDir, ".cursor", "rules");
+      await fs.ensureDir(cursorRulesDir);
+
+      // new-chat-rules.mdc dosyasını kopyala
+      const sourceRulesFile = path.join(
+        packageDir,
+        ".cursor",
+        "rules",
+        "new-chat-rules.mdc"
+      );
+      const targetRulesFile = path.join(cursorRulesDir, "new-chat-rules.mdc");
+
+      if (await fs.pathExists(sourceRulesFile)) {
+        await fs.copy(sourceRulesFile, targetRulesFile);
+        console.log(
+          chalk.green("✅ .cursor/rules/new-chat-rules.mdc kopyalandı")
+        );
+      } else {
+        console.log(chalk.yellow("⚠️  new-chat-rules.mdc dosyası bulunamadı"));
+      }
+
+      // agents klasörünü kopyala
+      const sourceAgentsDir = path.join(packageDir, "agents");
+      const targetAgentsDir = path.join(targetDir, "agents");
+
+      if (await fs.pathExists(sourceAgentsDir)) {
+        await fs.copy(sourceAgentsDir, targetAgentsDir);
+        console.log(chalk.green("✅ agents klasörü kopyalandı"));
+
+        // Alt klasörleri oluştur ve boşalt
+        const subDirs = ["docs", "logs", "prompts", "tasks"];
+        for (const subDir of subDirs) {
+          const dirPath = path.join(targetAgentsDir, subDir);
+          await fs.ensureDir(dirPath);
+          await fs.emptyDir(dirPath);
+        }
+        console.log(
+          chalk.green("✅ agents alt klasörleri boş olarak hazırlandı")
+        );
+      } else {
+        console.log(chalk.yellow("⚠️  agents klasörü bulunamadı"));
+      }
+
+      console.log(chalk.green.bold("🎉 EgKa AI Agents başarıyla kuruldu!"));
+      console.log(chalk.blue("📁 Kurulum dizini:"), targetDir);
+      console.log("");
+      console.log(
+        chalk.cyan(
+          "Kurulum tamamlandı. Artık Cursor'da AI agent sisteminizi kullanabilirsiniz."
+        )
+      );
+    } catch (error) {
+      console.error(
+        chalk.red("❌ Kurulum sırasında hata oluştu:"),
+        error.message
+      );
+      process.exit(1);
+    }
+  });
+
+program.parse();

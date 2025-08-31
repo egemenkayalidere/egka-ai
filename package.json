@@ -1,59 +1,52 @@
 {
-  "name": "@egka/egka-ai-agents",
-  "version": "3.0.22",
-  "description": "Multi-Agent System with Performance Optimization, Security Enhancement, Atomic Design, and Modern React Practices for automated task management and development",
+  "name": "@egka/cursor-ai-agents",
+  "version": "1.0.15",
+  "description": "Cursor AI Agent sistemi - .cursor/rules ve agents klasörlerini CLI komutu ile kurar",
   "main": "index.js",
   "bin": {
-    "egka-ai": "bin/egka-ai-simple.js"
+    "egka-ai": "./bin/egka-ai"
   },
   "scripts": {
-    "setup": "node scripts/setup.js",
-    "init": "node scripts/init.js",
-    "test": "echo 'Test completed successfully'"
+    "test": "echo \"Test completed successfully\""
   },
   "keywords": [
-    "multi-agent",
-    "performance-optimization",
-    "security-enhancement",
-    "atomic-design",
-    "modern-react-practices",
+    "cursor",
+    "ai-agents",
     "automation",
     "development",
-    "task-management",
-    "ai-agents",
-    "egkasoft",
-    "context-injection",
-    "storybook",
-    "material-ui",
-    "react-memo",
-    "use-callback",
-    "use-memo",
-    "typescript",
-    "xss-protection",
-    "input-validation"
+    "egkasoft"
   ],
   "author": "EgKaSoft",
-  "license": "MIT",
-  "publishConfig": {
-    "access": "restricted"
-  },
-  "dependencies": {
-    "chalk": "^4.1.2",
-    "inquirer": "^8.2.4",
-    "fs-extra": "^11.1.1",
-    "commander": "^11.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^18.0.0"
-  },
+  "homepage": "https://egkasoft.com",
+  "contributors": [
+    {
+      "name": "Egemen Kayalidere",
+      "url": "https://www.linkedin.com/in/egemenkayalidere/"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/egemenkayalidere/egka-ai-agents.git"
+    "url": "git+https://github.com/egemenkayalidere/egka-ai.git"
   },
   "bugs": {
-    "url": "https://github.com/egemenkayalidere/egka-ai-agents/issues"
+    "url": "https://github.com/egemenkayalidere/egka-ai/issues"
   },
-  "homepage": "https://github.com/egemenkayalidere/egka-ai-agents#readme",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    ".cursor/",
+    "agents/",
+    "bin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "fs-extra": "^11.1.1",
+    "commander": "^11.0.0",
+    "chalk": "^4.1.2"
+  },
   "engines": {
     "node": ">=16.0.0"
   }
