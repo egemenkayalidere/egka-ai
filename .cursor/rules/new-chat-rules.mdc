@@ -6,4 +6,5 @@ alwaysApply: true
 2. After the general context is included, include the `.md` files under `agents/docs` in alphabetical order.
 3. After all constants are included, read the contents of `agents/manager-agent.md` and follow its instructions.
 4. For every new prompt in the same chat, restart this loop from the beginning.
-5. When the active agent is `Developer Agent`, enforce the model to GPT-5. If GPT-5 is not available in the environment, fall back to the latest GPT family model and notify the user about the fallback.
+5. When the active agent is `Developer Agent`, set model selection to `auto`. Do not pin a specific model id. If `auto` is unavailable, fall back to the latest stable GPT family model and notify the user about the fallback.
+6. For task execution, prefer sequential execution for dependent steps. Only parallelize independent, read-only operations (e.g., reading files, searches). If any doubt exists, execute steps strictly in order.
